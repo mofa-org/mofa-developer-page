@@ -126,28 +126,29 @@ const DOMAIN_TO_ICON = {
 async function handleIconRequest(pathname) {
   const iconName = pathname.replace('/icons/', '').replace('.svg', '');
   
-  // 检查是否是支持的图标
-  if (Object.values(ICONS).includes(iconName) || iconName === 'home' || iconName === 'mail' || iconName === 'music' || iconName === 'message-square') {
-    try {
-      const iconUrl = `${CONFIG.GITHUB_RAW_BASE}/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/main/resources/icons/${iconName}.svg`;
-      const response = await fetch(iconUrl);
-      
-      if (response.ok) {
-        const svg = await response.text();
-        return new Response(svg, {
-          headers: {
-            'Content-Type': 'image/svg+xml',
-            'Cache-Control': 'public, max-age=86400'
-          }
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching icon:', error);
+  try {
+    const iconUrl = `${CONFIG.GITHUB_RAW_BASE}/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/main/resources/icons/${iconName}.svg`;
+    console.log('🎨 Fetching icon from:', iconUrl);
+    const response = await fetch(iconUrl);
+    
+    if (response.ok) {
+      const svg = await response.text();
+      console.log('✅ Icon fetched successfully:', iconName);
+      return new Response(svg, {
+        headers: {
+          'Content-Type': 'image/svg+xml',
+          'Cache-Control': 'public, max-age=86400'
+        }
+      });
+    } else {
+      console.error('❌ Icon fetch failed:', iconName, response.status);
     }
+  } catch (error) {
+    console.error('❌ Error fetching icon:', iconName, error);
   }
   
-  // 返回默认图标
-  const defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+  // 返回通用的链接图标作为默认
+  const defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
   return new Response(defaultIcon, {
     headers: {
       'Content-Type': 'image/svg+xml',
@@ -158,33 +159,53 @@ async function handleIconRequest(pathname) {
 
 // 智能图标选择函数
 function getIconForLink(url, iconHint) {
+  console.log('🔍 getIconForLink called with url:', url, 'iconHint:', iconHint);
+  
   // 1. 如果明确指定了图标
   if (iconHint) {
+    console.log('📌 Using specified icon hint:', iconHint);
     // 如果是完整URL，直接返回
     if (iconHint.startsWith('http')) {
+      console.log('🌐 Using full URL icon:', iconHint);
       return iconHint;
     }
     // 如果是图标名，返回本地路径
     if (ICONS[iconHint]) {
-      return `/icons/${iconHint}.svg`;
+      const iconPath = `/icons/${iconHint}.svg`;
+      console.log('📦 Using built-in icon:', iconPath);
+      return iconPath;
     }
   }
   
   // 2. 根据URL域名自动选择图标
   try {
-    const domain = new URL(url).hostname.toLowerCase();
+    const urlObj = new URL(url);
+    const domain = urlObj.hostname.toLowerCase();
+    console.log('🌐 Analyzing domain:', domain);
+    
     for (const [domainPattern, iconName] of Object.entries(DOMAIN_TO_ICON)) {
       if (domain.includes(domainPattern)) {
-        return `/icons/${iconName}.svg`;
+        const iconPath = `/icons/${iconName}.svg`;
+        console.log(`✅ Domain match found: ${domain} includes ${domainPattern} → ${iconPath}`);
+        return iconPath;
       }
     }
+    console.log('❌ No domain match found for:', domain);
   } catch (e) {
-    // URL解析失败，继续使用默认图标
+    console.error('❌ URL parsing failed:', url, e);
   }
   
   // 3. 默认图标
-  if (url.includes('mailto:')) return `/icons/mail.svg`;
-  if (url.includes('tel:')) return `/icons/phone.svg`;
+  if (url.includes('mailto:')) {
+    console.log('📧 Using mail icon for mailto');
+    return `/icons/mail.svg`;
+  }
+  if (url.includes('tel:')) {
+    console.log('📞 Using phone icon for tel');
+    return `/icons/phone.svg`;
+  }
+  
+  console.log('🏠 Using default home icon');
   return `/icons/home.svg`;
 }
 
@@ -204,7 +225,7 @@ async function handleRequest(request) {
   
   // 处理图标请求
   if (pathname.startsWith('/icons/')) {
-    return handleIconRequest(pathname);
+    return await handleIconRequest(pathname);
   }
   
   // 检查是否是子域名请求
@@ -408,8 +429,8 @@ function parseLinks(content) {
       const iconMatch = trimmed.match(/^icon:\s*(.*)$/);
       if (iconMatch && currentLink.name) {
         const iconValue = iconMatch[1].trim();
-        currentLink.iconHint = iconValue || null; // 保存原始值，留空则为null
-        console.log(`🎨 Added icon hint: "${iconValue}"`);
+        currentLink.iconHint = iconValue === '' ? null : iconValue; // 空字符串转为null
+        console.log(`🎨 Added icon hint: "${iconValue}" (processed: ${currentLink.iconHint})`);
         continue;
       }
     }

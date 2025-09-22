@@ -4,7 +4,7 @@ homepage:
 
 github:
   url: https://github.com/bh3gei
-  icon: 
+  icon:
 
 linkedin:
   url: https://www.linkedin.com/in/yao-li2026/
