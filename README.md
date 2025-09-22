@@ -1,66 +1,190 @@
-# MoFA 开发者个人页面系统
+# MoFA Developer Personal Pages
 
-基于子域名路由自动生成 MoFA 开发者个人页面的系统。
+为 MoFA 开发者提供个人链接页面服务，基于 Cloudflare Worker 构建。
 
-该项目为每位开发者创建可通过 `username.mofa.ai` 子域名访问的个人页面。
+## 🚀 功能特性
 
-## 系统架构
+- **智能图标识别**：根据URL自动选择合适图标
+- **50+ 内置图标**：覆盖全球主流平台和中文服务
+- **优雅YAML配置**：简洁易读的配置格式
+- **响应式设计**：完美适配移动端和桌面端
+- **快速访问**：通过 `用户名.mofa.ai` 访问个人页面
 
-### 核心组件
+## 📝 快速开始
 
-1. **GitHub 仓库**: `mofa-org/mofa-developer-page`
-   - 包含所有开发者配置文件
-   - 存储用户名到配置文件的映射关系
-   - 托管 Cloudflare Worker 代码
+### 1. 创建配置文件
 
-2. **Cloudflare Workers**: 处理子域名路由和页面生成
-   - 监听 `*.mofa.ai` 的请求
-   - 动态从 GitHub 获取开发者配置文件
-   - 渲染 HTML 页面
+创建你的配置文件，支持三种图标模式：
 
-3. **DNS 配置**:
-   - 生产环境: `*.mofa.ai` 指向 Cloudflare Workers
+```yaml
+# 自动识别（推荐）
+github:
+  url: https://github.com/yourusername
+  icon:
+
+# 使用内置图标名
+homepage:
+  url: https://yoursite.com
+  icon: home
+
+# 使用完整图标URL
+custom:
+  url: https://example.com
+  icon: https://example.com/icon.svg
+```
+
+### 2. 添加到映射文件
+
+在 `developers.md` 中添加你的配置：
+
+```
+[yourusername][https://raw.githubusercontent.com/your-repo/config.md]
+```
+
+### 3. 访问你的页面
+
+页面将在 `yourusername.mofa.ai` 可用。
+
+## 📂 示例配置
+
+- [完整示例](examples/example-mofa-links.md) - 展示所有支持的平台和功能
+- [简单示例](examples/simple-example.md) - 快速入门模板
+
+## 🎨 支持的图标
+
+### 热门平台
+`github`, `linkedin`, `x`, `telegram`, `discord`, `youtube`, `spotify`, `instagram`, `facebook`, `tiktok`, `reddit`, `medium`, `notion`
+
+### 中文平台  
+`wechat`, `weibo`, `bilibili`, `xiaohongshu`, `zhihu`, `qq`, `dingtalk`, `douyin`
+
+### 通讯工具
+`line`, `whatsapp`, `skype`, `signal`, `slack`, `zoom`, `teams`, `feishu`
+
+### 音乐媒体
+`spotify`, `youtube`, `soundcloud`, `applemusic`, `netease`, `twitch`
+
+### 通用图标
+`home`, `mail`, `music`, `message-square`
+
+### 支付平台
+`paypal`, `patreon`, `kofi`
+
+## 🔧 配置格式
+
+### YAML 结构
+
+```yaml
+linkname:
+  url: https://example.com    # 必需：链接地址
+  icon: iconname             # 可选：图标（留空自动识别）
+```
+
+### 图标使用方式
+
+1. **留空自动识别**（推荐）
+   ```yaml
+   github:
+     url: https://github.com/username
+     icon:  # 留空，系统自动识别为GitHub图标
+   ```
+
+2. **使用内置图标名**
+   ```yaml
+   blog:
+     url: https://myblog.com
+     icon: home  # 使用内置的home图标
+   ```
+
+3. **自定义图标URL**
+   ```yaml
+   myservice:
+     url: https://myservice.com
+     icon: https://myservice.com/icon.svg
+   ```
+
+## 🌍 智能域名识别
+
+系统自动识别常见域名并选择合适图标：
+
+- `github.com` → GitHub图标
+- `linkedin.com` → LinkedIn图标  
+- `x.com`, `twitter.com` → X图标
+- `youtube.com` → YouTube图标
+- `bilibili.com` → Bilibili图标
+- 还有40+其他平台...
+
+## 📱 页面特性
+
+- **响应式设计**：完美适配手机和电脑
+- **MoFA 品牌风格**：渐变色彩和现代设计
+- **二维码分享**：一键生成页面二维码
+- **快速加载**：优化的图标和缓存策略
+- **无障碍支持**：支持屏幕阅读器
+
+## 🛠️ 技术架构
+
+- **Cloudflare Workers**：全球边缘计算
+- **GitHub Pages**：配置文件托管
+- **SVG图标**：矢量图标支持缩放
+- **智能缓存**：提升加载速度
+
+## 📖 开发文档
 
 ### 文件结构
 
 ```
 mofa-developer-page/
-├── README.md                 # 项目文档
-├── developers.md            # 用户名到配置文件的映射表
-├── worker.js               # Cloudflare Worker 代码
-├── ICON_REFERENCE.md       # 图标链接大全
-├── username-mofa-links/
-    └── username-links.md # 开发者配置文件
-    └── username-links.md # 开发者配置文件
+├── README.md                    # 项目文档
+├── developers.md               # 用户名到配置文件的映射表
+├── worker.js                  # Cloudflare Worker 代码
+├── examples/                  # 示例配置文件
+│   ├── example-mofa-links.md  # 完整示例
+│   └── simple-example.md      # 简单示例
+├── resources/
+│   └── icons/                 # 图标资源库
+│       ├── ICON_REFERENCE.md  # 图标参考文档
+│       └── *.svg              # SVG图标文件
+└── username-mofa-links/       # 开发者配置文件
+    └── *.md                   # 各开发者的配置
 ```
 
-## 工作原理
+### 添加新图标
 
-1. 用户访问 `username.mofa.ai`
-2. Cloudflare Worker 提取子域名 `username`
-3. Worker 获取 `developers.md` 找到 `username` 对应的配置文件 URL
-4. Worker 获取链接的配置文件（例如来自开发者的个人仓库）
-5. Worker 解析 markdown 内容并生成 HTML 页面
+1. 将SVG文件添加到 `resources/icons/`
+2. 在 `worker.js` 的 `ICONS` 映射中添加图标名
+3. 在 `DOMAIN_TO_ICON` 中添加域名映射（如需要）
 
-## 开发者配置文件格式
+### 本地测试
 
-每位开发者维护自己的配置文件，格式如下：
+```bash
+# 安装依赖
+npm install -g wrangler
 
-```markdown
-[Github][https://github.com/username] [https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg]
-[LinkedIn][https://linkedin.com/in/username] [https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/linkedin.svg]
-[Twitter][https://twitter.com/username] [https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/x.svg]
-[Email][mailto:user@example.com] [https://cdn.jsdelivr.net/npm/lucide@latest/dist/esm/icons/mail.svg]
+# 本地开发
+wrangler dev
+
+# 部署到Cloudflare
+wrangler publish
 ```
 
-### 链接格式
-- `[显示名称][URL] [图标URL]`
-- 图标 URL 使用完整的 CDN 链接，参考 `ICON_REFERENCE.md`
-- 开发者可以添加任意数量的链接
+## 🤝 贡献指南
 
-## 添加新开发者
+1. Fork 此仓库
+2. 创建你的配置文件
+3. 提交 Pull Request
+4. 等待审核和合并
 
-1. 创建或更新你的个人配置文件（可以在你自己的仓库中）
-2. 在 `developers.md` 中添加从你的用户名到配置文件 URL 的映射（文件可以放在你自己的仓库，也可以放在username-mofa-links/ 下）
-3. 提交 pull request
-4. 合并后，你的页面将在 `username.mofa.ai` 上线
+## 📄 许可证
+
+MIT License - 查看 [LICENSE](LICENSE) 文件了解详情。
+
+## 🔗 相关链接
+
+- [MoFA 官网](https://mofa.ai)
+- [Cloudflare Workers 文档](https://developers.cloudflare.com/workers/)
+- [图标库参考](resources/icons/ICON_REFERENCE.md)
+
+---
+
+由 [MoFA](https://mofa.ai) ❤️ 强力驱动
