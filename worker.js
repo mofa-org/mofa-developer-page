@@ -186,16 +186,16 @@ function getIconForLink(url, iconHint) {
     const fullUrl = url.toLowerCase();
     console.log('🌐 Analyzing domain:', domain, 'fullUrl:', fullUrl);
     
-    // 特殊处理：根据URL内容判断
-    if (fullUrl.includes('wechat') || fullUrl.includes('WeChat')) {
+    // 特殊处理：根据URL内容判断（不区分大小写）
+    if (fullUrl.includes('wechat')) {
       console.log('✅ WeChat detected in URL');
       return `/icons/wechat.svg`;
     }
-    if (fullUrl.includes('skype') || fullUrl.includes('Skype')) {
+    if (fullUrl.includes('skype')) {
       console.log('✅ Skype detected in URL');
       return `/icons/skype.svg`;
     }
-    if (fullUrl.includes('whatsapp') || fullUrl.includes('WhatsApp')) {
+    if (fullUrl.includes('whatsapp')) {
       console.log('✅ WhatsApp detected in URL');
       return `/icons/whatsapp.svg`;
     }
