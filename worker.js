@@ -118,8 +118,10 @@ const DOMAIN_TO_ICON = {
   'xiaohongshu.com': 'xiaohongshu',
   'bilibili.com': 'bilibili',
   'space.bilibili.com': 'bilibili',
-  'feishu.cn': 'feishu',
-  'lark.com': 'feishu'
+  'feishu.cn': 'message-square',
+  'lark.com': 'message-square',
+  // 特殊处理：这些链接不是标准域名，需要特殊检测
+  'raw.githubusercontent.com': 'home'  // 对于GitHub raw文件，默认用home图标
 };
 
 // 图标处理函数 - 从GitHub raw获取图标文件
@@ -181,8 +183,24 @@ function getIconForLink(url, iconHint) {
   try {
     const urlObj = new URL(url);
     const domain = urlObj.hostname.toLowerCase();
-    console.log('🌐 Analyzing domain:', domain);
+    const fullUrl = url.toLowerCase();
+    console.log('🌐 Analyzing domain:', domain, 'fullUrl:', fullUrl);
     
+    // 特殊处理：根据URL内容判断
+    if (fullUrl.includes('wechat') || fullUrl.includes('WeChat')) {
+      console.log('✅ WeChat detected in URL');
+      return `/icons/wechat.svg`;
+    }
+    if (fullUrl.includes('skype') || fullUrl.includes('Skype')) {
+      console.log('✅ Skype detected in URL');
+      return `/icons/skype.svg`;
+    }
+    if (fullUrl.includes('whatsapp') || fullUrl.includes('WhatsApp')) {
+      console.log('✅ WhatsApp detected in URL');
+      return `/icons/whatsapp.svg`;
+    }
+    
+    // 标准域名匹配
     for (const [domainPattern, iconName] of Object.entries(DOMAIN_TO_ICON)) {
       if (domain.includes(domainPattern)) {
         const iconPath = `/icons/${iconName}.svg`;
