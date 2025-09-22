@@ -103,9 +103,20 @@ Complete list of available icons for developer profile links. Use the full URL i
 
 ## Usage Example
 
-```markdown
-[GitHub][https://github.com/username] [https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg]
-[Email][mailto:user@example.com] [https://cdn.jsdelivr.net/npm/lucide@latest/dist/esm/icons/mail.svg]
+YAML format configuration:
+
+```yaml
+github:
+  url: https://github.com/username
+  icon: https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg
+
+email:
+  url: mailto:user@example.com
+  icon: https://cdn.jsdelivr.net/npm/lucide@latest/dist/esm/icons/mail.svg
+
+homepage:
+  url: https://yourwebsite.com
+  icon: https://cdn.jsdelivr.net/npm/lucide@latest/dist/esm/icons/home.svg
 ```
 
 ## Icon Libraries Used

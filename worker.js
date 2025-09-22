@@ -36,6 +36,12 @@ addEventListener('fetch', event => {
 async function handleRequest(request) {
   const url = new URL(request.url);
   const hostname = url.hostname;
+  const pathname = url.pathname;
+  
+  // 处理 favicon.ico 请求
+  if (pathname === '/favicon.ico') {
+    return Response.redirect('https://mofa.ai/mofa-logo.png', 301);
+  }
   
   // 检查是否是子域名请求
   if (!isSubdomainRequest(hostname)) {
@@ -71,7 +77,8 @@ async function handleRequest(request) {
     
   } catch (error) {
     console.error('Error handling request:', error);
-    return generateErrorPage(username, hostname);
+    // 对于配置错误，显示默认页面而不是错误页面
+    return generateDefaultPage(username, hostname);
   }
 }
 
@@ -157,22 +164,53 @@ async function parseConfigFile(configUrl) {
 }
 
 function parseLinks(content) {
-  // 解析格式: [Display Name][URL] [Icon URL]
-  const lines = content.split('\n');
+  // 解析YAML格式配置文件
   const links = [];
   
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
+  try {
+    const lines = content.split('\n');
+    let currentLink = {};
     
-    const match = trimmed.match(/^\[([^\]]+)\]\[([^\]]+)\]\s+\[([^\]]+)\]$/);
-    if (match) {
-      links.push({
-        name: match[1],
-        url: match[2],
-        icon: match[3]
-      });
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      
+      // 匹配主键 (链接名称) - 格式: linkname:
+      const keyMatch = trimmed.match(/^([a-zA-Z0-9_-]+):\s*$/);
+      if (keyMatch) {
+        // 保存前一个链接
+        if (currentLink.name && currentLink.url && currentLink.icon) {
+          links.push(currentLink);
+        }
+        // 开始新的链接，使用首字母大写的显示名称
+        currentLink = { 
+          name: keyMatch[1].charAt(0).toUpperCase() + keyMatch[1].slice(1)
+        };
+        continue;
+      }
+      
+      // 匹配url字段 - 格式: url: https://...
+      const urlMatch = trimmed.match(/^url:\s*(.+)$/);
+      if (urlMatch && currentLink.name) {
+        currentLink.url = urlMatch[1].trim();
+        continue;
+      }
+      
+      // 匹配icon字段 - 格式: icon: https://...
+      const iconMatch = trimmed.match(/^icon:\s*(.+)$/);
+      if (iconMatch && currentLink.name) {
+        currentLink.icon = iconMatch[1].trim();
+        continue;
+      }
     }
+    
+    // 添加最后一个链接
+    if (currentLink.name && currentLink.url && currentLink.icon) {
+      links.push(currentLink);
+    }
+    
+  } catch (error) {
+    console.error('Error parsing YAML config:', error);
   }
   
   return links;
