@@ -59,11 +59,17 @@ async function handleRequest(request) {
     const configUrl = await getDeveloperConfig(username);
     
     if (!configUrl) {
-      return generateDefaultPage(username, hostname);
+      // 调试：显示调试信息页面
+      return generateDebugPage(username, hostname, 'No config URL found');
     }
     
     // 获取并解析配置文件
     const links = await parseConfigFile(configUrl);
+    
+    if (links.length === 0) {
+      // 调试：显示调试信息页面
+      return generateDebugPage(username, hostname, `Config URL found: ${configUrl}, but no links parsed`);
+    }
     
     // 生成HTML页面
     const html = generateHTML(username, links, hostname);
@@ -77,8 +83,8 @@ async function handleRequest(request) {
     
   } catch (error) {
     console.error('Error handling request:', error);
-    // 对于配置错误，显示默认页面而不是错误页面
-    return generateDefaultPage(username, hostname);
+    // 对于配置错误，显示调试页面
+    return generateDebugPage(username, hostname, `Error: ${error.message}`);
   }
 }
 
@@ -96,27 +102,36 @@ function extractUsername(hostname) {
 }
 
 async function getDeveloperConfig(username) {
-  const cacheKey = `config_mapping_${username}`;
+  console.log('🔍 getDeveloperConfig called with username:', username);
+  const cacheKey = `https://cache/${username}/config`;
   
   // 尝试从缓存获取
   const cached = await caches.default.match(cacheKey);
   if (cached) {
+    console.log('📦 Found cached config');
     const data = await cached.json();
+    console.log('📦 Cached configUrl:', data.configUrl);
     return data.configUrl;
   }
   
   try {
     // 获取 developers.md 文件
-    const response = await fetch(
-      `${CONFIG.GITHUB_RAW_BASE}/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/main/${CONFIG.DEVELOPERS_FILE}`
-    );
+    const url = `${CONFIG.GITHUB_RAW_BASE}/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/main/${CONFIG.DEVELOPERS_FILE}`;
+    console.log('🌐 Fetching developers mapping from:', url);
+    
+    const response = await fetch(url);
     
     if (!response.ok) {
+      console.error('❌ Failed to fetch developers mapping, status:', response.status);
       throw new Error('Failed to fetch developers mapping');
     }
     
     const content = await response.text();
+    console.log('📄 developers.md content length:', content.length);
+    console.log('📄 developers.md content preview:', content.substring(0, 200));
+    
     const configUrl = parseUsernameMapping(content, username);
+    console.log('🔗 Parsed configUrl for', username, ':', configUrl);
     
     // 缓存结果
     const cacheResponse = new Response(JSON.stringify({ configUrl }), {
@@ -127,65 +142,91 @@ async function getDeveloperConfig(username) {
     return configUrl;
     
   } catch (error) {
-    console.error('Error fetching developer config:', error);
+    console.error('❌ Error fetching developer config:', error);
     return null;
   }
 }
 
 function parseUsernameMapping(content, username) {
+  console.log('🔍 parseUsernameMapping called for username:', username);
   // 解析格式: [username][config-url]
   const lines = content.split('\n');
+  console.log('📝 Total lines in developers.md:', lines.length);
   
-  for (const line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    console.log(`📝 Line ${i}: "${line}"`);
     const match = line.match(/^\[([^\]]+)\]\[([^\]]+)\]$/);
-    if (match && match[1] === username) {
-      return match[2];
+    if (match) {
+      console.log(`✅ Found mapping: "${match[1]}" -> "${match[2]}"`);
+      if (match[1] === username) {
+        console.log(`🎯 Found match for username: ${username}`);
+        return match[2];
+      }
     }
   }
   
+  console.log(`❌ No mapping found for username: ${username}`);
   return null;
 }
 
 async function parseConfigFile(configUrl) {
+  console.log('🔗 parseConfigFile called with URL:', configUrl);
   try {
     const response = await fetch(configUrl);
     
     if (!response.ok) {
+      console.error('❌ Failed to fetch config file, status:', response.status);
       throw new Error('Failed to fetch config file');
     }
     
     const content = await response.text();
-    return parseLinks(content);
+    console.log('📄 Config file content length:', content.length);
+    console.log('📄 Config file preview:', content.substring(0, 300));
+    
+    const links = parseLinks(content);
+    console.log('🔗 Parsed links count:', links.length);
+    console.log('🔗 Parsed links:', JSON.stringify(links, null, 2));
+    
+    return links;
     
   } catch (error) {
-    console.error('Error parsing config file:', error);
+    console.error('❌ Error parsing config file:', error);
     return [];
   }
 }
 
 function parseLinks(content) {
+  console.log('📋 parseLinks called');
   // 解析YAML格式配置文件
   const links = [];
   
   try {
     const lines = content.split('\n');
+    console.log('📝 Total lines to process:', lines.length);
     let currentLink = {};
     
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
       const trimmed = line.trim();
+      console.log(`📝 Line ${i}: "${trimmed}"`);
+      
       if (!trimmed) continue;
       
       // 匹配主键 (链接名称) - 格式: linkname:
       const keyMatch = trimmed.match(/^([a-zA-Z0-9_-]+):\s*$/);
       if (keyMatch) {
+        console.log(`🔑 Found key: "${keyMatch[1]}"`);
         // 保存前一个链接
         if (currentLink.name && currentLink.url && currentLink.icon) {
+          console.log(`✅ Adding completed link:`, currentLink);
           links.push(currentLink);
         }
         // 开始新的链接，使用首字母大写的显示名称
         currentLink = { 
           name: keyMatch[1].charAt(0).toUpperCase() + keyMatch[1].slice(1)
         };
+        console.log(`🆕 Started new link: "${currentLink.name}"`);
         continue;
       }
       
@@ -193,6 +234,7 @@ function parseLinks(content) {
       const urlMatch = trimmed.match(/^url:\s*(.+)$/);
       if (urlMatch && currentLink.name) {
         currentLink.url = urlMatch[1].trim();
+        console.log(`🔗 Added URL: "${currentLink.url}"`);
         continue;
       }
       
@@ -200,17 +242,21 @@ function parseLinks(content) {
       const iconMatch = trimmed.match(/^icon:\s*(.+)$/);
       if (iconMatch && currentLink.name) {
         currentLink.icon = iconMatch[1].trim();
+        console.log(`🎨 Added icon: "${currentLink.icon}"`);
         continue;
       }
     }
     
     // 添加最后一个链接
     if (currentLink.name && currentLink.url && currentLink.icon) {
+      console.log(`✅ Adding final link:`, currentLink);
       links.push(currentLink);
     }
     
+    console.log(`📋 Final parsed links count: ${links.length}`);
+    
   } catch (error) {
-    console.error('Error parsing YAML config:', error);
+    console.error('❌ Error parsing YAML config:', error);
   }
   
   return links;
@@ -606,6 +652,83 @@ function generateDefaultPage(username, hostname) {
     headers: {
       'Content-Type': 'text/html;charset=UTF-8',
       'Cache-Control': 'public, max-age=60'
+    }
+  });
+}
+
+function generateDebugPage(username, hostname, debugInfo) {
+  const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>调试页面 - ${username}</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: ${COLORS.black};
+        }
+        
+        .container {
+            max-width: 600px;
+            padding: 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 2px solid ${COLORS.gray};
+        }
+        
+        .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: ${COLORS.gradient1};
+        }
+        
+        .debug-info {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+        
+        .username {
+            font-weight: 600;
+            color: ${COLORS.gradient1};
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🐛 调试页面</h1>
+        <p>用户名: <span class="username">${username}</span></p>
+        <p>域名: <span class="username">${hostname}</span></p>
+        
+        <div class="debug-info">调试信息: ${debugInfo}</div>
+        
+        <p>如果看到这个页面，说明配置解析出现了问题。</p>
+    </div>
+</body>
+</html>`;
+  
+  return new Response(html, {
+    headers: {
+      'Content-Type': 'text/html;charset=UTF-8'
     }
   });
 }
