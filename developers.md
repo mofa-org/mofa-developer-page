@@ -17,21 +17,31 @@ Format: `[username][config-file-url]`
 
 ## Configuration File Format
 
-Use YAML format with full icon URLs:
+Use YAML format with smart icon selection:
 
 ```yaml
 homepage:
   url: https://your-website.com
-  icon: https://cdn.jsdelivr.net/npm/lucide@latest/dist/esm/icons/home.svg
+  icon: home                    # 使用内置图标名
 
 github:
   url: https://github.com/yourusername
-  icon: https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg
+  icon:                         # 留空自动识别GitHub图标
 
 linkedin:
   url: https://www.linkedin.com/in/yourprofile/
-  icon: https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/linkedin.svg
+  icon:                         # 留空自动识别LinkedIn图标
+
+custom:
+  url: https://example.com
+  icon: https://example.com/icon.svg  # 使用完整URL
 ```
+
+### 图标使用方式
+
+1. **留空自动识别**：根据URL域名自动选择合适图标
+2. **使用图标名**：如 `github`、`home`、`mail` 等
+3. **完整URL**：使用自定义图标的完整链接
 
 ## Guidelines
 
@@ -39,4 +49,20 @@ linkedin:
 - Config file can be hosted in your personal repository
 - Ensure the raw file URL is publicly accessible
 - Use YAML format as shown above
-- Include full URLs for icons (recommend using CDN links)
+- Icon can be left empty for auto-detection, use built-in names, or custom URLs
+
+## Available Built-in Icons
+
+Popular platforms: `github`, `linkedin`, `x`, `telegram`, `discord`, `youtube`, `spotify`, `instagram`, `facebook`, `tiktok`, `reddit`, `medium`, `notion`
+
+Chinese platforms: `wechat`, `weibo`, `bilibili`, `xiaohongshu`, `zhihu`, `qq`, `dingtalk`
+
+Communication: `line`, `whatsapp`, `skype`, `signal`, `slack`, `zoom`, `teams`, `feishu`
+
+Music & Media: `spotify`, `youtube`, `soundcloud`, `applemusic`, `netease`, `twitch`
+
+General: `home`, `mail`, `music`, `message-square`
+
+Payment: `paypal`, `patreon`, `kofi`
+
+See `/resources/icons/` for the complete list.

@@ -29,6 +29,165 @@ const COLORS = {
   gray: '#E2E8F0'
 };
 
+// 图标映射 - 简写名称对应的SVG内容
+const ICONS = {
+  // 已有图标...（保持原有的图标代码）
+  'github': '...',  // 为节省空间，这里用...表示保持原内容
+  // 新增全球热门服务
+  'facebook': 'facebook',
+  'instagram': 'instagram', 
+  'tiktok': 'tiktok',
+  'snapchat': 'snapchat',
+  'reddit': 'reddit',
+  'pinterest': 'pinterest',
+  'twitch': 'twitch',
+  'medium': 'medium',
+  'notion': 'notion',
+  'paypal': 'paypal',
+  'patreon': 'patreon',
+  'kofi': 'kofi',
+  'mastodon': 'mastodon',
+  'signal': 'signal',
+  'viber': 'viber',
+  'slack': 'slack',
+  'zoom': 'zoom',
+  'teams': 'teams',
+  'applemusic': 'applemusic',
+  'soundcloud': 'soundcloud',
+  'netease': 'netease',
+  // 中文平台
+  'weibo': 'weibo',
+  'zhihu': 'zhihu', 
+  'douban': 'douban',
+  'qq': 'qq',
+  'dingtalk': 'dingtalk',
+  'douyin': 'douyin',
+  'feishu': 'message-square',
+  'lark': 'message-square'
+};
+
+// URL域名到图标的智能映射
+const DOMAIN_TO_ICON = {
+  'github.com': 'github',
+  'linkedin.com': 'linkedin',
+  'twitter.com': 'x',
+  'x.com': 'x',
+  't.me': 'telegram',
+  'telegram.org': 'telegram',
+  'line.me': 'line',
+  'web.whatsapp.com': 'whatsapp',
+  'wa.me': 'whatsapp',
+  'discord.gg': 'discord',
+  'discord.com': 'discord',
+  'steamcommunity.com': 'steam',
+  'store.steampowered.com': 'steam',
+  'youtube.com': 'youtube',
+  'youtu.be': 'youtube',
+  'open.spotify.com': 'spotify',
+  'spotify.com': 'spotify',
+  'facebook.com': 'facebook',
+  'fb.com': 'facebook',
+  'instagram.com': 'instagram',
+  'tiktok.com': 'tiktok',
+  'snapchat.com': 'snapchat',
+  'reddit.com': 'reddit',
+  'pinterest.com': 'pinterest',
+  'twitch.tv': 'twitch',
+  'medium.com': 'medium',
+  'notion.so': 'notion',
+  'paypal.com': 'paypal',
+  'paypal.me': 'paypal',
+  'patreon.com': 'patreon',
+  'ko-fi.com': 'kofi',
+  'mastodon.social': 'mastodon',
+  'signal.org': 'signal',
+  'viber.com': 'viber',
+  'slack.com': 'slack',
+  'zoom.us': 'zoom',
+  'teams.microsoft.com': 'teams',
+  'music.apple.com': 'applemusic',
+  'soundcloud.com': 'soundcloud',
+  'music.163.com': 'netease',
+  // 中文平台
+  'weibo.com': 'weibo',
+  'zhihu.com': 'zhihu',
+  'douban.com': 'douban',
+  'qq.com': 'qq',
+  'dingtalk.com': 'dingtalk',
+  'douyin.com': 'douyin',
+  'xiaohongshu.com': 'xiaohongshu',
+  'bilibili.com': 'bilibili',
+  'space.bilibili.com': 'bilibili',
+  'feishu.cn': 'feishu',
+  'lark.com': 'feishu'
+};
+
+// 图标处理函数 - 从GitHub raw获取图标文件
+async function handleIconRequest(pathname) {
+  const iconName = pathname.replace('/icons/', '').replace('.svg', '');
+  
+  // 检查是否是支持的图标
+  if (Object.values(ICONS).includes(iconName) || iconName === 'home' || iconName === 'mail' || iconName === 'music' || iconName === 'message-square') {
+    try {
+      const iconUrl = `${CONFIG.GITHUB_RAW_BASE}/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/main/resources/icons/${iconName}.svg`;
+      const response = await fetch(iconUrl);
+      
+      if (response.ok) {
+        const svg = await response.text();
+        return new Response(svg, {
+          headers: {
+            'Content-Type': 'image/svg+xml',
+            'Cache-Control': 'public, max-age=86400'
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching icon:', error);
+    }
+  }
+  
+  // 返回默认图标
+  const defaultIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+  return new Response(defaultIcon, {
+    headers: {
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'public, max-age=86400'
+    }
+  });
+}
+
+// 智能图标选择函数
+function getIconForLink(url, iconHint) {
+  // 1. 如果明确指定了图标
+  if (iconHint) {
+    // 如果是完整URL，直接返回
+    if (iconHint.startsWith('http')) {
+      return iconHint;
+    }
+    // 如果是图标名，返回本地路径
+    if (ICONS[iconHint]) {
+      return `/icons/${iconHint}.svg`;
+    }
+  }
+  
+  // 2. 根据URL域名自动选择图标
+  try {
+    const domain = new URL(url).hostname.toLowerCase();
+    for (const [domainPattern, iconName] of Object.entries(DOMAIN_TO_ICON)) {
+      if (domain.includes(domainPattern)) {
+        return `/icons/${iconName}.svg`;
+      }
+    }
+  } catch (e) {
+    // URL解析失败，继续使用默认图标
+  }
+  
+  // 3. 默认图标
+  if (url.includes('mailto:')) return `/icons/mail.svg`;
+  if (url.includes('tel:')) return `/icons/phone.svg`;
+  return `/icons/home.svg`;
+}
+
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
 });
@@ -41,6 +200,11 @@ async function handleRequest(request) {
   // 处理 favicon.ico 请求
   if (pathname === '/favicon.ico') {
     return Response.redirect('https://mofa.ai/mofa-logo.png', 301);
+  }
+  
+  // 处理图标请求
+  if (pathname.startsWith('/icons/')) {
+    return handleIconRequest(pathname);
   }
   
   // 检查是否是子域名请求
@@ -218,7 +382,9 @@ function parseLinks(content) {
       if (keyMatch) {
         console.log(`🔑 Found key: "${keyMatch[1]}"`);
         // 保存前一个链接
-        if (currentLink.name && currentLink.url && currentLink.icon) {
+        if (currentLink.name && currentLink.url) {
+          // 使用智能图标选择
+          currentLink.icon = getIconForLink(currentLink.url, currentLink.iconHint);
           console.log(`✅ Adding completed link:`, currentLink);
           links.push(currentLink);
         }
@@ -238,17 +404,19 @@ function parseLinks(content) {
         continue;
       }
       
-      // 匹配icon字段 - 格式: icon: https://...
-      const iconMatch = trimmed.match(/^icon:\s*(.+)$/);
+      // 匹配icon字段 - 格式: icon: https://... 或 icon: github 或 留空
+      const iconMatch = trimmed.match(/^icon:\s*(.*)$/);
       if (iconMatch && currentLink.name) {
-        currentLink.icon = iconMatch[1].trim();
-        console.log(`🎨 Added icon: "${currentLink.icon}"`);
+        const iconValue = iconMatch[1].trim();
+        currentLink.iconHint = iconValue || null; // 保存原始值，留空则为null
+        console.log(`🎨 Added icon hint: "${iconValue}"`);
         continue;
       }
     }
     
     // 添加最后一个链接
-    if (currentLink.name && currentLink.url && currentLink.icon) {
+    if (currentLink.name && currentLink.url) {
+      currentLink.icon = getIconForLink(currentLink.url, currentLink.iconHint);
       console.log(`✅ Adding final link:`, currentLink);
       links.push(currentLink);
     }
