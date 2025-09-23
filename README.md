@@ -7,6 +7,8 @@
 - **YAML配置**：配置链接和图标
 - **响应式设计**：适配移动端和桌面端
 - **快速访问**：通过 `用户名.mofa.ai` 访问个人页面
+- **🏆 成就展示**：展示MoFA贡献、黑客松获奖和GitHub动态
+- **📊 GitHub集成**：实时显示GitHub统计和活动
 
 ## 快速开始
 
@@ -139,6 +141,10 @@ mofa-developer-page/
 ├── examples/                  # 示例配置文件
 │   ├── example-mofa-links.md  # 完整示例
 │   └── simple-example.md      # 简单示例
+├── achievements/              # 🏆 成就展示系统 (Core Team维护)
+│   ├── README.md              # 成就系统说明
+│   ├── template-achievements.md # 成就模板
+│   └── {username}-achievements.md # 个人成就记录
 ├── resources/
 │   └── icons/                 # 图标资源库
 │       ├── ICON_REFERENCE.md  # 图标参考文档
@@ -166,12 +172,42 @@ wrangler dev
 wrangler publish
 ```
 
+## 🏆 成就展示系统
+
+### 谁可以拥有成就记录？
+- **MoFA Core Team 成员**
+- **重要贡献者** (10+ 有意义的贡献)
+- **黑客松获奖者** (MoFA相关竞赛)
+- **社区领导者** (组织者、演讲者、导师)
+
+### 成就类型
+- **📊 GitHub统计**: 自动显示GitHub活动和统计
+- **💻 MoFA贡献**: 仓库贡献记录和影响描述  
+- **🏆 黑客松获奖**: 竞赛名称、奖项、项目描述
+- **🌟 社区认可**: 演讲、文章、导师活动等
+
+### 如何申请成就记录？
+1. **Core Team成员**: 直接创建achievement文件
+2. **社区成员**: 通过GitHub issue或Discord联系core team
+3. **所有成就必须提供验证链接和证据**
+
+详见 [achievements/README.md](achievements/README.md)
+
 ## 🤝 贡献指南
 
+### 添加个人链接页面
 1. Fork 此仓库
 2. 创建你的配置文件
 3. 提交 Pull Request
 4. 等待审核和合并
+
+### 申请成就展示
+1. 准备成就证明材料（GitHub贡献、获奖证书、项目链接等）
+2. 通过GitHub issue提交申请，包含：
+   - 详细成就描述
+   - 支持链接和证据
+   - 个人GitHub用户名
+3. Core team审核并创建成就记录
 
 ## 📄 许可证
 
