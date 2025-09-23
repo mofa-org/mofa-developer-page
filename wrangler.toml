@@ -1,0 +1,31 @@
+# Cloudflare Workers 配置文件
+name = "mofa-developer-pages"
+main = "src/worker.js"
+compatibility_date = "2024-01-15"
+
+# 路由配置
+[env.production]
+routes = [
+  { pattern = "*.mofa.ai/*", zone_name = "mofa.ai" }
+]
+
+[env.staging]
+routes = [
+  { pattern = "*.mofa-dev.workers.dev/*" }
+]
+
+# 资源配置
+[build]
+command = ""
+
+# 环境变量（如需要）
+[vars]
+# 生产环境域名在代码中硬编码，无需环境变量
+
+# Worker 限制
+[limits]
+cpu_ms = 50
+
+# 部署配置
+[triggers]
+crons = []
