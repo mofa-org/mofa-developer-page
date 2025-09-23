@@ -24,7 +24,7 @@ twitter:
 
 feishu:
   url: https://www.feishu.cn/invitation/page/add_contact/?token=fd764679-6091-4f1a-9abc-233a0fd74b70&unique_id=nHZT70IxNGRoroixFQweLA==
-  icon:
+  icon: message-square
 
 wechat:
   url: https://raw.githubusercontent.com/BH3GEI/Resume/main/WechatQR.png

@@ -6,7 +6,7 @@ Format: `[username][config-file-url]`
 
 ## Active Developers
 
-[liyao][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/refs/heads/main/username-mofa-links/liyao-mofa-links.md]
+[bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/refs/heads/main/username-mofa-links/liyao-mofa-links.md]
 
 ## How to Add Yourself
 
