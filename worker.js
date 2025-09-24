@@ -620,9 +620,10 @@ function parseAchievements(content) {
       const dateMatch = trimmed.match(/- \*\*Date\*\*:\s*(.+)/);
       if (dateMatch) {
         currentItem.date = dateMatch[1].trim();
-        // 只有当有事件、奖项和项目时才添加
-        if (currentItem.event && currentItem.award && currentItem.project) {
+        // 只有当有事件和奖项时才添加
+        if (currentItem.event && currentItem.award) {
           achievements.hackathons.push({...currentItem});
+          console.log('✅ Added hackathon:', currentItem);
         }
         currentItem = {};
       }
@@ -893,7 +894,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 2fr 3fr;
             gap: 40px;
             align-items: start;
         }
@@ -1099,7 +1100,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         /* 大平板和小桌面响应式 */
         @media (max-width: 1200px) {
             .main-content {
-                grid-template-columns: 1fr 350px;
+                grid-template-columns: 1fr 2fr;
             }
         }
         
