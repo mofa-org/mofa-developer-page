@@ -540,7 +540,7 @@ async function fetchUserAchievements(username) {
 function parseAchievements(content) {
   const achievements = {
     githubUsername: null,
-    enableGithubStats: false,
+    enableGithubStats: true, // 默认开启
     contributions: [],
     hackathons: [],
     recognition: [],
@@ -562,17 +562,13 @@ function parseAchievements(content) {
       continue;
     }
     
-    // GitHub Stats section - 修复解析逻辑
-    if (trimmed.startsWith('- GitHub Username:')) {
-      const match = trimmed.match(/- GitHub Username:\s*(\w+)/);
-      if (match) {
-        achievements.githubUsername = match[1];
-        console.log('✅ GitHub Username found:', match[1]);
+    // 从标题推断GitHub用户名
+    if (trimmed.startsWith('# ') && trimmed.includes(' - MoFA Achievements')) {
+      const usernameMatch = trimmed.match(/# (\w+) - MoFA Achievements/);
+      if (usernameMatch) {
+        achievements.githubUsername = usernameMatch[1];
+        console.log('✅ GitHub Username inferred from title:', usernameMatch[1]);
       }
-    }
-    if (trimmed.startsWith('- Enable GitHub stats display:')) {
-      achievements.enableGithubStats = trimmed.toLowerCase().includes('true');
-      console.log('✅ Enable GitHub stats:', achievements.enableGithubStats);
     }
     
     // Repository contributions - 改进匹配规则
@@ -597,8 +593,8 @@ function parseAchievements(content) {
       }
     }
     
-    // Hackathon awards - 改进解析
-    if (trimmed.startsWith('### ') && !trimmed.includes('##') && currentSection.includes('Hackathon')) {
+    // Awards - 改进解析
+    if (trimmed.startsWith('### ') && !trimmed.includes('##') && currentSection.includes('Awards')) {
       const eventName = trimmed.replace('### ', '').trim();
       if (eventName.length > 0) {
         currentItem = { event: eventName };
@@ -616,6 +612,18 @@ function parseAchievements(content) {
         currentItem.project = projectMatch[1].trim();
       }
     }
+    if (trimmed.startsWith('- **Team**:') && currentItem.event) {
+      const teamMatch = trimmed.match(/- \*\*Team\*\*:\s*(.+)/);
+      if (teamMatch) {
+        currentItem.team = teamMatch[1].trim();
+      }
+    }
+    if (trimmed.startsWith('- **Achievement**:') && currentItem.event) {
+      const achievementMatch = trimmed.match(/- \*\*Achievement\*\*:\s*(.+)/);
+      if (achievementMatch) {
+        currentItem.achievement = achievementMatch[1].trim();
+      }
+    }
     if (trimmed.startsWith('- **Date**:') && currentItem.event) {
       const dateMatch = trimmed.match(/- \*\*Date\*\*:\s*(.+)/);
       if (dateMatch) {
@@ -623,7 +631,7 @@ function parseAchievements(content) {
         // 只有当有事件和奖项时才添加
         if (currentItem.event && currentItem.award) {
           achievements.hackathons.push({...currentItem});
-          console.log('✅ Added hackathon:', currentItem);
+          console.log('✅ Added award:', currentItem);
         }
         currentItem = {};
       }
@@ -746,7 +754,9 @@ function generateAwardsCard(achievements) {
             <div class="award-content">
               <div class="award-title">${award.award}</div>
               <div class="award-event">${award.event}</div>
-              <div class="award-project">${award.project}</div>
+              ${award.project ? `<div class="award-project">项目: ${award.project}</div>` : ''}
+              ${award.team ? `<div class="award-team">团队: ${award.team}</div>` : ''}
+              ${award.achievement ? `<div class="award-achievement">${award.achievement}</div>` : ''}
               <div class="award-date">${award.date}</div>
             </div>
           </div>
@@ -1338,6 +1348,17 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             font-size: 0.75rem;
             color: #888;
             font-style: italic;
+        }
+        
+        .award-team {
+            font-size: 0.75rem;
+            color: #888;
+        }
+        
+        .award-achievement {
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 500;
         }
         
         .award-date {

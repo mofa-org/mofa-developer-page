@@ -1,17 +1,13 @@
 # bh3gei - MoFA Achievements
 
-## GitHub Stats
-- GitHub Username: bh3gei
-- Enable GitHub stats display: true
-
 ## GitHub Activity
 - 推送代码 in mofa-org/mofa (2小时前)
-- 创建仓库 in bh3gei/new-project (1天前)  
+- 创建仓库 in bh3gei/new-project (1天前)
 - 关注仓库 in microsoft/vscode (2天前)
 - Pull Request in mofa-org/mofa-website (3天前)
 - 处理Issue in bh3gei/code-analyzer-ai (5天前)
 
-## Hackathon Awards
+## Awards
 
 ### GOSIM Hangzhou 2025 Code Alert Hackathon
 - **Award**: First Place Winner
