@@ -545,7 +545,8 @@ function parseAchievements(content) {
     hackathons: [],
     recognition: [],
     currentProjects: [],
-    repositories: []
+    repositories: [],
+    activities: []
   };
   
   const lines = content.split('\n');
@@ -603,20 +604,20 @@ function parseAchievements(content) {
         currentItem = { event: eventName };
       }
     }
-    if (trimmed.includes('**Award**:') && currentItem.event) {
-      const awardMatch = trimmed.match(/\*\*Award\*\*:\s*(.+)/);
+    if (trimmed.startsWith('- **Award**:') && currentItem.event) {
+      const awardMatch = trimmed.match(/- \*\*Award\*\*:\s*(.+)/);
       if (awardMatch) {
         currentItem.award = awardMatch[1].trim();
       }
     }
-    if (trimmed.includes('**Project**:') && currentItem.event) {
-      const projectMatch = trimmed.match(/\*\*Project\*\*:\s*(.+)/);
+    if (trimmed.startsWith('- **Project**:') && currentItem.event) {
+      const projectMatch = trimmed.match(/- \*\*Project\*\*:\s*(.+)/);
       if (projectMatch) {
         currentItem.project = projectMatch[1].trim();
       }
     }
-    if (trimmed.includes('**Date**:') && currentItem.event) {
-      const dateMatch = trimmed.match(/\*\*Date\*\*:\s*(.+)/);
+    if (trimmed.startsWith('- **Date**:') && currentItem.event) {
+      const dateMatch = trimmed.match(/- \*\*Date\*\*:\s*(.+)/);
       if (dateMatch) {
         currentItem.date = dateMatch[1].trim();
         // 只有当有事件、奖项和项目时才添加
@@ -659,27 +660,35 @@ function parseAchievements(content) {
         }
       }
     }
+    
+    // GitHub Activity - 新增动态解析
+    if (currentSection.includes('GitHub') && currentSection.includes('Activity')) {
+      if (trimmed.startsWith('- ')) {
+        const activityMatch = trimmed.match(/- (.+?) in (.+?) \((.+?)\)/);
+        if (activityMatch) {
+          achievements.activities.push({
+            type: activityMatch[1],
+            repo: activityMatch[2],
+            time: activityMatch[3]
+          });
+        }
+      }
+    }
   }
   
   console.log("🏆 Parsed achievements:", achievements);
   return achievements;
 }
 
-// 获取GitHub统计数据和动态
+// 获取GitHub统计数据
 async function fetchGithubStats(username) {
   if (!username) return null;
   
   try {
-    const [userResponse, eventsResponse] = await Promise.all([
-      fetch(`https://api.github.com/users/${username}`),
-      fetch(`https://api.github.com/users/${username}/events/public?per_page=5`)
-    ]);
-    
+    const userResponse = await fetch(`https://api.github.com/users/${username}`);
     if (!userResponse.ok) return null;
     
     const userData = await userResponse.json();
-    const eventsData = eventsResponse.ok ? await eventsResponse.json() : [];
-    
     return {
       followers: userData.followers,
       following: userData.following,
@@ -687,13 +696,7 @@ async function fetchGithubStats(username) {
       avatarUrl: userData.avatar_url,
       bio: userData.bio,
       location: userData.location,
-      company: userData.company,
-      events: eventsData.slice(0, 5).map(event => ({
-        type: event.type,
-        repo: event.repo?.name,
-        createdAt: event.created_at,
-        payload: event.payload
-      }))
+      company: userData.company
     };
   } catch (error) {
     console.error("❌ Error fetching GitHub stats:", error);
@@ -701,33 +704,9 @@ async function fetchGithubStats(username) {
   }
 }
 
-// 生成GitHub动态卡片
-function generateGithubActivityCard(githubStats) {
-  if (!githubStats || !githubStats.events) return '';
-  
-  const formatEventType = (type) => {
-    const types = {
-      'PushEvent': '🚀 推送代码',
-      'CreateEvent': '📦 创建仓库',
-      'WatchEvent': '⭐ 关注仓库',
-      'ForkEvent': '🍴 Fork仓库',
-      'IssuesEvent': '🐛 处理Issue',
-      'PullRequestEvent': '🔀 Pull Request',
-      'ReleaseEvent': '🎉 发布版本',
-      'CommitCommentEvent': '💬 代码评论'
-    };
-    return types[type] || '📝 ' + type;
-  };
-  
-  const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now - date;
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    if (hours < 24) return `${hours}小时前`;
-    const days = Math.floor(hours / 24);
-    return `${days}天前`;
-  };
+// 生成GitHub动态卡片（从MD配置读取）
+function generateGithubActivityCard(achievements) {
+  if (!achievements.activities || achievements.activities.length === 0) return '';
   
   return `
     <div class="achievement-card github-activity">
@@ -736,11 +715,11 @@ function generateGithubActivityCard(githubStats) {
         <h3>GitHub 动态</h3>
       </div>
       <div class="github-activity-list">
-        ${githubStats.events.map(event => `
+        ${achievements.activities.map(activity => `
           <div class="activity-item">
-            <span class="activity-type">${formatEventType(event.type)}</span>
-            <span class="activity-repo">${event.repo}</span>
-            <span class="activity-time">${formatTime(event.createdAt)}</span>
+            <span class="activity-type">${activity.type}</span>
+            <span class="activity-repo">${activity.repo}</span>
+            <span class="activity-time">${activity.time}</span>
           </div>
         `).join('')}
       </div>
@@ -754,14 +733,14 @@ function generateAwardsCard(achievements) {
   return `
     <div class="achievement-card awards-card">
       <div class="achievement-header">
-        <div class="trophy-icon">🏆</div>
+        <div class="trophy-icon">AWARD</div>
         <h3>获奖信息</h3>
       </div>
       <div class="awards-list">
         ${achievements.hackathons.slice(0, 3).map(award => `
           <div class="award-item">
             <div class="award-icon">
-              <div class="trophy-mini">🏆</div>
+              <div class="trophy-mini">AWARD</div>
             </div>
             <div class="award-content">
               <div class="award-title">${award.award}</div>
@@ -809,9 +788,7 @@ function generateAchievementsSection(achievements, githubStats) {
   let content = '<div class="achievements-section">';
   
   // 1. GitHub动态
-  if (achievements.enableGithubStats && githubStats) {
-    content += generateGithubActivityCard(githubStats);
-  }
+  content += generateGithubActivityCard(achievements);
   
   // 2. 获奖信息
   content += generateAwardsCard(achievements);
@@ -1258,7 +1235,9 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         .trophy-icon {
-            font-size: 28px;
+            font-size: 12px;
+            font-weight: 600;
+            color: ${COLORS["mofa-gradient-1"]};
         }
 
         .achievement-header h3 {
@@ -1330,7 +1309,9 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
         
         .trophy-mini {
-            font-size: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
         }
         
         .award-content {

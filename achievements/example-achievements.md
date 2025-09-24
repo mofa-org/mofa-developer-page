@@ -4,18 +4,17 @@
 - GitHub Username: example
 - Enable GitHub stats display: true
 
-## MoFA Related Contributions
-
-### Repository Contributions
-- **mofa-org/example-project**
-  - Role: Senior Developer
-  - Contributions: 30+ commits, feature development
-  - Focus: Backend architecture, API design
+## GitHub Activity
+- 推送代码 in example/awesome-project (3小时前)
+- 创建仓库 in example/new-tool (1天前)
+- 关注仓库 in facebook/react (2天前)
+- Pull Request in mofa-org/mofa (4天前)
+- 处理Issue in example/ml-toolkit (1周前)
 
 ## Hackathon Awards
 
 ### Example AI Hackathon 2024
-- **Award**: 🥈 Second Place Winner
+- **Award**: Second Place Winner
 - **Project**: Smart task automation system
 - **Team**: example, teammate1, teammate2
 - **Achievement**: Built AI-powered workflow optimization tool
