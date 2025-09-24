@@ -593,47 +593,21 @@ function parseAchievements(content) {
       }
     }
     
-    // Awards - 改进解析
-    if (trimmed.startsWith('### ') && !trimmed.includes('##') && currentSection.includes('Awards')) {
-      const eventName = trimmed.replace('### ', '').trim();
-      if (eventName.length > 0) {
-        currentItem = { event: eventName };
-      }
-    }
-    if (trimmed.startsWith('- **Award**:') && currentItem.event) {
-      const awardMatch = trimmed.match(/- \*\*Award\*\*:\s*(.+)/);
-      if (awardMatch) {
-        currentItem.award = awardMatch[1].trim();
-      }
-    }
-    if (trimmed.startsWith('- **Project**:') && currentItem.event) {
-      const projectMatch = trimmed.match(/- \*\*Project\*\*:\s*(.+)/);
-      if (projectMatch) {
-        currentItem.project = projectMatch[1].trim();
-      }
-    }
-    if (trimmed.startsWith('- **Team**:') && currentItem.event) {
-      const teamMatch = trimmed.match(/- \*\*Team\*\*:\s*(.+)/);
-      if (teamMatch) {
-        currentItem.team = teamMatch[1].trim();
-      }
-    }
-    if (trimmed.startsWith('- **Achievement**:') && currentItem.event) {
-      const achievementMatch = trimmed.match(/- \*\*Achievement\*\*:\s*(.+)/);
-      if (achievementMatch) {
-        currentItem.achievement = achievementMatch[1].trim();
-      }
-    }
-    if (trimmed.startsWith('- **Date**:') && currentItem.event) {
-      const dateMatch = trimmed.match(/- \*\*Date\*\*:\s*(.+)/);
-      if (dateMatch) {
-        currentItem.date = dateMatch[1].trim();
-        // 只有当有事件和奖项时才添加
-        if (currentItem.event && currentItem.award) {
+    // Awards - 整段解析
+    if (currentSection.includes('Awards')) {
+      if (trimmed.startsWith('### ')) {
+        // 如果有上一个奖项，先保存
+        if (currentItem.title && currentItem.content) {
           achievements.hackathons.push({...currentItem});
-          console.log('✅ Added award:', currentItem);
         }
-        currentItem = {};
+        // 开始新的奖项
+        currentItem = {
+          title: trimmed.replace('### ', '').trim(),
+          content: ''
+        };
+      } else if (trimmed.startsWith('- ') && currentItem.title) {
+        // 添加内容到当前奖项
+        currentItem.content += (currentItem.content ? '\n' : '') + trimmed;
       }
     }
     
@@ -683,6 +657,11 @@ function parseAchievements(content) {
         }
       }
     }
+  }
+  
+  // 保存最后一个奖项
+  if (currentItem.title && currentItem.content) {
+    achievements.hackathons.push({...currentItem});
   }
   
   console.log("🏆 Parsed achievements:", achievements);
@@ -752,12 +731,8 @@ function generateAwardsCard(achievements) {
               <div class="trophy-mini">AWARD</div>
             </div>
             <div class="award-content">
-              <div class="award-title">${award.award}</div>
-              <div class="award-event">${award.event}</div>
-              ${award.project ? `<div class="award-project">项目: ${award.project}</div>` : ''}
-              ${award.team ? `<div class="award-team">团队: ${award.team}</div>` : ''}
-              ${award.achievement ? `<div class="award-achievement">${award.achievement}</div>` : ''}
-              <div class="award-date">${award.date}</div>
+              <div class="award-title">${award.title}</div>
+              <div class="award-details">${award.content.replace(/\n/g, '<br>')}</div>
             </div>
           </div>
         `).join('')}
@@ -1364,6 +1339,13 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         .award-date {
             font-size: 0.7rem;
             color: #999;
+        }
+        
+        .award-details {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.4;
+            margin-top: 6px;
         }
 
         /* 仓库展示样式 */

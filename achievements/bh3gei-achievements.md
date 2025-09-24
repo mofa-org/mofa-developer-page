@@ -10,24 +10,24 @@
 ## Awards
 
 ### GOSIM Hangzhou 2025 Code Alert Hackathon
-- **Award**: First Place Winner
-- **Project**: AI-powered code analysis and vulnerability detection
-- **Team**: 李杰, 刘雨寒, 王云洋
-- **Achievement**: Built real-time code scanning with 95% accuracy
+- **1**: First Place Winner
+- **2**: AI-powered code analysis and vulnerability detection
+- **3**: 李杰, 刘雨寒, 王云洋
+- **4**: Built real-time code scanning with 95% accuracy
 - **Date**: January 2025
 
 ### MoFA Global AI Hackathon 2024
-- **Award**: Best Innovation Award
-- **Project**: Multi-agent collaboration system for enterprise workflows
-- **Innovation**: Novel agent orchestration protocol
-- **Impact**: Improved workflow efficiency by 200%
+- **1**: Best Innovation Award
+- **2**: Multi-agent collaboration system for enterprise workflows
+- **3**: Novel agent orchestration protocol
+- **4**: Improved workflow efficiency by 200%
 - **Date**: December 2024
 
 ### AI4Good Hackathon 2024
-- **Award**: Social Impact Award
-- **Project**: Educational AI assistant for underserved communities
-- **Technology**: MoFA framework + voice recognition
-- **Reach**: Deployed to 3 schools, 500+ students benefited
+- **1**: Social Impact Award
+- **1**: Educational AI assistant for underserved communities
+- **2**: MoFA framework + voice recognition
+- **44**: Deployed to 3 schools, 500+ students benefited
 - **Date**: September 2024
 
 ## Repository Showcase
