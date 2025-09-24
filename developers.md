@@ -6,6 +6,7 @@ Format: `[username][config-file-url]`
 
 ## Active Developers
 
+[example][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example-mofa-links.md]
 [bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/bh3gei-mofa-links.md]
 
 ## How to Add Yourself
