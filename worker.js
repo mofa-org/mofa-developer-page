@@ -732,7 +732,7 @@ function generateAwardsCard(achievements) {
             </div>
             <div class="award-content">
               <div class="award-title">${award.title}</div>
-              <div class="award-details">${award.content.replace(/\n/g, '<br>')}</div>
+              <div class="award-details">${award.content.replace(/\*\*([^*]+)\*\*:/g, '<strong>$1:</strong>').replace(/\n/g, '<br>')}</div>
             </div>
           </div>
         `).join('')}
