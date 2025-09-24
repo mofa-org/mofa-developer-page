@@ -549,36 +549,45 @@ function parseAchievements(content) {
   
   const lines = content.split('\n');
   let currentItem = {};
+  let currentSection = '';
   
   for (let line of lines) {
-    line = line.trim();
+    const trimmed = line.trim();
     
-    // GitHub Stats section - 改进解析逻辑
-    if (line.includes('GitHub Username:')) {
-      const match = line.match(/GitHub Username:\s*(\w+)/);
+    // 检测当前所在区域
+    if (trimmed.startsWith('## ')) {
+      currentSection = trimmed.replace('## ', '');
+      continue;
+    }
+    
+    // GitHub Stats section - 修复解析逻辑
+    if (trimmed.startsWith('- GitHub Username:')) {
+      const match = trimmed.match(/- GitHub Username:\s*(\w+)/);
       if (match) {
         achievements.githubUsername = match[1];
+        console.log('✅ GitHub Username found:', match[1]);
       }
     }
-    if (line.includes('Enable GitHub stats display:')) {
-      achievements.enableGithubStats = line.toLowerCase().includes('true');
+    if (trimmed.startsWith('- Enable GitHub stats display:')) {
+      achievements.enableGithubStats = trimmed.toLowerCase().includes('true');
+      console.log('✅ Enable GitHub stats:', achievements.enableGithubStats);
     }
     
     // Repository contributions - 改进匹配规则
-    if (line.startsWith('- **') && line.includes('mofa-org/')) {
-      const repoMatch = line.match(/\*\*(mofa-org\/[^*]+)\*\*/);
+    if (trimmed.startsWith('- **') && trimmed.includes('mofa-org/')) {
+      const repoMatch = trimmed.match(/\*\*(mofa-org\/[^*]+)\*\*/);
       if (repoMatch) {
         currentItem = { repo: repoMatch[1] };
       }
     }
-    if (line.includes('Role:') && currentItem.repo) {
-      const roleMatch = line.match(/Role:\s*(.+)/);
+    if (trimmed.includes('Role:') && currentItem.repo) {
+      const roleMatch = trimmed.match(/Role:\s*(.+)/);
       if (roleMatch) {
         currentItem.role = roleMatch[1].trim();
       }
     }
-    if (line.includes('Contributions:') && currentItem.repo) {
-      const contribMatch = line.match(/Contributions:\s*(.+)/);
+    if (trimmed.includes('Contributions:') && currentItem.repo) {
+      const contribMatch = trimmed.match(/Contributions:\s*(.+)/);
       if (contribMatch) {
         currentItem.contributions = contribMatch[1].trim();
         achievements.contributions.push({...currentItem});
@@ -587,26 +596,26 @@ function parseAchievements(content) {
     }
     
     // Hackathon awards - 改进解析
-    if (line.startsWith('### ') && !line.includes('##')) {
-      const eventName = line.replace('### ', '').trim();
+    if (trimmed.startsWith('### ') && !trimmed.includes('##') && currentSection.includes('Hackathon')) {
+      const eventName = trimmed.replace('### ', '').trim();
       if (eventName.length > 0) {
         currentItem = { event: eventName };
       }
     }
-    if (line.includes('**Award**:') && currentItem.event) {
-      const awardMatch = line.match(/\*\*Award\*\*:\s*(.+)/);
+    if (trimmed.includes('**Award**:') && currentItem.event) {
+      const awardMatch = trimmed.match(/\*\*Award\*\*:\s*(.+)/);
       if (awardMatch) {
         currentItem.award = awardMatch[1].trim();
       }
     }
-    if (line.includes('**Project**:') && currentItem.event) {
-      const projectMatch = line.match(/\*\*Project\*\*:\s*(.+)/);
+    if (trimmed.includes('**Project**:') && currentItem.event) {
+      const projectMatch = trimmed.match(/\*\*Project\*\*:\s*(.+)/);
       if (projectMatch) {
         currentItem.project = projectMatch[1].trim();
       }
     }
-    if (line.includes('**Date**:') && currentItem.event) {
-      const dateMatch = line.match(/\*\*Date\*\*:\s*(.+)/);
+    if (trimmed.includes('**Date**:') && currentItem.event) {
+      const dateMatch = trimmed.match(/\*\*Date\*\*:\s*(.+)/);
       if (dateMatch) {
         currentItem.date = dateMatch[1].trim();
         // 只有当有事件、奖项和项目时才添加
@@ -807,14 +816,22 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
-            text-align: center;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            align-items: start;
         }
 
         .header {
             margin-bottom: 40px;
+            text-align: center;
+            grid-column: 1 / -1;
         }
 
         /* Logo容器 - 仿照MoFA官网的风格 */
@@ -872,10 +889,10 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             column-count: 3;
             column-gap: 20px;
             margin-bottom: 40px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0 20px;
+        }
+        
+        .links-section {
+            grid-column: 1;
         }
 
         /* 流体卡片基础样式 */
@@ -1009,12 +1026,44 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             transform: scale(1.1) rotate(5deg);
         }
 
+        /* 大平板和小桌面响应式 */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr 350px;
+            }
+        }
+        
         /* 响应式流体布局 */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .achievements-section {
+                grid-column: 1;
+                position: static;
+                max-height: none;
+                overflow-y: visible;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            
+            .fluid-container {
+                column-count: 3;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .fluid-container {
+                column-count: 2;
+            }
+        }
+        
         @media (max-width: 640px) {
             .fluid-container {
                 column-count: 2;
                 column-gap: 16px;
-                padding: 0 16px;
             }
 
             .fluid-card {
@@ -1047,7 +1096,10 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             .fluid-container {
                 column-count: 1;
                 column-gap: 0;
-                padding: 0 12px;
+            }
+            
+            .container {
+                padding: 20px 12px;
             }
 
             .fluid-card {
@@ -1073,22 +1125,25 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         /* 成就展示区域样式 */
         .achievements-section {
-            margin: 40px auto;
-            max-width: 800px;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-column: 2;
+            display: flex;
+            flex-direction: column;
             gap: 24px;
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
         }
 
         .achievement-card {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .achievement-card:hover {
@@ -1240,20 +1295,23 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             .achievements-section {
                 grid-template-columns: 1fr;
                 gap: 16px;
-                padding: 0 16px;
             }
 
             .achievement-card {
-                padding: 20px;
+                padding: 18px;
             }
 
             .github-stats-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
             }
 
             .stat-number {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
+            }
+            
+            .stat-label {
+                font-size: 0.75rem;
             }
         }
 
@@ -1273,6 +1331,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             border-radius: 8px;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 2px 0 ${COLORS["mondrian-black"]};
+            grid-column: 1 / -1;
+            text-align: center;
         }
 
         /* 按钮样式 - 仿照MoFA官网的btn-primary */
@@ -1313,6 +1373,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             border-top: 1px solid ${COLORS["mondrian-gray"]};
             color: #64748b;
             font-size: 0.875rem;
+            grid-column: 1 / -1;
+            text-align: center;
         }
 
         .footer a {
@@ -1336,8 +1398,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
                 font-size: 1.75rem;
             }
 
-            .link-item {
-                padding: 14px 16px;
+            .main-content {
+                gap: 20px;
             }
         }
 
@@ -1409,6 +1471,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             gap: 8px;
             padding: 20px 0;
             margin: 20px 0;
+            grid-column: 1 / -1;
         }
 
         .mini-line {
@@ -1450,19 +1513,23 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             <div class="mini-line yellow-line"></div>
         </div>
 
-        ${achievements ? generateAchievementsSection(achievements, githubStats) : ''}
-
-        <div class="fluid-container">
-            ${fluidLinks
-              .map(
-                (link) => `
-                <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="fluid-card fluid-${link.fluidHeight} fluid-${link.fluidColor}">
-                    <img src="${link.icon}" alt="${link.name}" class="fluid-icon">
-                    <span class="fluid-name">${link.name}</span>
-                </a>
-            `,
-              )
-              .join("")}
+        <div class="main-content">
+            <div class="links-section">
+                <div class="fluid-container">
+                    ${fluidLinks
+                      .map(
+                        (link) => `
+                        <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="fluid-card fluid-${link.fluidHeight} fluid-${link.fluidColor}">
+                            <img src="${link.icon}" alt="${link.name}" class="fluid-icon">
+                            <span class="fluid-name">${link.name}</span>
+                        </a>
+                    `,
+                      )
+                      .join("")}
+                </div>
+            </div>
+            
+            ${achievements ? generateAchievementsSection(achievements, githubStats) : ''}
         </div>
 
         <div class="qr-section">
