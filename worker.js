@@ -1036,18 +1036,20 @@ async function generateHTML(
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: visible; /* 确保帽子不被裁剪 */
         }
         
         /* 简单粗暴的魔法帽子 */
         .magic-hat {
             position: absolute;
-            top: -1.5rem;
+            top: -1.2rem;
             left: 50%;
             transform: translateX(-50%) rotate(-15deg);
-            font-size: 2rem;  /* 和头像一样大 */
-            z-index: 10;
+            font-size: 2.5rem;  /* 比头像大一点，更明显 */
+            z-index: 15;
             pointer-events: none;
             animation: magic-hat-float 3s ease-in-out infinite;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
         }
         
         @keyframes magic-hat-float {
