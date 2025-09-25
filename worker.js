@@ -981,6 +981,17 @@ async function generateHTML(
             -webkit-background-clip: text;
             color: transparent;
             animation: gradient-flow 12s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            border: 2px solid rgba(251, 106, 88, 0.3);
+            flex-shrink: 0;
         }
 
         @keyframes gradient-flow {
@@ -1711,7 +1722,10 @@ async function generateHTML(
         <div class="main-content">
             <div class="links-section">
                 <div class="header-in-left">
-                    <h1 class="username">${username.toUpperCase()}</h1>
+                    <h1 class="username">
+                        <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
+                        ${username.toUpperCase()}
+                    </h1>
                     <p class="subtitle">
                         <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="subtitle-logo">
                         MoFA Developer
