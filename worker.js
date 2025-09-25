@@ -868,7 +868,7 @@ async function generateHTML(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${username} - MoFA Developer</title>
+    <title>${username} - 魔法师 - MoFA Developer</title>
     <meta name="description" content="${username}的个人链接页面 - MoFA开发者">
 
     <!-- Google Fonts - 与MoFA官网一致 -->
@@ -941,7 +941,7 @@ async function generateHTML(
             text-align: center;
             grid-column: 1 / -1;
         }
-        
+
         /* 左侧区域的头部样式 */
         .header-in-left {
             margin-bottom: 20px;
@@ -975,23 +975,83 @@ async function generateHTML(
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-profile-link {
             background: linear-gradient(120deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]}, ${COLORS["mofa-gradient-3"]}, ${COLORS["mofa-gradient-4"]});
             background-size: 300% 300%;
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             animation: gradient-flow 12s ease-in-out infinite;
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.2s ease;
         }
         
+        .user-profile-link:hover {
+            transform: translate(-2px, -2px);
+        }
+        
+        .user-profile-link:hover .user-avatar {
+            box-shadow: 3px 3px 0 ${COLORS["mondrian-blue"]};
+        }
+
         .user-avatar {
             width: 2rem;
             height: 2rem;
             border-radius: 50%;
             border: 2px solid rgba(251, 106, 88, 0.3);
             flex-shrink: 0;
+            position: relative;
+        }
+        
+        /* 魔法帽子装饰 */
+        .user-avatar::before {
+            content: '🎩';
+            position: absolute;
+            top: -1.2rem;
+            left: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            font-size: 1.5rem;
+            z-index: 2;
+            animation: magic-hat-float 3s ease-in-out infinite;
+        }
+        
+        /* 魔法星星装饰 */
+        .user-avatar::after {
+            content: '✨';
+            position: absolute;
+            top: -0.8rem;
+            right: -0.5rem;
+            font-size: 0.8rem;
+            z-index: 3;
+            animation: magic-sparkle 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes magic-hat-float {
+            0%, 100% {
+                transform: translateX(-50%) rotate(-15deg) translateY(0px);
+            }
+            50% {
+                transform: translateX(-50%) rotate(-10deg) translateY(-2px);
+            }
+        }
+        
+        @keyframes magic-sparkle {
+            0% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
         @keyframes gradient-flow {
@@ -1011,11 +1071,26 @@ async function generateHTML(
             align-items: center;
             gap: 8px;
         }
-        
+
         .subtitle-logo {
             width: 1rem;
             height: 1rem;
             border-radius: 4px;
+        }
+        
+        .mofa-logo-link {
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .mofa-logo-link:hover {
+            transform: translate(-1px, -1px);
+        }
+        
+        .mofa-logo-link:hover .subtitle-logo {
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-red"]};
         }
 
         /* 流体网格布局系统 - Pinterest瀑布流风格 */
@@ -1053,16 +1128,16 @@ async function generateHTML(
             transform: translate(-3px, -3px);
             z-index: 10;
         }
-        
+
         /* 悬停时的彩色阴影 */
         .fluid-coral:hover, .fluid-peach:hover, .fluid-rose:hover {
             box-shadow: 4px 4px 0 ${COLORS["mondrian-red"]};
         }
-        
+
         .fluid-mint:hover, .fluid-sky:hover, .fluid-sage:hover {
             box-shadow: 4px 4px 0 ${COLORS["mondrian-blue"]};
         }
-        
+
         .fluid-lavender:hover, .fluid-lemon:hover {
             box-shadow: 4px 4px 0 ${COLORS["mondrian-yellow"]};
         }
@@ -1071,16 +1146,16 @@ async function generateHTML(
             transform: translate(-1px, -1px);
             transition: transform 0.1s ease;
         }
-        
+
         /* 激活时的彩色阴影 */
         .fluid-coral:active, .fluid-peach:active, .fluid-rose:active {
             box-shadow: 2px 2px 0 ${COLORS["mondrian-red"]};
         }
-        
+
         .fluid-mint:active, .fluid-sky:active, .fluid-sage:active {
             box-shadow: 2px 2px 0 ${COLORS["mondrian-blue"]};
         }
-        
+
         .fluid-lavender:active, .fluid-lemon:active {
             box-shadow: 2px 2px 0 ${COLORS["mondrian-yellow"]};
         }
@@ -1306,16 +1381,16 @@ async function generateHTML(
             transition: all 0.2s ease;
             flex-shrink: 0;
         }
-        
+
         /* 蒙德里安配色 - 不同类型用不同颜色的左边框 */
         .awards-card {
             border-left: 6px solid ${COLORS["mondrian-red"]};
         }
-        
+
         .repos-card {
             border-left: 6px solid ${COLORS["mondrian-blue"]};
         }
-        
+
         .github-activity {
             border-left: 6px solid ${COLORS["mondrian-yellow"]};
         }
@@ -1397,7 +1472,7 @@ async function generateHTML(
             gap: 12px;
             padding: 12px;
             background: rgba(211, 47, 47, 0.1);
-            border-radius: 12px;
+            border-radius: 0;
             border: 1px solid ${COLORS["mondrian-red"]};
         }
 
@@ -1476,14 +1551,14 @@ async function generateHTML(
         .repo-item {
             padding: 12px;
             background: rgba(255, 179, 0, 0.1);
-            border-radius: 10px;
+            border-radius: 0;
             border: 1px solid ${COLORS["mondrian-yellow"]};
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .repo-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 ${COLORS["mondrian-yellow"]};
         }
 
         .repo-name {
@@ -1719,7 +1794,7 @@ async function generateHTML(
             margin: 20px 0;
             grid-column: 1 / -1;
         }
-        
+
         /* 左侧头部内的分隔线 */
         .header-in-left .mini-divider {
             justify-content: flex-start;
@@ -1756,12 +1831,16 @@ async function generateHTML(
             <div class="links-section">
                 <div class="header-in-left">
                     <h1 class="username">
-                        <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
-                        ${username.toUpperCase()}
+                        <a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer" class="user-profile-link">
+                            <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
+                            ${username.toUpperCase()}
+                        </a>
                     </h1>
                     <p class="subtitle">
-                        <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="subtitle-logo">
-                        MoFA Developer
+                        <a href="https://mofa.ai" target="_blank" rel="noopener noreferrer" class="mofa-logo-link">
+                            <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="subtitle-logo">
+                        </a>
+                        魔法师 - MoFA Developer
                     </p>
                     <!-- 小装饰分隔线 -->
                     <div class="mini-divider">
@@ -1868,7 +1947,7 @@ function generateDefaultPage(username, hostname) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${username} - MoFA Developer</title>
+    <title>${username} - 魔法师 - MoFA Developer</title>
     <meta name="description" content="${username}的个人页面 - MoFA开发者">
 
     <!-- Google Fonts - 与MoFA官网一致 -->
