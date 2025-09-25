@@ -6,16 +6,7 @@
 
 每个成就文件 (`{username}-achievements.md`) 包含三个展示部分：
 
-### 1. GitHub Activity
-手动配置的最近GitHub活动：
-```markdown
-## GitHub Activity
-- 推送代码 in username/project (2小时前)
-- 创建仓库 in username/new-repo (1天前)
-- 关注仓库 in popular/project (2天前)
-```
-
-### 2. Awards  
+### 1. Awards  
 获奖信息和成就：
 ```markdown
 ## Awards
@@ -27,7 +18,7 @@
 - **Date**: 获奖日期
 ```
 
-### 3. Repository Showcase
+### 2. Repository Showcase
 精选仓库展示：
 ```markdown
 ## Repository Showcase
@@ -38,16 +29,21 @@
   - Stars: Star数量
 ```
 
+### 3. GitHub Activity
+手动配置的最近GitHub活动：
+```markdown
+## GitHub Activity
+- 推送代码 in username/project (2小时前)
+- 创建仓库 in username/new-repo (1天前)
+- 关注仓库 in popular/project (2天前)
+```
+
 ## 文件格式示例
 
 完整的成就文件结构：
 
 ```markdown
 # username - MoFA Achievements
-
-## GitHub Activity
-- 推送代码 in username/awesome-project (3小时前)
-- 创建仓库 in username/new-tool (1天前)
 
 ## Awards
 
@@ -63,6 +59,10 @@
   - Description: Project description
   - Language: Python
   - Stars: 42
+
+## GitHub Activity
+- 推送代码 in username/awesome-project (3小时前)
+- 创建仓库 in username/new-tool (1天前)
 
 ---
 *Last updated: January 2025*
@@ -80,7 +80,7 @@
 
 成就信息会在个人页面右侧展示：
 - 左侧：社交链接流式卡片布局
-- 右侧：三部分成就展示（GitHub Activity、Awards、Repository Showcase）
+- 右侧：三部分成就展示（Awards、Repository Showcase、GitHub Activity）
 
 详细系统说明请参考主 [README.md](../README.md)。
 

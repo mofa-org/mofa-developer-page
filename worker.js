@@ -773,14 +773,14 @@ function generateReposCard(achievements) {
 function generateAchievementsSection(achievements, githubStats) {
   let content = '<div class="achievements-section">';
   
-  // 1. GitHub动态
-  content += generateGithubActivityCard(achievements);
-  
-  // 2. 获奖信息
+  // 1. 获奖信息
   content += generateAwardsCard(achievements);
   
-  // 3. 精选仓库
+  // 2. 精选仓库
   content += generateReposCard(achievements);
+  
+  // 3. GitHub动态
+  content += generateGithubActivityCard(achievements);
   
   content += '</div>';
   return content;
