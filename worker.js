@@ -309,13 +309,23 @@ async function handleRequest(request) {
     // 获取成就数据
     const achievements = await fetchUserAchievements(username);
     let githubStats = null;
-    
-    if (achievements && achievements.enableGithubStats && achievements.githubUsername) {
+
+    if (
+      achievements &&
+      achievements.enableGithubStats &&
+      achievements.githubUsername
+    ) {
       githubStats = await fetchGithubStats(achievements.githubUsername);
     }
 
     // 生成HTML页面
-    const html = await generateHTML(username, links, hostname, achievements, githubStats);
+    const html = await generateHTML(
+      username,
+      links,
+      hostname,
+      achievements,
+      githubStats,
+    );
 
     return new Response(html, {
       headers: {
@@ -520,13 +530,13 @@ async function fetchUserAchievements(username) {
   try {
     const achievementUrl = `https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/achievements/${username}-achievements.md`;
     console.log("🏆 Fetching achievements from:", achievementUrl);
-    
+
     const response = await fetch(achievementUrl);
     if (!response.ok) {
       console.log("📝 No achievements file found for user:", username);
       return null;
     }
-    
+
     const content = await response.text();
     console.log("✅ Achievements loaded successfully");
     return parseAchievements(content);
@@ -546,124 +556,133 @@ function parseAchievements(content) {
     recognition: [],
     currentProjects: [],
     repositories: [],
-    activities: []
+    activities: [],
   };
-  
-  const lines = content.split('\n');
+
+  const lines = content.split("\n");
   let currentItem = {};
-  let currentSection = '';
-  
+  let currentSection = "";
+
   for (let line of lines) {
     const trimmed = line.trim();
-    
+
     // 检测当前所在区域
-    if (trimmed.startsWith('## ')) {
-      currentSection = trimmed.replace('## ', '');
+    if (trimmed.startsWith("## ")) {
+      currentSection = trimmed.replace("## ", "");
       continue;
     }
-    
+
     // 从标题推断GitHub用户名
-    if (trimmed.startsWith('# ') && trimmed.includes(' - MoFA Achievements')) {
+    if (trimmed.startsWith("# ") && trimmed.includes(" - MoFA Achievements")) {
       const usernameMatch = trimmed.match(/# (\w+) - MoFA Achievements/);
       if (usernameMatch) {
         achievements.githubUsername = usernameMatch[1];
-        console.log('✅ GitHub Username inferred from title:', usernameMatch[1]);
+        console.log(
+          "✅ GitHub Username inferred from title:",
+          usernameMatch[1],
+        );
       }
     }
-    
+
     // Repository contributions - 改进匹配规则
-    if (trimmed.startsWith('- **') && trimmed.includes('mofa-org/')) {
+    if (trimmed.startsWith("- **") && trimmed.includes("mofa-org/")) {
       const repoMatch = trimmed.match(/\*\*(mofa-org\/[^*]+)\*\*/);
       if (repoMatch) {
         currentItem = { repo: repoMatch[1] };
       }
     }
-    if (trimmed.includes('Role:') && currentItem.repo) {
+    if (trimmed.includes("Role:") && currentItem.repo) {
       const roleMatch = trimmed.match(/Role:\s*(.+)/);
       if (roleMatch) {
         currentItem.role = roleMatch[1].trim();
       }
     }
-    if (trimmed.includes('Contributions:') && currentItem.repo) {
+    if (trimmed.includes("Contributions:") && currentItem.repo) {
       const contribMatch = trimmed.match(/Contributions:\s*(.+)/);
       if (contribMatch) {
         currentItem.contributions = contribMatch[1].trim();
-        achievements.contributions.push({...currentItem});
+        achievements.contributions.push({ ...currentItem });
         currentItem = {};
       }
     }
-    
+
     // Awards - 整段解析
-    if (currentSection.includes('Awards')) {
-      if (trimmed.startsWith('### ')) {
+    if (currentSection.includes("Awards")) {
+      if (trimmed.startsWith("### ")) {
         // 如果有上一个奖项，先保存
         if (currentItem.title && currentItem.content) {
-          achievements.hackathons.push({...currentItem});
+          achievements.hackathons.push({ ...currentItem });
         }
         // 开始新的奖项
         currentItem = {
-          title: trimmed.replace('### ', '').trim(),
-          content: ''
+          title: trimmed.replace("### ", "").trim(),
+          content: "",
         };
-      } else if (trimmed.startsWith('- ') && currentItem.title) {
+      } else if (trimmed.startsWith("- ") && currentItem.title) {
         // 添加内容到当前奖项
-        currentItem.content += (currentItem.content ? '\n' : '') + trimmed;
+        currentItem.content += (currentItem.content ? "\n" : "") + trimmed;
       }
     }
-    
+
     // Repository showcase - 新增仓库展示解析
-    if (currentSection.includes('Repository') && currentSection.includes('Showcase')) {
-      if (trimmed.startsWith('- **') && !trimmed.includes('mofa-org/')) {
+    if (
+      currentSection.includes("Repository") &&
+      currentSection.includes("Showcase")
+    ) {
+      if (trimmed.startsWith("- **") && !trimmed.includes("mofa-org/")) {
         const repoMatch = trimmed.match(/\*\*([^*]+)\*\*/);
         if (repoMatch) {
           currentItem = { name: repoMatch[1] };
         }
       }
-      if (trimmed.includes('Description:') && currentItem.name) {
+      if (trimmed.includes("Description:") && currentItem.name) {
         const descMatch = trimmed.match(/Description:\s*(.+)/);
         if (descMatch) {
           currentItem.description = descMatch[1].trim();
         }
       }
-      if (trimmed.includes('Language:') && currentItem.name) {
+      if (trimmed.includes("Language:") && currentItem.name) {
         const langMatch = trimmed.match(/Language:\s*(.+)/);
         if (langMatch) {
           currentItem.language = langMatch[1].trim();
         }
       }
-      if (trimmed.includes('Stars:') && currentItem.name) {
+      if (trimmed.includes("Stars:") && currentItem.name) {
         const starsMatch = trimmed.match(/Stars:\s*(\d+)/);
         if (starsMatch) {
           currentItem.stars = parseInt(starsMatch[1]);
           // 只有当有名称和描述时才添加
           if (currentItem.name && currentItem.description) {
-            achievements.repositories.push({...currentItem});
+            achievements.repositories.push({ ...currentItem });
           }
           currentItem = {};
         }
       }
     }
-    
+
     // GitHub Activity - 新增动态解析
-    if (currentSection.includes('GitHub') && currentSection.includes('Activity')) {
-      if (trimmed.startsWith('- ')) {
+    if (
+      currentSection.includes("GitHub") &&
+      currentSection.includes("Activity")
+    ) {
+      if (trimmed.startsWith("- ")) {
         const activityMatch = trimmed.match(/- (.+?) in (.+?) \((.+?)\)/);
         if (activityMatch) {
           achievements.activities.push({
             type: activityMatch[1],
             repo: activityMatch[2],
-            time: activityMatch[3]
+            time: activityMatch[3],
           });
         }
       }
     }
   }
-  
+
   // 保存最后一个奖项
   if (currentItem.title && currentItem.content) {
-    achievements.hackathons.push({...currentItem});
+    achievements.hackathons.push({ ...currentItem });
   }
-  
+
   console.log("🏆 Parsed achievements:", achievements);
   return achievements;
 }
@@ -671,11 +690,13 @@ function parseAchievements(content) {
 // 获取GitHub统计数据
 async function fetchGithubStats(username) {
   if (!username) return null;
-  
+
   try {
-    const userResponse = await fetch(`https://api.github.com/users/${username}`);
+    const userResponse = await fetch(
+      `https://api.github.com/users/${username}`,
+    );
     if (!userResponse.ok) return null;
-    
+
     const userData = await userResponse.json();
     return {
       followers: userData.followers,
@@ -684,7 +705,7 @@ async function fetchGithubStats(username) {
       avatarUrl: userData.avatar_url,
       bio: userData.bio,
       location: userData.location,
-      company: userData.company
+      company: userData.company,
     };
   } catch (error) {
     console.error("❌ Error fetching GitHub stats:", error);
@@ -694,8 +715,9 @@ async function fetchGithubStats(username) {
 
 // 生成GitHub动态卡片（从MD配置读取）
 function generateGithubActivityCard(achievements) {
-  if (!achievements.activities || achievements.activities.length === 0) return '';
-  
+  if (!achievements.activities || achievements.activities.length === 0)
+    return "";
+
   return `
     <div class="achievement-card github-activity">
       <div class="achievement-header">
@@ -703,21 +725,26 @@ function generateGithubActivityCard(achievements) {
         <h3>GitHub 动态</h3>
       </div>
       <div class="github-activity-list">
-        ${achievements.activities.map(activity => `
+        ${achievements.activities
+          .map(
+            (activity) => `
           <div class="activity-item">
             <span class="activity-type">${activity.type}</span>
             <span class="activity-repo">${activity.repo}</span>
             <span class="activity-time">${activity.time}</span>
           </div>
-        `).join('')}
+        `,
+          )
+          .join("")}
       </div>
     </div>`;
 }
 
 // 生成获奖信息卡片
 function generateAwardsCard(achievements) {
-  if (!achievements.hackathons || achievements.hackathons.length === 0) return '';
-  
+  if (!achievements.hackathons || achievements.hackathons.length === 0)
+    return "";
+
   return `
     <div class="achievement-card awards-card">
       <div class="achievement-header">
@@ -725,25 +752,31 @@ function generateAwardsCard(achievements) {
         <h3>获奖信息</h3>
       </div>
       <div class="awards-list">
-        ${achievements.hackathons.slice(0, 3).map(award => `
+        ${achievements.hackathons
+          .slice(0, 3)
+          .map(
+            (award) => `
           <div class="award-item">
             <div class="award-icon">
-              <img src="/icons/trophy.svg" alt="Award" class="award-mini-icon">
+              <img src="https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/resources/icons/trophy.svg" alt="Award" class="award-mini-icon">
             </div>
             <div class="award-content">
               <div class="award-title">${award.title}</div>
-              <div class="award-details">${award.content.replace(/\*\*([^*]+)\*\*:/g, '<strong>$1:</strong>').replace(/\n/g, '<br>')}</div>
+              <div class="award-details">${award.content.replace(/\*\*([^*]+)\*\*:/g, "<strong>$1:</strong>").replace(/\n/g, "<br>")}</div>
             </div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join("")}
       </div>
     </div>`;
 }
 
 // 生成仓库展示卡片
 function generateReposCard(achievements) {
-  if (!achievements.repositories || achievements.repositories.length === 0) return '';
-  
+  if (!achievements.repositories || achievements.repositories.length === 0)
+    return "";
+
   return `
     <div class="achievement-card repos-card">
       <div class="achievement-header">
@@ -751,7 +784,9 @@ function generateReposCard(achievements) {
         <h3>精选仓库</h3>
       </div>
       <div class="repos-list">
-        ${achievements.repositories.map(repo => `
+        ${achievements.repositories
+          .map(
+            (repo) => `
           <div class="repo-item">
             <div class="repo-name">
               <a href="https://github.com/${repo.name}" target="_blank" rel="noopener noreferrer">
@@ -760,11 +795,13 @@ function generateReposCard(achievements) {
             </div>
             <div class="repo-description">${repo.description}</div>
             <div class="repo-meta">
-              ${repo.language ? `<span class="repo-language">${repo.language}</span>` : ''}
-              ${repo.stars ? `<span class="repo-stars">⭐ ${repo.stars}</span>` : ''}
+              ${repo.language ? `<span class="repo-language">${repo.language}</span>` : ""}
+              ${repo.stars ? `<span class="repo-stars">⭐ ${repo.stars}</span>` : ""}
             </div>
           </div>
-        `).join('')}
+        `,
+          )
+          .join("")}
       </div>
     </div>`;
 }
@@ -772,42 +809,57 @@ function generateReposCard(achievements) {
 // 生成成就展示区域
 function generateAchievementsSection(achievements, githubStats) {
   let content = '<div class="achievements-section">';
-  
+
   // 1. 获奖信息
   content += generateAwardsCard(achievements);
-  
+
   // 2. 精选仓库
   content += generateReposCard(achievements);
-  
+
   // 3. GitHub动态
   content += generateGithubActivityCard(achievements);
-  
-  content += '</div>';
+
+  content += "</div>";
   return content;
 }
 
 // 流体网格布局 - Pinterest瀑布流风格
 function assignFluidLayouts(links) {
-  const colors = ["coral", "mint", "lavender", "peach", "sky", "sage", "rose", "lemon"];
+  const colors = [
+    "coral",
+    "mint",
+    "lavender",
+    "peach",
+    "sky",
+    "sage",
+    "rose",
+    "lemon",
+  ];
   const heights = ["compact", "normal", "tall"]; // 紧凑、正常、高
-  
+
   return links.map((link, index) => {
     let height;
     // 自然的高度分布：50% normal, 30% compact, 20% tall
-    const rand = (index * 13 + 7) % 10; 
+    const rand = (index * 13 + 7) % 10;
     if (rand < 5) height = "normal";
-    else if (rand < 8) height = "compact"; 
+    else if (rand < 8) height = "compact";
     else height = "tall";
-    
+
     return {
       ...link,
       fluidHeight: height,
-      fluidColor: colors[index % colors.length]
+      fluidColor: colors[index % colors.length],
     };
   });
 }
 
-async function generateHTML(username, links, hostname, achievements = null, githubStats = null) {
+async function generateHTML(
+  username,
+  links,
+  hostname,
+  achievements = null,
+  githubStats = null,
+) {
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://${hostname}`)}`;
   const fluidLinks = assignFluidLayouts(links);
 
@@ -876,7 +928,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             margin: 0 auto;
             padding: 40px 20px;
         }
-        
+
         .main-content {
             display: grid;
             grid-template-columns: 2fr 3fr;
@@ -888,6 +940,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             margin-bottom: 40px;
             text-align: center;
             grid-column: 1 / -1;
+        }
+        
+        /* 左侧区域的头部样式 */
+        .header-in-left {
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         /* Logo容器 - 仿照MoFA官网的风格 */
@@ -938,6 +996,15 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             font-size: 1rem;
             font-family: 'DotGothic16', 'Inter', 'Noto Sans SC', system-ui, sans-serif;
             font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .subtitle-logo {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 4px;
         }
 
         /* 流体网格布局系统 - Pinterest瀑布流风格 */
@@ -946,7 +1013,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             column-gap: 20px;
             margin-bottom: 40px;
         }
-        
+
         .links-section {
             grid-column: 1;
         }
@@ -1007,13 +1074,13 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             opacity: 0.9;
             transition: all 0.3s ease;
         }
-        
+
         /* MoFA品牌卡片样式 */
         .mofa-brand-card {
             cursor: default;
             background: linear-gradient(135deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]}) !important;
         }
-        
+
         .mofa-logo {
             width: 50px;
             height: 50px;
@@ -1103,14 +1170,14 @@ async function generateHTML(username, links, hostname, achievements = null, gith
                 grid-template-columns: 1fr 2fr;
             }
         }
-        
+
         /* 响应式流体布局 */
         @media (max-width: 1024px) {
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 30px;
             }
-            
+
             .achievements-section {
                 grid-column: 1;
                 position: static;
@@ -1119,18 +1186,18 @@ async function generateHTML(username, links, hostname, achievements = null, gith
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             }
-            
+
             .fluid-container {
                 column-count: 3;
             }
         }
-        
+
         @media (max-width: 768px) {
             .fluid-container {
                 column-count: 2;
             }
         }
-        
+
         @media (max-width: 640px) {
             .fluid-container {
                 column-count: 2;
@@ -1168,7 +1235,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
                 column-count: 1;
                 column-gap: 0;
             }
-            
+
             .container {
                 padding: 20px 12px;
             }
@@ -1254,7 +1321,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .activity-item {
             padding: 12px;
             background: linear-gradient(135deg, ${COLORS["macaron-sky"]}22, ${COLORS["mondrian-blue"]}22);
@@ -1264,19 +1331,19 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex-direction: column;
             gap: 4px;
         }
-        
+
         .activity-type {
             font-size: 0.85rem;
             font-weight: 600;
             color: ${COLORS["mondrian-blue"]};
         }
-        
+
         .activity-repo {
             font-size: 0.8rem;
             color: #666;
             font-family: 'JetBrains Mono', monospace;
         }
-        
+
         .activity-time {
             font-size: 0.75rem;
             color: #999;
@@ -1288,7 +1355,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex-direction: column;
             gap: 16px;
         }
-        
+
         .award-item {
             display: flex;
             gap: 12px;
@@ -1297,7 +1364,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             border-radius: 12px;
             border: 1px solid ${COLORS["macaron-peach"]};
         }
-        
+
         .award-icon {
             flex-shrink: 0;
             width: 40px;
@@ -1308,54 +1375,54 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             background: linear-gradient(135deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]});
             border-radius: 8px;
         }
-        
+
         .award-mini-icon {
             width: 20px;
             height: 20px;
             filter: brightness(0) invert(1);
         }
-        
+
         .award-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
-        
+
         .award-title {
             font-weight: 600;
             color: ${COLORS["mofa-gradient-1"]};
             font-size: 0.9rem;
         }
-        
+
         .award-event {
             font-size: 0.8rem;
             color: #666;
             font-weight: 500;
         }
-        
+
         .award-project {
             font-size: 0.75rem;
             color: #888;
             font-style: italic;
         }
-        
+
         .award-team {
             font-size: 0.75rem;
             color: #888;
         }
-        
+
         .award-achievement {
             font-size: 0.75rem;
             color: #666;
             font-weight: 500;
         }
-        
+
         .award-date {
             font-size: 0.7rem;
             color: #999;
         }
-        
+
         .award-details {
             font-size: 0.8rem;
             color: #666;
@@ -1369,7 +1436,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .repo-item {
             padding: 12px;
             background: linear-gradient(135deg, ${COLORS["macaron-mint"]}22, ${COLORS["macaron-sage"]}22);
@@ -1377,45 +1444,45 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             border: 1px solid ${COLORS["macaron-mint"]};
             transition: all 0.3s ease;
         }
-        
+
         .repo-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        
+
         .repo-name {
             margin-bottom: 6px;
         }
-        
+
         .repo-name a {
             color: ${COLORS["mondrian-blue"]};
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
         }
-        
+
         .repo-name a:hover {
             text-decoration: underline;
         }
-        
+
         .repo-description {
             font-size: 0.8rem;
             color: #666;
             line-height: 1.4;
             margin-bottom: 8px;
         }
-        
+
         .repo-meta {
             display: flex;
             gap: 12px;
             font-size: 0.75rem;
         }
-        
+
         .repo-language {
             color: ${COLORS["mofa-gradient-3"]};
             font-weight: 500;
         }
-        
+
         .repo-stars {
             color: #666;
         }
@@ -1434,17 +1501,17 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             .activity-item {
                 padding: 10px;
             }
-            
+
             .award-item {
                 padding: 10px;
                 gap: 10px;
             }
-            
+
             .award-icon {
                 width: 32px;
                 height: 32px;
             }
-            
+
             .repo-item {
                 padding: 10px;
             }
@@ -1608,6 +1675,14 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             margin: 20px 0;
             grid-column: 1 / -1;
         }
+        
+        /* 左侧头部内的分隔线 */
+        .header-in-left .mini-divider {
+            justify-content: flex-start;
+            padding: 15px 0;
+            margin: 15px 0;
+            grid-column: auto;
+        }
 
         .mini-line {
             width: 40px;
@@ -1633,25 +1708,22 @@ async function generateHTML(username, links, hostname, achievements = null, gith
     <div class="decoration"></div>
 
     <div class="container">
-        <div class="header">
-            <h1 class="username">${username}</h1>
-            <p class="subtitle">MoFA Developer</p>
-        </div>
-
-        <!-- 小装饰分隔线 -->
-        <div class="mini-divider">
-            <div class="mini-line red-line"></div>
-            <div class="mini-line blue-line"></div>
-            <div class="mini-line yellow-line"></div>
-        </div>
-
         <div class="main-content">
             <div class="links-section">
-                <div class="fluid-container">
-                    <div class="fluid-card fluid-normal fluid-coral mofa-brand-card">
-                        <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="mofa-logo">
-                        <span class="fluid-name">MoFA Developer</span>
+                <div class="header-in-left">
+                    <h1 class="username">${username.toUpperCase()}</h1>
+                    <p class="subtitle">
+                        <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="subtitle-logo">
+                        MoFA Developer
+                    </p>
+                    <!-- 小装饰分隔线 -->
+                    <div class="mini-divider">
+                        <div class="mini-line red-line"></div>
+                        <div class="mini-line blue-line"></div>
+                        <div class="mini-line yellow-line"></div>
                     </div>
+                </div>
+                <div class="fluid-container">
                     ${fluidLinks
                       .map(
                         (link) => `
@@ -1664,8 +1736,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
                       .join("")}
                 </div>
             </div>
-            
-            ${achievements ? generateAchievementsSection(achievements, githubStats) : ''}
+
+            ${achievements ? generateAchievementsSection(achievements, githubStats) : ""}
         </div>
 
         <div class="qr-section">
