@@ -9,11 +9,12 @@
 - **亮点**: Built real-time code scanning with 95% accuracy
 - **时间**: January 2025
 
-### 占位AIOS Hackathon 2025
-- **名次**: Second Place Winner
-- **项目介绍**: Intelligent task automation platform
-- **获奖人**: x
-- **亮点**: Automated 80% of routine tasks using AI
+
+### 占位测试GOSIM Hangzhou 2025 Code Alert Hackathon
+- **名次**: First Place Winner
+- **项目介绍**: AI-powered code analysis and vulnerability detection
+- **获奖人**: 李杰, 刘雨寒, 王云洋
+- **亮点**: Built real-time code scanning with 95% accuracy
 - **时间**: January 2025
 
 
