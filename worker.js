@@ -721,7 +721,7 @@ function generateAwardsCard(achievements) {
   return `
     <div class="achievement-card awards-card">
       <div class="achievement-header">
-        <img src="/icons/trophy.svg" alt="Trophy" class="achievement-icon">
+        <img src="https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/resources/icons/trophy.svg" alt="Trophy" class="achievement-icon">
         <h3>获奖信息</h3>
       </div>
       <div class="awards-list">
@@ -1006,6 +1006,21 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             filter: brightness(0) invert(1);
             opacity: 0.9;
             transition: all 0.3s ease;
+        }
+        
+        /* MoFA品牌卡片样式 */
+        .mofa-brand-card {
+            cursor: default;
+            background: linear-gradient(135deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]}) !important;
+        }
+        
+        .mofa-logo {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            filter: none !important;
+            opacity: 1 !important;
         }
 
         .fluid-tall .fluid-icon {
@@ -1619,9 +1634,6 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
     <div class="container">
         <div class="header">
-            <div class="logo">
-                <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo">
-            </div>
             <h1 class="username">${username}</h1>
             <p class="subtitle">MoFA Developer</p>
         </div>
@@ -1636,6 +1648,10 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         <div class="main-content">
             <div class="links-section">
                 <div class="fluid-container">
+                    <div class="fluid-card fluid-normal fluid-coral mofa-brand-card">
+                        <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="mofa-logo">
+                        <span class="fluid-name">MoFA Developer</span>
+                    </div>
                     ${fluidLinks
                       .map(
                         (link) => `
