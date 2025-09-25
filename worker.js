@@ -721,14 +721,14 @@ function generateAwardsCard(achievements) {
   return `
     <div class="achievement-card awards-card">
       <div class="achievement-header">
-        <div class="trophy-icon">AWARD</div>
+        <img src="/icons/trophy.svg" alt="Trophy" class="achievement-icon">
         <h3>获奖信息</h3>
       </div>
       <div class="awards-list">
         ${achievements.hackathons.slice(0, 3).map(award => `
           <div class="award-item">
             <div class="award-icon">
-              <div class="trophy-mini">AWARD</div>
+              <img src="/icons/trophy.svg" alt="Award" class="award-mini-icon">
             </div>
             <div class="award-content">
               <div class="award-title">${award.title}</div>
@@ -1294,10 +1294,10 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             border-radius: 8px;
         }
         
-        .trophy-mini {
-            font-size: 12px;
-            font-weight: 600;
-            color: white;
+        .award-mini-icon {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
         }
         
         .award-content {
