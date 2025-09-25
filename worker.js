@@ -610,7 +610,7 @@ function parseAchievements(content) {
     if (currentSection.includes("Awards")) {
       if (trimmed.startsWith("### ")) {
         // 如果有上一个奖项，先保存
-        if (currentItem.title && currentItem.content) {
+        if (currentItem.title) {
           achievements.hackathons.push({ ...currentItem });
         }
         // 开始新的奖项
