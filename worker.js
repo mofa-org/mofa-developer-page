@@ -1036,28 +1036,53 @@ async function generateHTML(
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            color: white;
-            font-weight: 500;
-            border-radius: 16px;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            color: ${COLORS["mondrian-black"]};
+            font-weight: 600;
+            border-radius: 0;
+            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             margin-bottom: 20px;
             break-inside: avoid;
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.15);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            background: white;
+            border: 2px solid ${COLORS["mondrian-black"]};
+            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
         }
 
         .fluid-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            transform: translate(-3px, -3px);
             z-index: 10;
+        }
+        
+        /* 悬停时的彩色阴影 */
+        .fluid-coral:hover, .fluid-peach:hover, .fluid-rose:hover {
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-red"]};
+        }
+        
+        .fluid-mint:hover, .fluid-sky:hover, .fluid-sage:hover {
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-blue"]};
+        }
+        
+        .fluid-lavender:hover, .fluid-lemon:hover {
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-yellow"]};
         }
 
         .fluid-card:active {
-            transform: translateY(-2px) scale(1.01);
+            transform: translate(-1px, -1px);
             transition: transform 0.1s ease;
+        }
+        
+        /* 激活时的彩色阴影 */
+        .fluid-coral:active, .fluid-peach:active, .fluid-rose:active {
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-red"]};
+        }
+        
+        .fluid-mint:active, .fluid-sky:active, .fluid-sage:active {
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-blue"]};
+        }
+        
+        .fluid-lavender:active, .fluid-lemon:active {
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-yellow"]};
         }
 
         /* 流体卡片高度变化 */
@@ -1081,8 +1106,8 @@ async function generateHTML(
             width: 40px;
             height: 40px;
             margin-bottom: 12px;
-            filter: brightness(0) invert(1);
-            opacity: 0.9;
+            filter: brightness(0);
+            opacity: 0.8;
             transition: all 0.3s ease;
         }
 
@@ -1096,7 +1121,7 @@ async function generateHTML(
             width: 50px;
             height: 50px;
             margin-bottom: 12px;
-            border-radius: 8px;
+            border-radius: 0;
             filter: none !important;
             opacity: 1 !important;
         }
@@ -1110,7 +1135,7 @@ async function generateHTML(
         /* 流体卡片文字 */
         .fluid-name {
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
             text-align: center;
             line-height: 1.4;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -1124,51 +1149,39 @@ async function generateHTML(
 
         /* 流体卡片颜色主题 - 柔和流动渐变 */
         .fluid-coral {
-            background: linear-gradient(165deg, ${COLORS["macaron-coral"]}, ${COLORS["mofa-gradient-1"]});
+            border-color: ${COLORS["mondrian-red"]} !important;
         }
 
         .fluid-mint {
-            background: linear-gradient(165deg, ${COLORS["macaron-mint"]}, ${COLORS["mondrian-blue"]});
+            border-color: ${COLORS["mondrian-blue"]} !important;
         }
 
         .fluid-lavender {
-            background: linear-gradient(165deg, ${COLORS["macaron-lavender"]}, #8B5CF6);
+            border-color: ${COLORS["mondrian-yellow"]} !important;
         }
 
         .fluid-peach {
-            background: linear-gradient(165deg, ${COLORS["macaron-peach"]}, ${COLORS["mofa-gradient-2"]});
+            border-color: ${COLORS["mondrian-red"]} !important;
         }
 
         .fluid-sky {
-            background: linear-gradient(165deg, ${COLORS["macaron-sky"]}, ${COLORS["mofa-gradient-4"]});
+            border-color: ${COLORS["mondrian-blue"]} !important;
         }
 
         .fluid-sage {
-            background: linear-gradient(165deg, ${COLORS["macaron-sage"]}, ${COLORS["macaron-mint"]});
+            border-color: ${COLORS["mondrian-blue"]} !important;
         }
 
         .fluid-rose {
-            background: linear-gradient(165deg, ${COLORS["macaron-rose"]}, ${COLORS["macaron-coral"]});
+            border-color: ${COLORS["mondrian-red"]} !important;
         }
 
         .fluid-lemon {
-            background: linear-gradient(165deg, ${COLORS["macaron-lemon"]}, ${COLORS["mofa-gradient-3"]});
+            border-color: ${COLORS["mondrian-yellow"]} !important;
         }
 
         /* 流体卡片水波纹效果 */
-        .fluid-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(60deg, transparent, rgba(255,255,255,0.12), transparent);
-            transform: translateX(-120%);
-            transition: transform 0.7s ease;
-            border-radius: 16px;
-        }
 
-        .fluid-card:hover::before {
-            transform: translateX(120%);
-        }
 
         /* 图标悬停效果 */
         .fluid-card:hover .fluid-icon {
@@ -1285,19 +1298,31 @@ async function generateHTML(
         }
 
         .achievement-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
+            background: white;
+            border-radius: 0;
             padding: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            border: 2px solid ${COLORS["mondrian-black"]};
+            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
+            transition: all 0.2s ease;
             flex-shrink: 0;
+        }
+        
+        /* 蒙德里安配色 - 不同类型用不同颜色的左边框 */
+        .awards-card {
+            border-left: 6px solid ${COLORS["mondrian-red"]};
+        }
+        
+        .repos-card {
+            border-left: 6px solid ${COLORS["mondrian-blue"]};
+        }
+        
+        .github-activity {
+            border-left: 6px solid ${COLORS["mondrian-yellow"]};
         }
 
         .achievement-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translate(-3px, -3px);
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-black"]};
         }
 
         .achievement-header {
@@ -1316,7 +1341,7 @@ async function generateHTML(
         .trophy-icon {
             font-size: 12px;
             font-weight: 600;
-            color: ${COLORS["mofa-gradient-1"]};
+            color: ${COLORS["mondrian-black"]};
         }
 
         .achievement-header h3 {
@@ -1335,8 +1360,8 @@ async function generateHTML(
 
         .activity-item {
             padding: 12px;
-            background: linear-gradient(135deg, ${COLORS["macaron-sky"]}22, ${COLORS["mondrian-blue"]}22);
-            border-radius: 8px;
+            background: rgba(25, 118, 210, 0.1);
+            border-radius: 0;
             border-left: 3px solid ${COLORS["mondrian-blue"]};
             display: flex;
             flex-direction: column;
@@ -1371,9 +1396,9 @@ async function generateHTML(
             display: flex;
             gap: 12px;
             padding: 12px;
-            background: linear-gradient(135deg, ${COLORS["macaron-peach"]}22, ${COLORS["mofa-gradient-1"]}22);
+            background: rgba(211, 47, 47, 0.1);
             border-radius: 12px;
-            border: 1px solid ${COLORS["macaron-peach"]};
+            border: 1px solid ${COLORS["mondrian-red"]};
         }
 
         .award-icon {
@@ -1384,7 +1409,7 @@ async function generateHTML(
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]});
-            border-radius: 8px;
+            border-radius: 0;
         }
 
         .award-mini-icon {
@@ -1402,14 +1427,14 @@ async function generateHTML(
 
         .award-title {
             font-weight: 600;
-            color: ${COLORS["mofa-gradient-1"]};
+            color: ${COLORS["mondrian-black"]};
             font-size: 0.9rem;
         }
 
         .award-event {
             font-size: 0.8rem;
             color: #666;
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .award-project {
@@ -1426,7 +1451,7 @@ async function generateHTML(
         .award-achievement {
             font-size: 0.75rem;
             color: #666;
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .award-date {
@@ -1450,9 +1475,9 @@ async function generateHTML(
 
         .repo-item {
             padding: 12px;
-            background: linear-gradient(135deg, ${COLORS["macaron-mint"]}22, ${COLORS["macaron-sage"]}22);
+            background: rgba(255, 179, 0, 0.1);
             border-radius: 10px;
-            border: 1px solid ${COLORS["macaron-mint"]};
+            border: 1px solid ${COLORS["mondrian-yellow"]};
             transition: all 0.3s ease;
         }
 
@@ -1466,14 +1491,22 @@ async function generateHTML(
         }
 
         .repo-name a {
-            color: ${COLORS["mondrian-blue"]};
+            color: ${COLORS["mondrian-black"]};
             text-decoration: none;
             font-weight: 600;
             font-size: 0.9rem;
+            padding: 4px 8px;
+            border: 1px solid ${COLORS["mondrian-black"]};
+            border-radius: 0;
+            display: inline-block;
+            background: white;
+            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
+            transition: all 0.2s ease;
         }
 
         .repo-name a:hover {
-            text-decoration: underline;
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 ${COLORS["mondrian-black"]};
         }
 
         .repo-description {
@@ -1491,7 +1524,7 @@ async function generateHTML(
 
         .repo-language {
             color: ${COLORS["mofa-gradient-3"]};
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .repo-stars {
@@ -1541,7 +1574,7 @@ async function generateHTML(
             margin: 40px 0;
             padding: 24px;
             background: white;
-            border-radius: 8px;
+            border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 2px 0 ${COLORS["mondrian-black"]};
             grid-column: 1 / -1;
@@ -1575,7 +1608,7 @@ async function generateHTML(
         }
 
         .qr-code img {
-            border-radius: 8px;
+            border-radius: 0;
             box-shadow: 0 4px 16px rgba(0,0,0,0.1);
             border: 1px solid ${COLORS["mondrian-gray"]};
         }
@@ -1591,14 +1624,14 @@ async function generateHTML(
         }
 
         .footer a {
-            color: ${COLORS["mofa-gradient-1"]};
+            color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
-            color: ${COLORS["mondrian-red"]};
-            text-decoration: underline;
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-black"]};
         }
 
         /* 移动端优化 */
@@ -1875,7 +1908,7 @@ function generateDefaultPage(username, hostname) {
             padding: 40px;
             text-align: center;
             background: white;
-            border-radius: 8px;
+            border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 4px 0 ${COLORS["mondrian-black"]};
         }
@@ -1958,14 +1991,14 @@ function generateDefaultPage(username, hostname) {
         }
 
         .footer a {
-            color: ${COLORS["mofa-gradient-1"]};
+            color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
-            color: ${COLORS["mondrian-red"]};
-            text-decoration: underline;
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-black"]};
         }
     </style>
 </head>
@@ -2042,7 +2075,7 @@ function generateDebugPage(username, hostname, debugInfo) {
             max-width: 600px;
             padding: 40px;
             background: white;
-            border-radius: 8px;
+            border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 4px 0 ${COLORS["mondrian-black"]};
         }
@@ -2060,7 +2093,7 @@ function generateDebugPage(username, hostname, debugInfo) {
         .debug-info {
             background: #f1f5f9;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 0;
             margin: 20px 0;
             font-family: 'JetBrains Mono', monospace;
             white-space: pre-wrap;
@@ -2080,7 +2113,7 @@ function generateDebugPage(username, hostname, debugInfo) {
 
         .username {
             font-weight: 600;
-            color: ${COLORS["mofa-gradient-1"]};
+            color: ${COLORS["mondrian-black"]};
         }
 
         .footer {
@@ -2093,14 +2126,14 @@ function generateDebugPage(username, hostname, debugInfo) {
         }
 
         .footer a {
-            color: ${COLORS["mofa-gradient-1"]};
+            color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
-            color: ${COLORS["mondrian-red"]};
-            text-decoration: underline;
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-black"]};
         }
     </style>
 </head>
@@ -2181,7 +2214,7 @@ function generateErrorPage(username, hostname) {
             padding: 40px;
             text-align: center;
             background: white;
-            border-radius: 8px;
+            border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 4px 0 ${COLORS["mondrian-black"]};
         }
@@ -2238,14 +2271,14 @@ function generateErrorPage(username, hostname) {
         }
 
         .footer a {
-            color: ${COLORS["mofa-gradient-1"]};
+            color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
-            color: ${COLORS["mondrian-red"]};
-            text-decoration: underline;
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-black"]};
         }
     </style>
 </head>
