@@ -9,7 +9,6 @@
 - **亮点**: Built real-time code scanning with 95% accuracy
 - **时间**: January 2025
 
-
 ### 占位测试GOSIM Hangzhou 2025 Code Alert Hackathon
 - **名次**: First Place Winner
 - **项目介绍**: AI-powered code analysis and vulnerability detection
