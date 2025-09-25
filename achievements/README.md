@@ -1,94 +1,88 @@
-# MoFA Developer Achievements
+# MoFA 成就展示系统
 
-This directory contains achievement and contribution records for MoFA community members. These files are **manually maintained by the MoFA core team** to ensure accuracy and authenticity.
+记录和展示 MoFA 开发者贡献、获奖和项目的系统。
 
-## File Structure
+## 成就档案结构
 
+每个成就文件 (`{username}-achievements.md`) 包含三个展示部分：
+
+### 1. GitHub Activity
+手动配置的最近GitHub活动：
+```markdown
+## GitHub Activity
+- 推送代码 in username/project (2小时前)
+- 创建仓库 in username/new-repo (1天前)
+- 关注仓库 in popular/project (2天前)
 ```
-achievements/
-├── README.md                    # This file
-├── {username}-achievements.md   # Individual achievement records
-└── template-achievements.md     # Template for new entries
+
+### 2. Awards  
+获奖信息和成就：
+```markdown
+## Awards
+
+### 比赛名称 2024
+- **Award**: 获奖等级
+- **Project**: 项目描述
+- **Team**: 团队成员
+- **Date**: 获奖日期
 ```
 
-## Who Can Have Achievement Records?
+### 3. Repository Showcase
+精选仓库展示：
+```markdown
+## Repository Showcase
 
-- **MoFA Core Team Members**
-- **Significant Contributors** (10+ meaningful contributions)  
-- **Hackathon Winners** (MoFA-related competitions)
-- **Community Leaders** (organizers, speakers, mentors)
-- **Open Source Champions** (exceptional community impact)
+- **username/project-name**
+  - Description: 项目描述
+  - Language: 编程语言
+  - Stars: Star数量
+```
 
-## Achievement Categories
+## 文件格式示例
 
-### 1. GitHub Statistics
-- Automatic display of GitHub activity
-- Stars, followers, contributions graph
-- Most active repositories
+完整的成就文件结构：
 
-### 2. MoFA Contributions  
-- Repository contributions with specific impact
-- Role and responsibility descriptions
-- Code quality and innovation metrics
+```markdown
+# username - MoFA Achievements
 
-### 3. Hackathon Awards
-- Competition name and date
-- Award level (1st place, innovation, etc.)
-- Project description and team members
-- Technical achievements and impact
+## GitHub Activity
+- 推送代码 in username/awesome-project (3小时前)
+- 创建仓库 in username/new-tool (1天前)
 
-### 4. Community Recognition
-- Speaking engagements
-- Technical articles and tutorials  
-- Mentoring and leadership activities
-- Special recognitions and titles
+## Awards
 
-## How to Add/Update Achievement Records
+### AI Hackathon 2024
+- **Award**: First Place Winner
+- **Project**: Smart automation system
+- **Team**: username, teammate1, teammate2
+- **Date**: October 2024
 
-### For Core Team Members:
-1. Create `{username}-achievements.md` using the template
-2. Fill in verified information with supporting links
-3. Review and approve with at least 2 core team members
-4. Commit directly to main branch
+## Repository Showcase
 
-### For Community Members:
-1. Submit achievement information via:
-   - GitHub issue with evidence/links
-   - Discord message to core team
-   - Email to team@mofa.ai
-2. Core team will verify and create/update the record
-3. Notification sent when record is published
-
-## Verification Requirements
-
-All achievements must be verified with:
-- **GitHub Contributions**: Public commit history and repository access
-- **Hackathon Awards**: Official results, certificates, or announcement links  
-- **Speaking/Writing**: Event pages, article links, video recordings
-- **Project Impact**: Deployment evidence, user testimonials, metrics
-
-## Template Format
-
-See `template-achievements.md` for the standard format. All entries must follow this structure for consistency.
-
-## Display Integration
-
-Achievement records are automatically integrated into developer profile pages:
-
-- **Highlights Section**: Top 3 achievements prominently displayed
-- **Contributions Timeline**: Chronological view of MoFA involvement  
-- **GitHub Activity**: Real-time statistics and recent commits
-- **Recognition Badges**: Visual indicators for special achievements
-
-## Review Process
-
-- **Monthly Review**: Core team reviews all achievement records
-- **Annual Audit**: Comprehensive verification of all claims
-- **Community Feedback**: Public input on achievement significance
-- **Continuous Updates**: Records updated as new achievements occur
+- **username/project**
+  - Description: Project description
+  - Language: Python
+  - Stars: 42
 
 ---
+*Last updated: January 2025*
+*Maintained by: MoFA Core Team*
+```
 
-**Maintained by**: MoFA Core Team  
-**Last Updated**: January 2025  
-**Contact**: team@mofa.ai for questions or submissions
+## 申请流程
+
+1. **准备材料**：整理GitHub贡献、获奖证书、项目信息
+2. **创建文件**：按照格式创建 `{username}-achievements.md`
+3. **提交PR**：或通过GitHub Issue提交申请
+4. **审核批准**：Core Team审核后合并
+
+## 展示效果
+
+成就信息会在个人页面右侧展示：
+- 左侧：社交链接流式卡片布局
+- 右侧：三部分成就展示（GitHub Activity、Awards、Repository Showcase）
+
+详细系统说明请参考主 [README.md](../README.md)。
+
+---
+*由 MoFA Core Team 维护*
