@@ -995,11 +995,7 @@ async function generateHTML(
         }
         
         .user-profile-link:hover {
-            transform: translate(-2px, -2px);
-        }
-        
-        .user-profile-link:hover .user-avatar {
-            box-shadow: 3px 3px 0 ${COLORS["mondrian-blue"]};
+            /* 保持简洁，无阴影效果 */
         }
 
         .user-avatar {
@@ -1015,23 +1011,27 @@ async function generateHTML(
         .user-avatar::before {
             content: '🎩';
             position: absolute;
-            top: -1.2rem;
+            top: -1.5rem;
             left: 50%;
             transform: translateX(-50%) rotate(-15deg);
-            font-size: 1.5rem;
-            z-index: 2;
+            font-size: 1.8rem;
+            z-index: 10;
+            pointer-events: none;
             animation: magic-hat-float 3s ease-in-out infinite;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         
         /* 魔法星星装饰 */
         .user-avatar::after {
             content: '✨';
             position: absolute;
-            top: -0.8rem;
-            right: -0.5rem;
-            font-size: 0.8rem;
-            z-index: 3;
+            top: -1rem;
+            right: -0.8rem;
+            font-size: 1rem;
+            z-index: 11;
+            pointer-events: none;
             animation: magic-sparkle 2s ease-in-out infinite alternate;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
         
         @keyframes magic-hat-float {
@@ -1086,11 +1086,7 @@ async function generateHTML(
         }
         
         .mofa-logo-link:hover {
-            transform: translate(-1px, -1px);
-        }
-        
-        .mofa-logo-link:hover .subtitle-logo {
-            box-shadow: 2px 2px 0 ${COLORS["mondrian-red"]};
+            /* 保持简洁，无阴影效果 */
         }
 
         /* 流体网格布局系统 - Pinterest瀑布流风格 */
