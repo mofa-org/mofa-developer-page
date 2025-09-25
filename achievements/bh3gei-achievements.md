@@ -24,8 +24,8 @@
   - Language: JavaScript
   - Stars: 0
 
-- **bh3gei/info-digest**
-  - Description: AI-powered RSS information summarization tool
+- **bh3gei/infoDigest**
+  - Description: AI-powered RSS information summarization tool 2024二等奖
   - Language: TypeScript
   - Stars: 0
 

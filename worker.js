@@ -666,12 +666,21 @@ function parseAchievements(content) {
       currentSection.includes("Activity")
     ) {
       if (trimmed.startsWith("- ")) {
-        const activityMatch = trimmed.match(/- (.+?) in (.+?) \((.+?)\)/);
-        if (activityMatch) {
+        // 支持两种格式：带括号时间和不带括号
+        const activityWithTimeMatch = trimmed.match(/- (.+?) in (.+?) \((.+?)\)/);
+        const activitySimpleMatch = trimmed.match(/- (.+?) in (.+?)$/);
+        
+        if (activityWithTimeMatch) {
           achievements.activities.push({
-            type: activityMatch[1],
-            repo: activityMatch[2],
-            time: activityMatch[3],
+            type: activityWithTimeMatch[1],
+            repo: activityWithTimeMatch[2],
+            time: activityWithTimeMatch[3],
+          });
+        } else if (activitySimpleMatch) {
+          achievements.activities.push({
+            type: activitySimpleMatch[1],
+            repo: activitySimpleMatch[2],
+            time: "最近", // 默认时间
           });
         }
       }
@@ -992,6 +1001,20 @@ async function generateHTML(
             align-items: center;
             gap: 12px;
             transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        /* 魔法星星装饰 */
+        .user-profile-link::after {
+            content: '⭐';
+            position: absolute;
+            top: -0.5rem;
+            right: -1rem;
+            font-size: 0.8rem;
+            z-index: 12;
+            pointer-events: none;
+            animation: magic-sparkle 2s ease-in-out infinite alternate;
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
         }
         
         .user-profile-link:hover {
@@ -1007,31 +1030,40 @@ async function generateHTML(
             position: relative;
         }
         
-        /* 魔法帽子装饰 */
+        /* CSS画的魔法帽子 */
         .user-avatar::before {
-            content: '🎩';
+            content: '';
             position: absolute;
-            top: -1.5rem;
+            top: -1.8rem;
             left: 50%;
+            width: 1.2rem;
+            height: 1.2rem;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border: 2px solid ${COLORS["mondrian-black"]};
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             transform: translateX(-50%) rotate(-15deg);
-            font-size: 1.8rem;
             z-index: 10;
             pointer-events: none;
             animation: magic-hat-float 3s ease-in-out infinite;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
         
-        /* 魔法星星装饰 */
+        /* 魔法帽子的帽檐 */
         .user-avatar::after {
-            content: '✨';
+            content: '';
             position: absolute;
             top: -1rem;
-            right: -0.8rem;
-            font-size: 1rem;
-            z-index: 11;
+            left: 50%;
+            width: 1.6rem;
+            height: 0.3rem;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border: 1px solid ${COLORS["mondrian-black"]};
+            border-radius: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            z-index: 9;
             pointer-events: none;
-            animation: magic-sparkle 2s ease-in-out infinite alternate;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            animation: magic-hat-float 3s ease-in-out infinite;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
         
         @keyframes magic-hat-float {
