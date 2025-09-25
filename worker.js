@@ -1030,40 +1030,24 @@ async function generateHTML(
             position: relative;
         }
         
-        /* CSS画的魔法帽子 */
-        .user-avatar::before {
-            content: '';
+        /* 头像容器 */
+        .avatar-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 简单粗暴的魔法帽子 */
+        .magic-hat {
             position: absolute;
-            top: -1.8rem;
+            top: -1.5rem;
             left: 50%;
-            width: 1.2rem;
-            height: 1.2rem;
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            border: 2px solid ${COLORS["mondrian-black"]};
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
             transform: translateX(-50%) rotate(-15deg);
+            font-size: 2rem;  /* 和头像一样大 */
             z-index: 10;
             pointer-events: none;
             animation: magic-hat-float 3s ease-in-out infinite;
-            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        /* 魔法帽子的帽檐 */
-        .user-avatar::after {
-            content: '';
-            position: absolute;
-            top: -1rem;
-            left: 50%;
-            width: 1.6rem;
-            height: 0.3rem;
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            border: 1px solid ${COLORS["mondrian-black"]};
-            border-radius: 50%;
-            transform: translateX(-50%) rotate(-15deg);
-            z-index: 9;
-            pointer-events: none;
-            animation: magic-hat-float 3s ease-in-out infinite;
-            box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
         }
         
         @keyframes magic-hat-float {
@@ -1860,7 +1844,10 @@ async function generateHTML(
                 <div class="header-in-left">
                     <h1 class="username">
                         <a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer" class="user-profile-link">
-                            <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
+                            <div class="avatar-container">
+                                <div class="magic-hat">🎩</div>
+                                <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
+                            </div>
                             ${username.toUpperCase()}
                         </a>
                     </h1>
