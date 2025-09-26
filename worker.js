@@ -563,42 +563,44 @@ function parseAchievements(content) {
   const awardsMatch = content.match(/awards:\s*([\s\S]*?)(?=\n\w+:|$)/);
   if (awardsMatch) {
     const awardsText = awardsMatch[1];
-    const awardBlocks = awardsText.split(/\n  - /).filter(block => block.trim());
-    
-    awardBlocks.forEach(block => {
+    const awardBlocks = awardsText
+      .split(/\n  - /)
+      .filter((block) => block.trim());
+
+    awardBlocks.forEach((block) => {
       const award = {};
-      const lines = block.split('\n');
-      
-      lines.forEach(line => {
-        const trimmed = line.trim().replace(/^- /, '');
-        if (trimmed.includes(':')) {
-          const [key, ...valueParts] = trimmed.split(':');
-          const value = valueParts.join(':').trim().replace(/['"]/g, '');
+      const lines = block.split("\n");
+
+      lines.forEach((line) => {
+        const trimmed = line.trim().replace(/^- /, "");
+        if (trimmed.includes(":")) {
+          const [key, ...valueParts] = trimmed.split(":");
+          const value = valueParts.join(":").trim().replace(/['"]/g, "");
           if (key.trim() && value) {
             award[key.trim()] = value;
           }
         }
       });
-      
+
       if (award.title) {
         // 转换为原来的格式
         const content = [
-          `- **名次**: ${award.rank || ''}`,
-          `- **项目介绍**: ${award.description || ''}`,
-          `- **获奖人**: ${award.team || ''}`,
-          `- **亮点**: ${award.highlight || ''}`,
-          `- **时间**: ${award.date || ''}`
-        ].join('\n');
-        
-        achievements.hackathons.push({ 
-          title: award.title, 
+          `- **名次**: ${award.rank || ""}`,
+          `- **项目介绍**: ${award.description || ""}`,
+          `- **获奖人**: ${award.team || ""}`,
+          `- **亮点**: ${award.highlight || ""}`,
+          `- **时间**: ${award.date || ""}`,
+        ].join("\n");
+
+        achievements.hackathons.push({
+          title: award.title,
           content: content,
-          image: award.image || null
+          image: award.image || null,
         });
       }
     });
   }
-  
+
   // 解析githubUsername
   const usernameMatch = content.match(/githubUsername:\s*(.+)/);
   if (usernameMatch) {
@@ -609,57 +611,60 @@ function parseAchievements(content) {
   const reposMatch = content.match(/repositories:\s*([\s\S]*?)(?=\n\w+:|$)/);
   if (reposMatch) {
     const reposText = reposMatch[1];
-    const repoBlocks = reposText.split(/\n  - /).filter(block => block.trim());
-    
-    repoBlocks.forEach(block => {
+    const repoBlocks = reposText
+      .split(/\n  - /)
+      .filter((block) => block.trim());
+
+    repoBlocks.forEach((block) => {
       const repo = {};
-      const lines = block.split('\n');
-      
-      lines.forEach(line => {
-        const trimmed = line.trim().replace(/^- /, '');
-        if (trimmed.includes(':')) {
-          const [key, ...valueParts] = trimmed.split(':');
-          const value = valueParts.join(':').trim().replace(/['"]/g, '');
+      const lines = block.split("\n");
+
+      lines.forEach((line) => {
+        const trimmed = line.trim().replace(/^- /, "");
+        if (trimmed.includes(":")) {
+          const [key, ...valueParts] = trimmed.split(":");
+          const value = valueParts.join(":").trim().replace(/['"]/g, "");
           if (key.trim() && value) {
-            repo[key.trim()] = key.trim() === 'stars' ? parseInt(value) || 0 : value;
+            repo[key.trim()] =
+              key.trim() === "stars" ? parseInt(value) || 0 : value;
           }
         }
       });
-      
+
       if (repo.name) {
         achievements.repositories.push(repo);
       }
     });
   }
 
-  // 解析activities  
+  // 解析activities
   const activitiesMatch = content.match(/activities:\s*([\s\S]*?)(?=\n\w+:|$)/);
   if (activitiesMatch) {
     const activitiesText = activitiesMatch[1];
-    const activityBlocks = activitiesText.split(/\n  - /).filter(block => block.trim());
-    
-    activityBlocks.forEach(block => {
+    const activityBlocks = activitiesText
+      .split(/\n  - /)
+      .filter((block) => block.trim());
+
+    activityBlocks.forEach((block) => {
       const activity = {};
-      const lines = block.split('\n');
-      
-      lines.forEach(line => {
-        const trimmed = line.trim().replace(/^- /, '');
-        if (trimmed.includes(':')) {
-          const [key, ...valueParts] = trimmed.split(':');
-          const value = valueParts.join(':').trim().replace(/['"]/g, '');
+      const lines = block.split("\n");
+
+      lines.forEach((line) => {
+        const trimmed = line.trim().replace(/^- /, "");
+        if (trimmed.includes(":")) {
+          const [key, ...valueParts] = trimmed.split(":");
+          const value = valueParts.join(":").trim().replace(/['"]/g, "");
           if (key.trim() && value) {
             activity[key.trim()] = value;
           }
         }
       });
-      
+
       if (activity.type && activity.repo) {
         achievements.activities.push(activity);
       }
     });
   }
-
-
 
   console.log("🏆 Parsed achievements:", achievements);
   return achievements;
@@ -734,16 +739,20 @@ function generateAwardsCard(achievements) {
           .slice(0, 3)
           .map(
             (award) => `
-          <div class="award-item ${award.image ? 'award-with-image' : ''}">
-            ${award.image ? `
+          <div class="award-item ${award.image ? "award-with-image" : ""}">
+            ${
+              award.image
+                ? `
             <div class="award-image">
               <img src="${award.image}" alt="${award.title}" class="award-photo">
             </div>
-            ` : `
+            `
+                : `
             <div class="award-icon">
               <img src="https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/resources/icons/trophy.svg" alt="Award" class="award-mini-icon">
             </div>
-            `}
+            `
+            }
             <div class="award-content">
               <div class="award-title">${award.title}</div>
               <div class="award-details">${award.content.replace(/\*\*([^*]+)\*\*:/g, "<strong>$1:</strong>").replace(/\n/g, "<br>")}</div>
@@ -967,7 +976,7 @@ async function generateHTML(
             gap: 12px;
             overflow: visible;
         }
-        
+
         .user-profile-link {
             background: linear-gradient(120deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]}, ${COLORS["mofa-gradient-3"]}, ${COLORS["mofa-gradient-4"]});
             background-size: 300% 300%;
@@ -982,7 +991,7 @@ async function generateHTML(
             transition: all 0.2s ease;
             position: relative;
         }
-        
+
         /* 魔法星星装饰 */
         .user-profile-link::after {
             content: '⭐';
@@ -995,7 +1004,7 @@ async function generateHTML(
             animation: magic-sparkle 2s ease-in-out infinite alternate;
             filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
         }
-        
+
         .user-profile-link:hover {
             /* 保持简洁，无阴影效果 */
         }
@@ -1008,7 +1017,7 @@ async function generateHTML(
             flex-shrink: 0;
             position: relative;
         }
-        
+
         /* 头像容器 */
         .avatar-container {
             position: relative;
@@ -1017,29 +1026,8 @@ async function generateHTML(
             justify-content: center;
             overflow: visible; /* 确保帽子不被裁剪 */
         }
-        
-        /* 简单粗暴的魔法帽子 */
-        .magic-hat {
-            position: absolute;
-            top: -1.2rem;
-            left: 50%;
-            transform: translateX(-50%) rotate(-15deg);
-            font-size: 2.5rem;  /* 比头像大一点，更明显 */
-            z-index: 15;
-            pointer-events: none;
-            animation: magic-hat-float 3s ease-in-out infinite;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-        }
-        
-        @keyframes magic-hat-float {
-            0%, 100% {
-                transform: translateX(-50%) rotate(-15deg) translateY(0px);
-            }
-            50% {
-                transform: translateX(-50%) rotate(-10deg) translateY(-2px);
-            }
-        }
-        
+
+
         @keyframes magic-sparkle {
             0% {
                 opacity: 0.6;
@@ -1074,14 +1062,14 @@ async function generateHTML(
             height: 1rem;
             border-radius: 4px;
         }
-        
+
         .mofa-logo-link {
             text-decoration: none;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
         }
-        
+
         .mofa-logo-link:hover {
             /* 保持简洁，无阴影效果 */
         }
@@ -1811,6 +1799,111 @@ async function generateHTML(
             grid-column: 1 / -1;
         }
 
+        /* 魔法帽子模态窗口 */
+        .magic-modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .magic-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 60px;
+            border-radius: 20px;
+            border: 3px solid ${COLORS["mondrian-black"]};
+            box-shadow: 0 8px 0 ${COLORS["mondrian-black"]};
+            text-align: center;
+            animation: magic-modal-appear 0.3s ease-out;
+        }
+
+        @keyframes magic-modal-appear {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .magic-emoji {
+            font-size: 8rem;
+            animation: magic-bounce 2s ease-in-out infinite;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        @keyframes magic-bounce {
+            0%, 100% {
+                transform: scale(1) rotate(-10deg);
+            }
+            50% {
+                transform: scale(1.1) rotate(10deg);
+            }
+        }
+
+        .magic-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]}, ${COLORS["mofa-gradient-3"]});
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .magic-close {
+            background: ${COLORS["mondrian-red"]};
+            color: white;
+            border: 2px solid ${COLORS["mondrian-black"]};
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 0 ${COLORS["mondrian-black"]};
+            transition: all 0.2s ease;
+        }
+
+        .magic-close:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-black"]};
+        }
+
+        /* 魔法帽子图标 */
+        .magic-trigger {
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2.5rem;
+            height: 2.5rem;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: default;
+            z-index: 15;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+            color: black;
+            line-height: 1;
+        }
+
+
+
         /* 左侧头部内的分隔线 */
         .header-in-left .mini-divider {
             justify-content: flex-start;
@@ -1842,6 +1935,15 @@ async function generateHTML(
 <body>
     <div class="decoration"></div>
 
+    <!-- 魔法帽子模态窗口 -->
+    <div id="magicModal" class="magic-modal" onclick="hideMagicHat()">
+        <div class="magic-modal-content" onclick="event.stopPropagation()">
+            <div class="magic-emoji">🎩</div>
+            <div class="magic-text">✨ 魔法师的帽子 ✨</div>
+            <button class="magic-close" onclick="hideMagicHat()">关闭</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="main-content">
             <div class="links-section">
@@ -1849,7 +1951,7 @@ async function generateHTML(
                     <h1 class="username">
                         <a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer" class="user-profile-link">
                             <div class="avatar-container">
-                                <div class="magic-hat">🎩</div>
+                                <div class="magic-trigger">🎩</div>
                                 <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
                             </div>
                             ${username.toUpperCase()}
@@ -1910,6 +2012,16 @@ async function generateHTML(
                 qrCode.style.display = 'none';
                 button.textContent = '分享二维码';
             }
+        }
+
+        function showMagicHat() {
+            const modal = document.getElementById('magicModal');
+            modal.style.display = 'block';
+        }
+
+        function hideMagicHat() {
+            const modal = document.getElementById('magicModal');
+            modal.style.display = 'none';
         }
 
         // 流体卡片加载动画
