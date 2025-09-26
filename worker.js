@@ -890,25 +890,13 @@ async function generateHTML(
         body {
             line-height: 1.6;
             color: ${COLORS["mondrian-black"]};
-            background: #f1f5f9;
+            background: #E8F6F7;
             min-height: 100vh;
             margin: 0;
             padding: 0;
             position: relative;
         }
 
-        /* 渐变背景层 - 使用伪元素确保完整覆盖 */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            z-index: -2;
-            pointer-events: none;
-        }
 
         /* 选中文本颜色 - 与MoFA官网一致 */
         ::selection {
@@ -1100,7 +1088,7 @@ async function generateHTML(
             overflow: visible;
             margin-bottom: 20px;
             break-inside: avoid;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
         }
@@ -1110,17 +1098,21 @@ async function generateHTML(
             z-index: 10;
         }
 
-        /* 悬停时的彩色阴影 */
-        .fluid-coral:hover, .fluid-peach:hover, .fluid-rose:hover {
-            box-shadow: 4px 4px 0 ${COLORS["mondrian-red"]};
+        /* 悬停时的彩色阴影 - 只用四个指定颜色 */
+        .fluid-coral:hover, .fluid-peach:hover {
+            box-shadow: 4px 4px 0 #fc543e;
         }
 
-        .fluid-mint:hover, .fluid-sky:hover, .fluid-sage:hover {
-            box-shadow: 4px 4px 0 ${COLORS["mondrian-blue"]};
+        .fluid-mint:hover, .fluid-sky:hover {
+            box-shadow: 4px 4px 0 #ffc63e;
         }
 
-        .fluid-lavender:hover, .fluid-lemon:hover {
-            box-shadow: 4px 4px 0 ${COLORS["mondrian-yellow"]};
+        .fluid-lavender:hover, .fluid-sage:hover, .fluid-lemon:hover {
+            box-shadow: 4px 4px 0 #fe6a5b;
+        }
+
+        .fluid-rose:hover {
+            box-shadow: 4px 4px 0 #6dcad0;
         }
 
         .fluid-card:active {
@@ -1128,17 +1120,21 @@ async function generateHTML(
             transition: transform 0.1s ease;
         }
 
-        /* 激活时的彩色阴影 */
-        .fluid-coral:active, .fluid-peach:active, .fluid-rose:active {
-            box-shadow: 2px 2px 0 ${COLORS["mondrian-red"]};
+        /* 激活时的彩色阴影 - 只用四个指定颜色 */
+        .fluid-coral:active, .fluid-peach:active {
+            box-shadow: 2px 2px 0 #fc543e;
         }
 
-        .fluid-mint:active, .fluid-sky:active, .fluid-sage:active {
-            box-shadow: 2px 2px 0 ${COLORS["mondrian-blue"]};
+        .fluid-mint:active, .fluid-sky:active {
+            box-shadow: 2px 2px 0 #ffc63e;
         }
 
-        .fluid-lavender:active, .fluid-lemon:active {
-            box-shadow: 2px 2px 0 ${COLORS["mondrian-yellow"]};
+        .fluid-lavender:active, .fluid-sage:active, .fluid-lemon:active {
+            box-shadow: 2px 2px 0 #fe6a5b;
+        }
+
+        .fluid-rose:active {
+            box-shadow: 2px 2px 0 #6dcad0;
         }
 
         /* 流体卡片高度变化 */
@@ -1191,7 +1187,7 @@ async function generateHTML(
         /* 流体卡片文字 */
         .fluid-name {
             font-size: 15px;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
             text-align: center;
             line-height: 1.4;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
@@ -1203,37 +1199,45 @@ async function generateHTML(
             font-weight: 600;
         }
 
-        /* 流体卡片颜色主题 - 柔和流动渐变 */
+        /* 流体卡片颜色主题 - 马卡龙纯色 */
         .fluid-coral {
-            border-color: ${COLORS["mondrian-red"]} !important;
+            border-color: #fc543e !important;
+            background: #fe6a5b !important;
         }
 
         .fluid-mint {
-            border-color: ${COLORS["mondrian-blue"]} !important;
+            border-color: #fe6a5b !important;
+            background: #6dcad0 !important;
         }
 
         .fluid-lavender {
-            border-color: ${COLORS["mondrian-yellow"]} !important;
+            border-color: #fc543e !important;
+            background: #ffc63e !important;
         }
 
         .fluid-peach {
-            border-color: ${COLORS["mondrian-red"]} !important;
+            border-color: #6dcad0 !important;
+            background: #fe6a5b !important;
         }
 
         .fluid-sky {
-            border-color: ${COLORS["mondrian-blue"]} !important;
+            border-color: #ffc63e !important;
+            background: #6dcad0 !important;
         }
 
         .fluid-sage {
-            border-color: ${COLORS["mondrian-blue"]} !important;
+            border-color: #fc543e !important;
+            background: #ffc63e !important;
         }
 
         .fluid-rose {
-            border-color: ${COLORS["mondrian-red"]} !important;
+            border-color: #ffc63e !important;
+            background: #fc543e !important;
         }
 
         .fluid-lemon {
-            border-color: ${COLORS["mondrian-yellow"]} !important;
+            border-color: #6dcad0 !important;
+            background: #ffc63e !important;
         }
 
         /* 流体卡片水波纹效果 */
@@ -1354,7 +1358,7 @@ async function generateHTML(
         }
 
         .achievement-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 0;
             padding: 20px;
             border: 2px solid ${COLORS["mondrian-black"]};
@@ -1513,7 +1517,7 @@ async function generateHTML(
         .award-event {
             font-size: 0.8rem;
             color: #666;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .award-project {
@@ -1530,7 +1534,7 @@ async function generateHTML(
         .award-achievement {
             font-size: 0.75rem;
             color: #666;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .award-date {
@@ -1578,7 +1582,7 @@ async function generateHTML(
             border: 1px solid ${COLORS["mondrian-black"]};
             border-radius: 0;
             display: inline-block;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
             transition: all 0.2s ease;
         }
@@ -1603,7 +1607,7 @@ async function generateHTML(
 
         .repo-language {
             color: ${COLORS["mofa-gradient-3"]};
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .repo-stars {
@@ -1652,7 +1656,7 @@ async function generateHTML(
         .qr-section {
             margin: 40px 0;
             padding: 24px;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 2px 0 ${COLORS["mondrian-black"]};
@@ -1705,7 +1709,7 @@ async function generateHTML(
         .footer a {
             color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
@@ -1817,7 +1821,7 @@ async function generateHTML(
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             padding: 60px;
             border-radius: 20px;
             border: 3px solid ${COLORS["mondrian-black"]};
@@ -2117,7 +2121,7 @@ function generateDefaultPage(username, hostname) {
             max-width: 500px;
             padding: 40px;
             text-align: center;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 4px 0 ${COLORS["mondrian-black"]};
@@ -2203,7 +2207,7 @@ function generateDefaultPage(username, hostname) {
         .footer a {
             color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
@@ -2284,7 +2288,7 @@ function generateDebugPage(username, hostname, debugInfo) {
         .container {
             max-width: 600px;
             padding: 40px;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 4px 0 ${COLORS["mondrian-black"]};
@@ -2338,7 +2342,7 @@ function generateDebugPage(username, hostname, debugInfo) {
         .footer a {
             color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
@@ -2423,7 +2427,7 @@ function generateErrorPage(username, hostname) {
             max-width: 500px;
             padding: 40px;
             text-align: center;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 0;
             border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 4px 0 ${COLORS["mondrian-black"]};
@@ -2483,7 +2487,7 @@ function generateErrorPage(username, hostname) {
         .footer a {
             color: ${COLORS["mondrian-black"]};
             text-decoration: none;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: white;            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
         }
 
         .footer a:hover {
