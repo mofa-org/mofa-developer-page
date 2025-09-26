@@ -924,7 +924,7 @@ async function generateHTML(
 
         .main-content {
             display: grid;
-            grid-template-columns: 2fr 3fr;
+            grid-template-columns: 0.5fr 4.5fr;
             gap: 40px;
             align-items: start;
         }
