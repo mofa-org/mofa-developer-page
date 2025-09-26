@@ -688,7 +688,7 @@ function parseAchievements(content) {
   }
 
   // 保存最后一个奖项
-  if (currentItem.title && currentItem.content) {
+  if (currentItem.title) {
     achievements.hackathons.push({ ...currentItem });
   }
 
@@ -954,7 +954,9 @@ async function generateHTML(
         /* 左侧区域的头部样式 */
         .header-in-left {
             margin-bottom: 20px;
+            padding-top: 10px; /* 给帽子留出空间 */
             text-align: left;
+            overflow: visible;
         }
 
         /* Logo容器 - 仿照MoFA官网的风格 */
@@ -984,9 +986,11 @@ async function generateHTML(
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 8px;
+            margin-top: 2rem; /* 给帽子留出空间 */
             display: flex;
             align-items: center;
             gap: 12px;
+            overflow: visible;
         }
         
         .user-profile-link {
