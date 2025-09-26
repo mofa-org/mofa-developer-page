@@ -6,8 +6,8 @@
 
 ## 开发者映射表
 
-[example][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example-mofa-links.md]
-[bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/bh3gei-mofa-links.md]
+[example][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example-mofa-links.yml]
+[bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/bh3gei-mofa-links.yml]
 
 ## 添加说明
 

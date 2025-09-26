@@ -11,9 +11,9 @@
 ```markdown
 [username][配置文件URL]
 ```
-例如：`[bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/bh3gei-mofa-links.md]`
+例如：`[bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/bh3gei-mofa-links.yml]`
 
-### 2. 链接配置文件 (`username-mofa-links/username-mofa-links.md`)
+### 2. 链接配置文件 (`username-mofa-links/username-mofa-links.yml`)
 定义个人社交链接和作品集，采用YAML格式：
 ```yaml
 github:
@@ -25,7 +25,7 @@ portfolio:
   icon: home
 ```
 
-### 3. 成就档案文件 (`achievements/username-achievements.md`)
+### 3. 成就档案文件 (`achievements/username-achievements.yml`)
 包含右侧边栏展示的三个主要部分：
 - **GitHub Activity**：最近的GitHub活动（手动配置）
 - **Awards**：获奖信息和成就
@@ -59,7 +59,7 @@ custom:
 在 `developers.md` 中添加你的配置：
 
 ```
-[yourusername][https://raw.githubusercontent.com/your-repo/config.md]
+[yourusername][https://raw.githubusercontent.com/your-repo/config.yml]
 ```
 
 ### 3. 访问你的页面
@@ -68,8 +68,8 @@ custom:
 
 ## 📂 示例配置
 
-- [完整示例](examples/example-mofa-links.md) - 展示所有支持的平台和功能
-- [简单示例](examples/simple-example.md) - 快速入门模板
+- [完整示例](examples/example-mofa-links.yml) - 展示所有支持的平台和功能
+- [简单示例](examples/simple-example.yml) - 快速入门模板
 
 ## 🎨 支持的图标
 
@@ -160,18 +160,18 @@ mofa-developer-page/
 ├── developers.md               # 用户名到配置文件的映射表
 ├── worker.js                  # Cloudflare Worker 代码
 ├── examples/                  # 示例配置文件
-│   ├── example-mofa-links.md  # 完整示例
-│   └── simple-example.md      # 简单示例
+│   ├── example-mofa-links.yml # 完整示例
+│   └── simple-example.yml     # 简单示例
 ├── achievements/              # 🏆 成就展示系统 (Core Team维护)
 │   ├── README.md              # 成就系统说明
-│   ├── template-achievements.md # 成就模板
-│   └── {username}-achievements.md # 个人成就记录
+│   ├── template-achievements.yml # 成就模板
+│   └── {username}-achievements.yml # 个人成就记录
 ├── resources/
 │   └── icons/                 # 图标资源库
 │       ├── ICON_REFERENCE.md  # 图标参考文档
 │       └── *.svg              # SVG图标文件
 └── username-mofa-links/       # 开发者配置文件
-    └── *.md                   # 各开发者的配置
+    └── *.yml                  # 各开发者的配置
 ```
 
 ### 添加新图标

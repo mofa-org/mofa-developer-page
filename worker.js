@@ -528,7 +528,7 @@ function parseLinks(content) {
 // 获取用户成就数据
 async function fetchUserAchievements(username) {
   try {
-    const achievementUrl = `https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/achievements/${username}-achievements.md`;
+    const achievementUrl = `https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/achievements/${username}-achievements.yml`;
     console.log("🏆 Fetching achievements from:", achievementUrl);
 
     const response = await fetch(achievementUrl);
