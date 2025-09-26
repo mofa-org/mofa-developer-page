@@ -1883,8 +1883,8 @@ async function generateHTML(
         /* 魔法帽子图标 */
         .magic-trigger {
             position: absolute;
-            top: -2rem;
-            left: 50%;
+            top: -1.7rem;
+            left: 48%;
             transform: translateX(-50%);
             width: 2.5rem;
             height: 2.5rem;
