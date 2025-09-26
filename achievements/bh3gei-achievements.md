@@ -1,39 +1,45 @@
-# bh3gei - MoFA Achievements
+githubUsername: bh3gei
+enableGithubStats: true
 
-## Awards
+awards:
+  - title: "占位测试GOSIM Hangzhou 2025 Code Alert Hackathon"
+    rank: "First Place Winner"
+    description: "AI-powered code analysis and vulnerability detection"
+    team: "李杰, 刘雨寒, 王云洋"
+    highlight: "Built real-time code scanning with 95% accuracy"
+    date: "January 2025"
+    image: "https://picsum.photos/200/150?random=1"
+    
+  - title: "占位AIOS Hackathon 2025"
+    rank: "Second Place Winner"
+    description: "Intelligent task automation platform"
+    team: "李杰, 王小明, 张三"
+    highlight: "Automated 80% of routine tasks using AI"
+    date: "February 2025"
+    image: "https://picsum.photos/200/150?random=2"
 
-### 占位测试GOSIM Hangzhou 2025 Code Alert Hackathon
-- **名次**: First Place Winner
-- **项目介绍**: AI-powered code analysis and vulnerability detection
-- **获奖人**: 李杰, 刘雨寒, 王云洋
-- **亮点**: Built real-time code scanning with 95% accuracy
-- **时间**: January 2025
+repositories:
+  - name: "bh3gei/mofa-developer-page"
+    description: "Personal developer page system using Cloudflare Workers"
+    language: "JavaScript"
+    stars: 12
+    url: "https://github.com/bh3gei/mofa-developer-page"
+    
+  - name: "bh3gei/infoDigest" 
+    description: "AI-powered RSS information summarization tool 2024二等奖"
+    language: "TypeScript"
+    stars: 8
+    url: "https://github.com/bh3gei/infoDigest"
 
-### 占位AIOS Hackathon 2025
-- **名次**: Second Place Winner
-- **项目介绍**: Intelligent task automation platform
-- **获奖人**: 李杰, 王小明, 张三
-- **亮点**: Automated 80% of routine tasks using AI
-- **时间**: February 2025
-
-
-## Repository Showcase
-
-- **bh3gei/mofa-developer-page**
-  - Description: Personal developer page system using Cloudflare Workers
-  - Language: JavaScript
-  - Stars: 0
-
-- **bh3gei/infoDigest**
-  - Description: AI-powered RSS information summarization tool 2024二等奖
-  - Language: TypeScript
-  - Stars: 0
-
-## GitHub Activity
-- 1 commits in mofa-org/mofa
-- Opened issue #42 in mofa-org/mofa-stage
-- Merged PR #10 in mofa-org/mofa
-
----
-*Last updated: January 2025*
-*Maintained by: MoFA Core Team*
+activities:
+  - type: "1 commits"
+    repo: "mofa-org/mofa"
+    time: "最近"
+    
+  - type: "Opened issue #42"
+    repo: "mofa-org/mofa-stage"
+    time: "最近"
+    
+  - type: "Merged PR #10"
+    repo: "mofa-org/mofa"
+    time: "最近"

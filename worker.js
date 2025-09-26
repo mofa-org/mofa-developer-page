@@ -546,11 +546,11 @@ async function fetchUserAchievements(username) {
   }
 }
 
-// 解析成就Markdown文件
+// 解析成就YAML文件
 function parseAchievements(content) {
   const achievements = {
     githubUsername: null,
-    enableGithubStats: true, // 默认开启
+    enableGithubStats: true,
     contributions: [],
     hackathons: [],
     recognition: [],
@@ -559,138 +559,107 @@ function parseAchievements(content) {
     activities: [],
   };
 
-  const lines = content.split("\n");
-  let currentItem = {};
-  let currentSection = "";
-
-  for (let line of lines) {
-    const trimmed = line.trim();
-
-    // 检测当前所在区域
-    if (trimmed.startsWith("## ")) {
-      currentSection = trimmed.replace("## ", "");
-      continue;
-    }
-
-    // 从标题推断GitHub用户名
-    if (trimmed.startsWith("# ") && trimmed.includes(" - MoFA Achievements")) {
-      const usernameMatch = trimmed.match(/# (\w+) - MoFA Achievements/);
-      if (usernameMatch) {
-        achievements.githubUsername = usernameMatch[1];
-        console.log(
-          "✅ GitHub Username inferred from title:",
-          usernameMatch[1],
-        );
-      }
-    }
-
-    // Repository contributions - 改进匹配规则
-    if (trimmed.startsWith("- **") && trimmed.includes("mofa-org/")) {
-      const repoMatch = trimmed.match(/\*\*(mofa-org\/[^*]+)\*\*/);
-      if (repoMatch) {
-        currentItem = { repo: repoMatch[1] };
-      }
-    }
-    if (trimmed.includes("Role:") && currentItem.repo) {
-      const roleMatch = trimmed.match(/Role:\s*(.+)/);
-      if (roleMatch) {
-        currentItem.role = roleMatch[1].trim();
-      }
-    }
-    if (trimmed.includes("Contributions:") && currentItem.repo) {
-      const contribMatch = trimmed.match(/Contributions:\s*(.+)/);
-      if (contribMatch) {
-        currentItem.contributions = contribMatch[1].trim();
-        achievements.contributions.push({ ...currentItem });
-        currentItem = {};
-      }
-    }
-
-    // Awards - 整段解析
-    if (currentSection.includes("Awards")) {
-      if (trimmed.startsWith("### ")) {
-        // 如果有上一个奖项，先保存
-        if (currentItem.title) {
-          achievements.hackathons.push({ ...currentItem });
-        }
-        // 开始新的奖项
-        currentItem = {
-          title: trimmed.replace("### ", "").trim(),
-          content: "",
-        };
-      } else if (trimmed.startsWith("- ") && currentItem.title) {
-        // 添加内容到当前奖项
-        currentItem.content += (currentItem.content ? "\n" : "") + trimmed;
-      }
-    }
-
-    // Repository showcase - 新增仓库展示解析
-    if (
-      currentSection.includes("Repository") &&
-      currentSection.includes("Showcase")
-    ) {
-      if (trimmed.startsWith("- **") && !trimmed.includes("mofa-org/")) {
-        const repoMatch = trimmed.match(/\*\*([^*]+)\*\*/);
-        if (repoMatch) {
-          currentItem = { name: repoMatch[1] };
-        }
-      }
-      if (trimmed.includes("Description:") && currentItem.name) {
-        const descMatch = trimmed.match(/Description:\s*(.+)/);
-        if (descMatch) {
-          currentItem.description = descMatch[1].trim();
-        }
-      }
-      if (trimmed.includes("Language:") && currentItem.name) {
-        const langMatch = trimmed.match(/Language:\s*(.+)/);
-        if (langMatch) {
-          currentItem.language = langMatch[1].trim();
-        }
-      }
-      if (trimmed.includes("Stars:") && currentItem.name) {
-        const starsMatch = trimmed.match(/Stars:\s*(\d+)/);
-        if (starsMatch) {
-          currentItem.stars = parseInt(starsMatch[1]);
-          // 只有当有名称和描述时才添加
-          if (currentItem.name && currentItem.description) {
-            achievements.repositories.push({ ...currentItem });
+  // 简单的YAML解析 - awards部分
+  const awardsMatch = content.match(/awards:\s*([\s\S]*?)(?=\n\w+:|$)/);
+  if (awardsMatch) {
+    const awardsText = awardsMatch[1];
+    const awardBlocks = awardsText.split(/\n  - /).filter(block => block.trim());
+    
+    awardBlocks.forEach(block => {
+      const award = {};
+      const lines = block.split('\n');
+      
+      lines.forEach(line => {
+        const trimmed = line.trim().replace(/^- /, '');
+        if (trimmed.includes(':')) {
+          const [key, ...valueParts] = trimmed.split(':');
+          const value = valueParts.join(':').trim().replace(/['"]/g, '');
+          if (key.trim() && value) {
+            award[key.trim()] = value;
           }
-          currentItem = {};
         }
-      }
-    }
-
-    // GitHub Activity - 新增动态解析
-    if (
-      currentSection.includes("GitHub") &&
-      currentSection.includes("Activity")
-    ) {
-      if (trimmed.startsWith("- ")) {
-        // 支持两种格式：带括号时间和不带括号
-        const activityWithTimeMatch = trimmed.match(/- (.+?) in (.+?) \((.+?)\)/);
-        const activitySimpleMatch = trimmed.match(/- (.+?) in (.+?)$/);
+      });
+      
+      if (award.title) {
+        // 转换为原来的格式
+        const content = [
+          `- **名次**: ${award.rank || ''}`,
+          `- **项目介绍**: ${award.description || ''}`,
+          `- **获奖人**: ${award.team || ''}`,
+          `- **亮点**: ${award.highlight || ''}`,
+          `- **时间**: ${award.date || ''}`
+        ].join('\n');
         
-        if (activityWithTimeMatch) {
-          achievements.activities.push({
-            type: activityWithTimeMatch[1],
-            repo: activityWithTimeMatch[2],
-            time: activityWithTimeMatch[3],
-          });
-        } else if (activitySimpleMatch) {
-          achievements.activities.push({
-            type: activitySimpleMatch[1],
-            repo: activitySimpleMatch[2],
-            time: "最近", // 默认时间
-          });
-        }
+        achievements.hackathons.push({ 
+          title: award.title, 
+          content: content,
+          image: award.image || null
+        });
       }
-    }
+    });
+  }
+  
+  // 解析githubUsername
+  const usernameMatch = content.match(/githubUsername:\s*(.+)/);
+  if (usernameMatch) {
+    achievements.githubUsername = usernameMatch[1].trim();
   }
 
-  // 保存最后一个奖项
-  if (currentItem.title) {
-    achievements.hackathons.push({ ...currentItem });
+  // 解析repositories
+  const reposMatch = content.match(/repositories:\s*([\s\S]*?)(?=\n\w+:|$)/);
+  if (reposMatch) {
+    const reposText = reposMatch[1];
+    const repoBlocks = reposText.split(/\n  - /).filter(block => block.trim());
+    
+    repoBlocks.forEach(block => {
+      const repo = {};
+      const lines = block.split('\n');
+      
+      lines.forEach(line => {
+        const trimmed = line.trim().replace(/^- /, '');
+        if (trimmed.includes(':')) {
+          const [key, ...valueParts] = trimmed.split(':');
+          const value = valueParts.join(':').trim().replace(/['"]/g, '');
+          if (key.trim() && value) {
+            repo[key.trim()] = key.trim() === 'stars' ? parseInt(value) || 0 : value;
+          }
+        }
+      });
+      
+      if (repo.name) {
+        achievements.repositories.push(repo);
+      }
+    });
   }
+
+  // 解析activities  
+  const activitiesMatch = content.match(/activities:\s*([\s\S]*?)(?=\n\w+:|$)/);
+  if (activitiesMatch) {
+    const activitiesText = activitiesMatch[1];
+    const activityBlocks = activitiesText.split(/\n  - /).filter(block => block.trim());
+    
+    activityBlocks.forEach(block => {
+      const activity = {};
+      const lines = block.split('\n');
+      
+      lines.forEach(line => {
+        const trimmed = line.trim().replace(/^- /, '');
+        if (trimmed.includes(':')) {
+          const [key, ...valueParts] = trimmed.split(':');
+          const value = valueParts.join(':').trim().replace(/['"]/g, '');
+          if (key.trim() && value) {
+            activity[key.trim()] = value;
+          }
+        }
+      });
+      
+      if (activity.type && activity.repo) {
+        achievements.activities.push(activity);
+      }
+    });
+  }
+
+
 
   console.log("🏆 Parsed achievements:", achievements);
   return achievements;
@@ -765,10 +734,16 @@ function generateAwardsCard(achievements) {
           .slice(0, 3)
           .map(
             (award) => `
-          <div class="award-item">
+          <div class="award-item ${award.image ? 'award-with-image' : ''}">
+            ${award.image ? `
+            <div class="award-image">
+              <img src="${award.image}" alt="${award.title}" class="award-photo">
+            </div>
+            ` : `
             <div class="award-icon">
               <img src="https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/resources/icons/trophy.svg" alt="Award" class="award-mini-icon">
             </div>
+            `}
             <div class="award-content">
               <div class="award-title">${award.title}</div>
               <div class="award-details">${award.content.replace(/\*\*([^*]+)\*\*:/g, "<strong>$1:</strong>").replace(/\n/g, "<br>")}</div>
@@ -798,7 +773,7 @@ function generateReposCard(achievements) {
             (repo) => `
           <div class="repo-item">
             <div class="repo-name">
-              <a href="https://github.com/${repo.name}" target="_blank" rel="noopener noreferrer">
+              <a href="${repo.url || `https://github.com/${repo.name}`}" target="_blank" rel="noopener noreferrer">
                 ${repo.name}
               </a>
             </div>
@@ -1509,6 +1484,29 @@ async function generateHTML(
             width: 20px;
             height: 20px;
             filter: brightness(0) invert(1);
+        }
+
+        /* 奖项图片样式 */
+        .award-image {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid ${COLORS["mondrian-gray"]};
+        }
+
+        .award-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .award-with-image {
+            gap: 16px;
         }
 
         .award-content {
