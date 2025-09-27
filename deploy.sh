@@ -3,7 +3,7 @@
 # MoFA Developer Pages 部署脚本
 # 使用方法: ./deploy.sh [环境] [操作]
 # 环境: dev|prod|setup
-# 操作: start|stop|restart|logs|status|health|ssl|pm2-setup
+# 操作: start|stop|restart|logs|status|health|ssl|pm2-setup|kill
 
 set -e  # 遇到错误立即退出
 
@@ -75,6 +75,38 @@ setup_pm2() {
     log "PM2 设置完成 ✓"
 }
 
+
+# 暴力杀掉占用端口的进程
+kill_ports() {
+    log "暴力清理端口占用..."
+    
+    # 杀掉 80 端口
+    PORT_80_PID=$(sudo lsof -ti:80 2>/dev/null)
+    if [ -n "$PORT_80_PID" ]; then
+        log "杀掉占用 80 端口的进程: $PORT_80_PID"
+        sudo kill -9 $PORT_80_PID || true
+    fi
+    
+    # 杀掉 443 端口
+    PORT_443_PID=$(sudo lsof -ti:443 2>/dev/null)
+    if [ -n "$PORT_443_PID" ]; then
+        log "杀掉占用 443 端口的进程: $PORT_443_PID"
+        sudo kill -9 $PORT_443_PID || true
+    fi
+    
+    # 杀掉所有 node 进程
+    log "杀掉所有 node 进程..."
+    sudo pkill -9 -f "node.*server.js" || true
+    
+    # 清理 PM2 进程
+    if command -v pm2 &> /dev/null; then
+        log "清理 PM2 进程..."
+        sudo pm2 kill || true
+    fi
+    
+    log "端口清理完成 ✓"
+    sleep 2
+}
 
 # 设置 SSL 证书自动续期
 setup_ssl_renewal() {
@@ -255,6 +287,9 @@ deploy_prod() {
             check_dependencies
             setup_directories
             
+            # 启动前先清理端口
+            kill_ports
+            
             if command -v docker &> /dev/null; then
                 log "使用 Docker 部署..."
                 docker-compose up -d
@@ -297,10 +332,13 @@ deploy_prod() {
             if command -v docker &> /dev/null && [ -f docker-compose.yml ]; then
                 docker-compose down
             elif command -v pm2 &> /dev/null; then
-                sudo pm2 stop mofa-developer-page
+                sudo pm2 stop mofa-developer-page || true
+                sudo pm2 delete mofa-developer-page || true
             else
                 sudo pkill -f "node server.js" || true
             fi
+            # 暴力清理端口
+            kill_ports
             ;;
         "restart")
             log "重启生产环境..."
@@ -346,6 +384,9 @@ deploy_prod() {
         "pm2-setup")
             setup_pm2
             ;;
+        "kill")
+            kill_ports
+            ;;
         *)
             error "未知操作: $ACTION"
             ;;
@@ -373,6 +414,7 @@ show_help() {
     echo "  health     - 健康检查（全面检查系统状态）"
     echo "  ssl        - 设置 SSL 证书自动续期"
     echo "  pm2-setup  - 安装配置 PM2"
+    echo "  kill       - 暴力杀掉占用端口的进程"
     echo
     echo "示例:"
     echo "  $0 setup          # 系统初始化（首次部署时运行）"
@@ -381,6 +423,7 @@ show_help() {
     echo "  $0 prod restart   # 重启生产环境"
     echo "  $0 prod health    # 执行健康检查"
     echo "  $0 prod ssl       # 设置 SSL 自动续期"
+    echo "  $0 prod kill      # 暴力杀掉占用端口的进程"
 }
 
 # 主逻辑

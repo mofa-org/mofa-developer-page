@@ -3,8 +3,8 @@ module.exports = {
     {
       name: 'mofa-developer-page',
       script: 'server.js',
-      instances: 'max', // 使用所有CPU核心
-      exec_mode: 'cluster', // 集群模式
+      instances: 1, // 单实例模式（避免端口冲突）
+      exec_mode: 'fork', // fork 模式
       env: {
         NODE_ENV: 'development',
         PORT: 3000
