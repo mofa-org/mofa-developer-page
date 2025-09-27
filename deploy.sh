@@ -392,14 +392,20 @@ deploy_prod() {
             kill_ports
             setup_directories
             log "启动 Node.js 服务（后台运行）..."
-            sudo nohup NODE_ENV=production PORT=80 node server.js > logs/server.log 2>&1 &
-            sleep 3
-            if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
-                log "HTTPS 服务启动成功！"
-            elif curl -f http://localhost:80/health > /dev/null 2>&1; then
-                log "HTTP 服务启动成功！"
+            log "检查 SSL 证书..."
+            if [ -f "/etc/letsencrypt/live/mofa.ai/fullchain.pem" ]; then
+                log "SSL 证书存在，将启动 HTTPS(443) + HTTP重定向(80)"
             else
-                warn "服务可能启动失败，请检查日志"
+                log "SSL 证书不存在，将启动 HTTP(80)"
+            fi
+            sudo nohup NODE_ENV=production node server.js > logs/server.log 2>&1 &
+            sleep 5
+            if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
+                log "✅ HTTPS 服务启动成功！(主服务在 443 端口)"
+            elif curl -f http://localhost:80/health > /dev/null 2>&1; then
+                log "✅ HTTP 服务启动成功！(服务在 80 端口)"
+            else
+                warn "⚠️  服务可能启动失败，请检查日志: tail -f logs/server.log"
             fi
             ;;
         *)
