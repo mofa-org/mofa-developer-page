@@ -2278,18 +2278,11 @@ if (hasSSLCerts()) {
     // 创建 HTTPS 服务器
     httpsServer = https.createServer(sslOptions, handleRequest);
     
-    // 创建 HTTP 服务器（重定向到 HTTPS）
-    httpServer = http.createServer(redirectToHTTPS);
-
-    // 启动服务器
+    // 仅启动 HTTPS 服务器
     httpsServer.listen(CONFIG.HTTPS_PORT, () => {
       console.log(`🔐 HTTPS server running on port ${CONFIG.HTTPS_PORT}`);
       console.log(`🌐 Visit: https://localhost:${CONFIG.HTTPS_PORT}`);
-    });
-
-    httpServer.listen(CONFIG.PORT, () => {
-      console.log(`🔄 HTTP redirect server running on port ${CONFIG.PORT}`);
-      console.log(`🔗 HTTP requests will redirect to HTTPS`);
+      console.log(`ℹ️  仅启用 HTTPS，不占用 80 端口`);
     });
 
   } catch (err) {
