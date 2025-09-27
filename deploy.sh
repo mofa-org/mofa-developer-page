@@ -3,7 +3,7 @@
 # MoFA Developer Pages 部署脚本
 # 使用方法: ./deploy.sh [环境] [操作]
 # 环境: dev|prod|setup
-# 操作: start|stop|restart|logs|status|health|ssl|nginx|pm2-setup
+# 操作: start|stop|restart|logs|status|health|ssl|pm2-setup
 
 set -e  # 遇到错误立即退出
 
@@ -75,96 +75,6 @@ setup_pm2() {
     log "PM2 设置完成 ✓"
 }
 
-# 安装和配置 Nginx
-setup_nginx() {
-    log "设置 Nginx..."
-    
-    # 安装 Nginx
-    if ! command -v nginx &> /dev/null; then
-        log "安装 Nginx..."
-        sudo apt update
-        sudo apt install -y nginx
-    else
-        log "Nginx 已安装: $(nginx -v 2>&1)"
-    fi
-    
-    # 创建配置文件
-    log "创建 Nginx 配置..."
-    sudo tee /etc/nginx/sites-available/mofa-developer-page > /dev/null << 'EOF'
-# HTTP 重定向到 HTTPS
-server {
-    listen 80;
-    server_name *.mofa.ai;
-    return 301 https://$host$request_uri;
-}
-
-# HTTPS 服务
-server {
-    listen 443 ssl http2;
-    server_name *.mofa.ai;
-
-    # SSL 证书配置
-    ssl_certificate /etc/letsencrypt/live/mofa.ai/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/mofa.ai/privkey.pem;
-    
-    # SSL 安全配置
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384;
-    ssl_prefer_server_ciphers off;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
-
-    # 安全头
-    add_header X-Frame-Options DENY always;
-    add_header X-Content-Type-Options nosniff always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-
-    # Gzip 压缩
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_comp_level 6;
-    gzip_types text/plain text/css text/xml text/javascript application/json application/javascript application/xml+rss application/atom+xml image/svg+xml;
-
-    # 反向代理到 Node.js
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-        
-        # 超时配置
-        proxy_connect_timeout 60s;
-        proxy_send_timeout 60s;
-        proxy_read_timeout 60s;
-    }
-
-    # 静态文件缓存
-    location ~* \.(css|js|png|jpg|jpeg|gif|ico|svg)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-}
-EOF
-
-    # 启用配置
-    log "启用 Nginx 配置..."
-    sudo ln -sf /etc/nginx/sites-available/mofa-developer-page /etc/nginx/sites-enabled/
-    sudo rm -f /etc/nginx/sites-enabled/default
-    
-    # 检查配置
-    if sudo nginx -t; then
-        log "Nginx 配置检查通过 ✓"
-        sudo systemctl enable nginx
-        sudo systemctl restart nginx
-        log "Nginx 已重启 ✓"
-    else
-        error "Nginx 配置检查失败"
-    fi
-}
 
 # 设置 SSL 证书自动续期
 setup_ssl_renewal() {
@@ -173,7 +83,7 @@ setup_ssl_renewal() {
     if ! command -v certbot &> /dev/null; then
         log "安装 Certbot..."
         sudo apt update
-        sudo apt install -y certbot python3-certbot-nginx
+        sudo apt install -y certbot
     fi
     
     # 测试续期
@@ -196,26 +106,14 @@ health_check() {
     log "执行健康检查..."
     
     # 检查 Node.js 应用
-    if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-        log "✅ Node.js 应用健康"
+    if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
+        log "✅ Node.js HTTPS 应用健康"
+    elif curl -f http://localhost:80/health > /dev/null 2>&1; then
+        log "✅ Node.js HTTP 应用健康"
     else
         error "❌ Node.js 应用不健康"
     fi
     
-    # 检查 Nginx
-    if command -v nginx &> /dev/null; then
-        if sudo systemctl is-active nginx > /dev/null 2>&1; then
-            log "✅ Nginx 服务运行中"
-        else
-            warn "⚠️  Nginx 服务未运行"
-        fi
-        
-        if sudo nginx -t > /dev/null 2>&1; then
-            log "✅ Nginx 配置正确"
-        else
-            warn "⚠️  Nginx 配置有误"
-        fi
-    fi
     
     # 检查 PM2
     if command -v pm2 &> /dev/null; then
@@ -292,8 +190,6 @@ system_setup() {
     # 设置 PM2
     setup_pm2
     
-    # 设置 Nginx
-    setup_nginx
     
     # 设置 SSL 续期
     setup_ssl_renewal
@@ -366,28 +262,34 @@ deploy_prod() {
                 sleep 10
                 
                 # 健康检查
-                if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-                    log "服务启动成功！"
+                sleep 3
+                if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
+                    log "HTTPS 服务启动成功！"
+                elif curl -f http://localhost:80/health > /dev/null 2>&1; then
+                    log "HTTP 服务启动成功！"
                 else
                     error "服务启动失败，请检查日志"
                 fi
             elif command -v pm2 &> /dev/null; then
-                log "使用 PM2 部署..."
-                pm2 start ecosystem.config.js --env production
+                log "使用 PM2 部署（需要 sudo 权限运行在 80 端口）..."
+                sudo pm2 start ecosystem.config.js --env production
                 
                 # 保存 PM2 配置
-                pm2 save
+                sudo pm2 save
                 
                 # 健康检查
                 sleep 5
-                if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-                    log "服务启动成功！"
+                if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
+                    log "HTTPS 服务启动成功！"
+                elif curl -f http://localhost:80/health > /dev/null 2>&1; then
+                    log "HTTP 服务启动成功！"
                 else
                     error "服务启动失败，请检查日志"
                 fi
             else
                 warn "建议安装 Docker 或 PM2 用于生产环境部署"
-                NODE_ENV=production PORT=3000 node server.js
+                log "使用 sudo 运行在 80 端口..."
+                sudo NODE_ENV=production PORT=80 node server.js
             fi
             ;;
         "stop")
@@ -395,9 +297,9 @@ deploy_prod() {
             if command -v docker &> /dev/null && [ -f docker-compose.yml ]; then
                 docker-compose down
             elif command -v pm2 &> /dev/null; then
-                pm2 stop mofa-developer-page
+                sudo pm2 stop mofa-developer-page
             else
-                pkill -f "node server.js" || true
+                sudo pkill -f "node server.js" || true
             fi
             ;;
         "restart")
@@ -441,9 +343,6 @@ deploy_prod() {
         "ssl")
             setup_ssl_renewal
             ;;
-        "nginx")
-            setup_nginx
-            ;;
         "pm2-setup")
             setup_pm2
             ;;
@@ -473,7 +372,6 @@ show_help() {
     echo "  update     - 更新服务（仅生产环境）"
     echo "  health     - 健康检查（全面检查系统状态）"
     echo "  ssl        - 设置 SSL 证书自动续期"
-    echo "  nginx      - 安装配置 Nginx"
     echo "  pm2-setup  - 安装配置 PM2"
     echo
     echo "示例:"
@@ -483,7 +381,6 @@ show_help() {
     echo "  $0 prod restart   # 重启生产环境"
     echo "  $0 prod health    # 执行健康检查"
     echo "  $0 prod ssl       # 设置 SSL 自动续期"
-    echo "  $0 prod nginx     # 重新配置 Nginx"
 }
 
 # 主逻辑

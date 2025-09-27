@@ -11,7 +11,7 @@ module.exports = {
       },
       env_production: {
         NODE_ENV: 'production',
-        PORT: 3000
+        PORT: 80
       },
       // 日志配置
       log_file: './logs/combined.log',

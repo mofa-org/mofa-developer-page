@@ -9,6 +9,7 @@ const https = require('https');
 const url = require('url');
 const path = require('path');
 const fs = require('fs').promises;
+const fsSync = require('fs');
 
 // 配置常量
 const CONFIG = {
@@ -20,7 +21,10 @@ const CONFIG = {
   CACHE_TTL: 300, // 5分钟缓存
   PRODUCTION_DOMAIN: "mofa.ai",
   TEST_DOMAIN: "liyao.space",
-  PORT: process.env.PORT || 3000,
+  PORT: process.env.PORT || 80,
+  HTTPS_PORT: process.env.HTTPS_PORT || 443,
+  SSL_CERT: process.env.SSL_CERT || '/etc/letsencrypt/live/mofa.ai/fullchain.pem',
+  SSL_KEY: process.env.SSL_KEY || '/etc/letsencrypt/live/mofa.ai/privkey.pem',
 };
 
 // 简单的内存缓存实现
@@ -2236,27 +2240,108 @@ async function handleRequest(req, res) {
   }
 }
 
-// 创建 HTTP 服务器
-const server = http.createServer(handleRequest);
+// 检查 SSL 证书是否存在
+function hasSSLCerts() {
+  try {
+    return fsSync.existsSync(CONFIG.SSL_CERT) && fsSync.existsSync(CONFIG.SSL_KEY);
+  } catch (err) {
+    return false;
+  }
+}
 
-server.listen(CONFIG.PORT, () => {
-  console.log(`🚀 MoFA Developer Pages server running on port ${CONFIG.PORT}`);
-  console.log(`🌐 Visit: http://localhost:${CONFIG.PORT}`);
-});
+// HTTP 重定向到 HTTPS 的处理函数
+function redirectToHTTPS(req, res) {
+  const host = req.headers.host;
+  const redirectURL = `https://${host}${req.url}`;
+  
+  res.writeHead(301, {
+    'Location': redirectURL,
+    'Content-Type': 'text/plain'
+  });
+  res.end(`Redirecting to ${redirectURL}`);
+}
+
+// 创建服务器
+let httpServer;
+let httpsServer;
+
+if (hasSSLCerts()) {
+  console.log('🔒 SSL 证书找到，启用 HTTPS...');
+  
+  try {
+    // SSL 配置
+    const sslOptions = {
+      cert: fsSync.readFileSync(CONFIG.SSL_CERT),
+      key: fsSync.readFileSync(CONFIG.SSL_KEY)
+    };
+
+    // 创建 HTTPS 服务器
+    httpsServer = https.createServer(sslOptions, handleRequest);
+    
+    // 创建 HTTP 服务器（重定向到 HTTPS）
+    httpServer = http.createServer(redirectToHTTPS);
+
+    // 启动服务器
+    httpsServer.listen(CONFIG.HTTPS_PORT, () => {
+      console.log(`🔐 HTTPS server running on port ${CONFIG.HTTPS_PORT}`);
+      console.log(`🌐 Visit: https://localhost:${CONFIG.HTTPS_PORT}`);
+    });
+
+    httpServer.listen(CONFIG.PORT, () => {
+      console.log(`🔄 HTTP redirect server running on port ${CONFIG.PORT}`);
+      console.log(`🔗 HTTP requests will redirect to HTTPS`);
+    });
+
+  } catch (err) {
+    console.error('❌ SSL 证书加载失败:', err.message);
+    console.log('🔄 回退到仅 HTTP 模式...');
+    httpServer = http.createServer(handleRequest);
+    httpServer.listen(CONFIG.PORT, () => {
+      console.log(`🌐 HTTP server running on port ${CONFIG.PORT}`);
+      console.log(`⚠️  SSL 证书加载失败，仅支持 HTTP`);
+    });
+  }
+} else {
+  console.log('📝 SSL 证书未找到，仅启用 HTTP...');
+  httpServer = http.createServer(handleRequest);
+  
+  httpServer.listen(CONFIG.PORT, () => {
+    console.log(`🌐 HTTP server running on port ${CONFIG.PORT}`);
+    console.log(`ℹ️  要启用 HTTPS，请配置 SSL 证书：`);
+    console.log(`   证书文件: ${CONFIG.SSL_CERT}`);
+    console.log(`   私钥文件: ${CONFIG.SSL_KEY}`);
+  });
+}
 
 // 优雅关闭
-process.on('SIGTERM', () => {
-  console.log('🛑 SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('✅ Server closed');
+function gracefulShutdown(signal) {
+  console.log(`🛑 ${signal} received, shutting down gracefully`);
+  
+  const servers = [httpServer, httpsServer].filter(Boolean);
+  let remaining = servers.length;
+  
+  if (remaining === 0) {
+    console.log('✅ No servers to close');
     process.exit(0);
+    return;
+  }
+  
+  servers.forEach(server => {
+    server.close(() => {
+      remaining--;
+      if (remaining === 0) {
+        console.log('✅ All servers closed');
+        process.exit(0);
+      }
+    });
   });
-});
+  
+  // 强制退出保护
+  setTimeout(() => {
+    console.log('⚡ Force exit after timeout');
+    process.exit(1);
+  }, 10000);
+}
 
-process.on('SIGINT', () => {
-  console.log('🛑 SIGINT received, shutting down gracefully');
-  server.close(() => {
-    console.log('✅ Server closed');
-    process.exit(0);
-  });
-});
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
