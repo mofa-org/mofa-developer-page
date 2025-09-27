@@ -98,3 +98,10 @@ linkname:
      url: https://myservice.com
      icon: https://myservice.com/icon.svg
    ```
+
+
+```bash
+
+sudo nohup NODE_ENV=production node server.js > logs/server.log 2>&1 &
+
+```
