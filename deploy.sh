@@ -3,7 +3,7 @@
 # MoFA Developer Pages 部署脚本
 # 使用方法: ./deploy.sh [环境] [操作]
 # 环境: dev|prod|setup
-# 操作: start|stop|restart|logs|status|health|ssl|pm2-setup|kill
+# 操作: start|stop|restart|logs|status|health|ssl|pm2-setup|kill|node
 
 set -e  # 遇到错误立即退出
 
@@ -290,22 +290,7 @@ deploy_prod() {
             # 启动前先清理端口
             kill_ports
             
-            if command -v docker &> /dev/null; then
-                log "使用 Docker 部署..."
-                docker-compose up -d
-                log "等待服务启动..."
-                sleep 10
-                
-                # 健康检查
-                sleep 3
-                if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
-                    log "HTTPS 服务启动成功！"
-                elif curl -f http://localhost:80/health > /dev/null 2>&1; then
-                    log "HTTP 服务启动成功！"
-                else
-                    error "服务启动失败，请检查日志"
-                fi
-            elif command -v pm2 &> /dev/null; then
+            if command -v pm2 &> /dev/null; then
                 log "使用 PM2 部署（需要 sudo 权限运行在 80 端口）..."
                 sudo pm2 start ecosystem.config.js --env production
                 
@@ -314,6 +299,21 @@ deploy_prod() {
                 
                 # 健康检查
                 sleep 5
+                if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
+                    log "HTTPS 服务启动成功！"
+                elif curl -f http://localhost:80/health > /dev/null 2>&1; then
+                    log "HTTP 服务启动成功！"
+                else
+                    error "服务启动失败，请检查日志"
+                fi
+            elif command -v docker &> /dev/null; then
+                log "使用 Docker 部署..."
+                docker-compose up -d
+                log "等待服务启动..."
+                sleep 10
+                
+                # 健康检查
+                sleep 3
                 if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
                     log "HTTPS 服务启动成功！"
                 elif curl -f http://localhost:80/health > /dev/null 2>&1; then
@@ -387,6 +387,21 @@ deploy_prod() {
         "kill")
             kill_ports
             ;;
+        "node")
+            log "使用 Node.js 直接启动..."
+            kill_ports
+            setup_directories
+            log "启动 Node.js 服务（后台运行）..."
+            sudo nohup NODE_ENV=production PORT=80 node server.js > logs/server.log 2>&1 &
+            sleep 3
+            if curl -f -k https://localhost:443/health > /dev/null 2>&1; then
+                log "HTTPS 服务启动成功！"
+            elif curl -f http://localhost:80/health > /dev/null 2>&1; then
+                log "HTTP 服务启动成功！"
+            else
+                warn "服务可能启动失败，请检查日志"
+            fi
+            ;;
         *)
             error "未知操作: $ACTION"
             ;;
@@ -415,6 +430,7 @@ show_help() {
     echo "  ssl        - 设置 SSL 证书自动续期"
     echo "  pm2-setup  - 安装配置 PM2"
     echo "  kill       - 暴力杀掉占用端口的进程"
+    echo "  node       - 使用 Node.js 直接启动"
     echo
     echo "示例:"
     echo "  $0 setup          # 系统初始化（首次部署时运行）"
@@ -424,6 +440,7 @@ show_help() {
     echo "  $0 prod health    # 执行健康检查"
     echo "  $0 prod ssl       # 设置 SSL 自动续期"
     echo "  $0 prod kill      # 暴力杀掉占用端口的进程"
+    echo "  $0 prod node      # 使用 Node.js 直接启动"
 }
 
 # 主逻辑
