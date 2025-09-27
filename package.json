@@ -1,0 +1,33 @@
+{
+  "name": "mofa-developer-page-server",
+  "version": "1.0.0",
+  "description": "MoFA Developer Personal Pages - Node.js Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "prod": "NODE_ENV=production node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mofa",
+    "developer",
+    "profile",
+    "personal-page"
+  ],
+  "author": "MoFA Organization",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mofa-org/mofa-developer-page.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mofa-org/mofa-developer-page/issues"
+  },
+  "homepage": "https://github.com/mofa-org/mofa-developer-page#readme"
+}
