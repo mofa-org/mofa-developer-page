@@ -107,19 +107,6 @@ sudo nohup NODE_ENV=production node server.js > logs/server.log 2>&1 &
 ```
 
 ```bash
-root@us:~/mofa-developer-page# sudo pm2 start server.js --name mofa-developer-page --env production
-[PM2] Starting /root/mofa-developer-page/server.js in fork_mode (1 instance)
-[PM2] Done.
-┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
-│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
-├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
-│ 1  │ chanjing-api       │ fork     │ 0    │ online    │ 0%       │ 44.6mb   │
-│ 2  │ mofa-developer-pa… │ fork     │ 0    │ online    │ 0%       │ 12.8mb   │
-│ 0  │ shuziren-api       │ fork     │ 0    │ online    │ 0%       │ 33.2mb   │
-└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
-root@us:~/mofa-developer-page# sudo pm2 save
-[PM2] Saving current process list...
-[PM2] Successfully saved in /root/.pm2/dump.pm2
-root@us:~/mofa-developer-page#
-
+sudo pm2 start server.js --name mofa-developer-page --env production
+sudo pm2 save
 ```
