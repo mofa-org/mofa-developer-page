@@ -6,17 +6,17 @@ awards:
     rank: "Audience Favorite Award"
     description: "GOSIM Wonderland 是一个为大会/活动设计的互动体验系统，用户可以拍照或上传图片，通过AI生成GOSIM风格的卡通头像，并在大屏幕上实时展示。"
     team: "Zonghuan Wu, Yao Li"
-    highlight: "三端系统架构：用户端、展示端、管理端"
+    highlight: "三端系统架构：用户端、展示端、管理端。响应式设计，适配各种设备和屏幕。"
     date: "September 2025"
     image: "https://avatars.githubusercontent.com/u/200447588?s=48&v=4"
     
-  - title: "占位AIOS Hackathon 2025"
+  - title: "GOSIM 超级智能体第二届黑客马拉松编程大赛"
     rank: "Second Place Winner"
-    description: "Intelligent task automation platform"
-    team: "李杰, 王小明, 张三"
-    highlight: "Automated 80% of routine tasks using AI"
+    description: "InfoDigest - RSS内容聚合与摘要系统"
+    team: "BH3GEI(李尧)"
+    highlight: "InfoDigest是一个基于MOFA框架的RSS聚合与摘要工具，能自动获取RSS源内容，利用大语言模型生成摘要，并将处理后的内容导出为Markdown文件。系统采用数据流驱动设计，通过三个主要组件完成从RSS获取到内容分发的全流程。"
     date: "February 2025"
-    image: "https://picsum.photos/200/150?random=2"
+    image: "https://avatars.githubusercontent.com/u/58540850?v=4&size=40"
 
 repositories:
   - name: "bh3gei/mofa-developer-page"
