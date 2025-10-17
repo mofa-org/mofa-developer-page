@@ -8,7 +8,7 @@ awards:
     team: "吴宗寰, 李尧"
     highlight: "三端系统架构：用户端、展示端、管理端。响应式设计，适配各种设备和屏幕。"
     date: "2025九月"
-    image: "https://avatars.githubusercontent.com/u/200447588?s=48&v=4"
+    image: "https://private-user-images.githubusercontent.com/58540850/502401693-c11751f6-9410-44e3-bd8f-3a93bc431a38.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA2NzkxMTksIm5iZiI6MTc2MDY3ODgxOSwicGF0aCI6Ii81ODU0MDg1MC81MDI0MDE2OTMtYzExNzUxZjYtOTQxMC00NGUzLWJkOGYtM2E5M2JjNDMxYTM4LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEwMTclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMDE3VDA1MjY1OVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWJkZmFhYTJmYzNiMTQwZmM1Yzg4ZWEwYmIwYzBhMGFhNWZkNzZmMjEzZGExNDNkNTMyNTkyNzdlMDk0MjNiNGUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.PL-UeKFpIL4IEfoekRic8SwOHfOP3jMavpExMC1vCLU"
     
   - title: "GOSIM 超级智能体第二届黑客马拉松编程大赛 - 二等奖"
     rank: "二等奖"
@@ -16,7 +16,7 @@ awards:
     team: "BH3GEI(李尧)"
     highlight: "InfoDigest是一个基于MOFA框架的RSS聚合与摘要工具，能自动获取RSS源内容，利用大语言模型生成摘要，并将处理后的内容导出为Markdown文件。系统采用数据流驱动设计，通过三个主要组件完成从RSS获取到内容分发的全流程。"
     date: "2025三月"
-    image: "https://avatars.githubusercontent.com/u/58540850?v=4&size=40"
+    image: "https://private-user-images.githubusercontent.com/58540850/502401693-c11751f6-9410-44e3-bd8f-3a93bc431a38.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NjA2NzkxMTksIm5iZiI6MTc2MDY3ODgxOSwicGF0aCI6Ii81ODU0MDg1MC81MDI0MDE2OTMtYzExNzUxZjYtOTQxMC00NGUzLWJkOGYtM2E5M2JjNDMxYTM4LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTEwMTclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUxMDE3VDA1MjY1OVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWJkZmFhYTJmYzNiMTQwZmM1Yzg4ZWEwYmIwYzBhMGFhNWZkNzZmMjEzZGExNDNkNTMyNTkyNzdlMDk0MjNiNGUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.PL-UeKFpIL4IEfoekRic8SwOHfOP3jMavpExMC1vCLU"
 
 repositories:
   - name: "mofa-org/mofa-developer-page"
