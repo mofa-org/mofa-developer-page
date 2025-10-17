@@ -2,24 +2,24 @@ githubUsername: bh3gei
 enableGithubStats: true
 
 awards:
-  - title: "GOSIM Wonderland"
+  - title: "GOSIM Wonderland - Audience Favorite Award"
     rank: "Audience Favorite Award"
     description: "GOSIM Wonderland 是一个为大会/活动设计的互动体验系统，用户可以拍照或上传图片，通过AI生成GOSIM风格的卡通头像，并在大屏幕上实时展示。"
-    team: "Zonghuan Wu, Yao Li"
+    team: "吴宗寰, 李尧"
     highlight: "三端系统架构：用户端、展示端、管理端。响应式设计，适配各种设备和屏幕。"
-    date: "September 2025"
+    date: "2025九月"
     image: "https://avatars.githubusercontent.com/u/200447588?s=48&v=4"
     
-  - title: "GOSIM 超级智能体第二届黑客马拉松编程大赛"
-    rank: "Second Place Winner"
+  - title: "GOSIM 超级智能体第二届黑客马拉松编程大赛 - 二等奖"
+    rank: "二等奖"
     description: "InfoDigest - RSS内容聚合与摘要系统"
     team: "BH3GEI(李尧)"
     highlight: "InfoDigest是一个基于MOFA框架的RSS聚合与摘要工具，能自动获取RSS源内容，利用大语言模型生成摘要，并将处理后的内容导出为Markdown文件。系统采用数据流驱动设计，通过三个主要组件完成从RSS获取到内容分发的全流程。"
-    date: "February 2025"
+    date: "2025三月"
     image: "https://avatars.githubusercontent.com/u/58540850?v=4&size=40"
 
 repositories:
-  - name: "bh3gei/mofa-developer-page"
+  - name: "mofa-org/mofa-developer-page"
     description: "Personal developer page system using Cloudflare Workers"
     language: "JavaScript"
     stars: 12
@@ -27,19 +27,31 @@ repositories:
     
   - name: "bh3gei/infoDigest" 
     description: "AI-powered RSS information summarization tool 2024二等奖"
-    language: "TypeScript"
-    stars: 8
+    language: "Vue + Python"
+    stars: 3
     url: "https://github.com/bh3gei/infoDigest"
 
-activities:
-  - type: "1 commits"
-    repo: "mofa-org/mofa"
-    time: "最近"
-    
-  - type: "Opened issue #42"
-    repo: "mofa-org/mofa-stage"
-    time: "最近"
-    
-  - type: "Merged PR #10"
-    repo: "mofa-org/mofa"
-    time: "最近"
+  - name: "mofa-org/mofa-stage"
+    description: "MoFA Stage Desktop is an Electron-based desktop application for AI agent development and management."
+    language: "Vue + Python"
+    stars: 4
+    url: "https://github.com/mofa-org/mofa-stage"
+
+  - name: "mofa-org/gosim-wonderland"
+    description: "GOSIM Wonderland 是一个为大会/活动设计的互动体验系统，用户可以拍照或上传图片，通过AI生成GOSIM风格的卡通头像，并在大屏幕上实时展示。"
+    language: "Vue + Python"
+    stars: 2
+    url: "https://github.com/mofa-org/gosim-wonderland"
+
+  - name: "mofa-org/mofa"
+    description: "MoFA is a software framework for building AI agents in a composable manner. With MoFA, AI agents can be constructed through templates and combined in a stacked way to form more powerful Super Agents."
+    language: "Python"
+    stars: 119
+    url: "https://github.com/mofa-org/mofa"
+
+  - name: "mofa-org/mofa-org.github.io"
+    description: "MoFA的官网"
+    language: "Astro"
+    stars: 3
+    url: "https://github.com/mofa-org/mofa-org.github.io"
+
