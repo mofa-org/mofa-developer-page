@@ -2147,6 +2147,7 @@ async function handleRequest(req, res) {
   const parsedUrl = url.parse(req.url, true);
   const hostname = req.headers.host;
   const pathname = parsedUrl.pathname;
+  let username = null; // 初始化 username
 
   console.log(`📥 Request: ${req.method} ${pathname} from ${hostname}`);
 
@@ -2180,7 +2181,7 @@ async function handleRequest(req, res) {
       return;
     }
 
-    const username = extractUsername(hostname);
+    username = extractUsername(hostname);
 
     if (!username) {
       res.writeHead(400, { "Content-Type": "text/plain" });
@@ -2234,7 +2235,7 @@ async function handleRequest(req, res) {
   } catch (error) {
     console.error("Error handling request:", error);
     // 对于配置错误，显示调试页面
-    const debugResponse = generateDebugPage(username, hostname, `Error: ${error.message}`);
+    const debugResponse = generateDebugPage(username || "unknown", hostname, `Error: ${error.message}`);
     res.writeHead(debugResponse.statusCode, debugResponse.headers);
     res.end(debugResponse.body);
   }
@@ -2267,7 +2268,7 @@ let httpsServer;
 
 if (hasSSLCerts()) {
   console.log('🔒 SSL 证书找到，启用 HTTPS...');
-  
+
   try {
     // SSL 配置
     const sslOptions = {
@@ -2277,7 +2278,7 @@ if (hasSSLCerts()) {
 
     // 创建 HTTPS 服务器
     httpsServer = https.createServer(sslOptions, handleRequest);
-    
+
     // 仅启动 HTTPS 服务器
     httpsServer.listen(CONFIG.HTTPS_PORT, () => {
       console.log(`🔐 HTTPS server running on port ${CONFIG.HTTPS_PORT}`);
@@ -2297,7 +2298,7 @@ if (hasSSLCerts()) {
 } else {
   console.log('📝 SSL 证书未找到，仅启用 HTTP...');
   httpServer = http.createServer(handleRequest);
-  
+
   httpServer.listen(CONFIG.PORT, () => {
     console.log(`🌐 HTTP server running on port ${CONFIG.PORT}`);
     console.log(`ℹ️  要启用 HTTPS，请配置 SSL 证书：`);
@@ -2309,16 +2310,16 @@ if (hasSSLCerts()) {
 // 优雅关闭
 function gracefulShutdown(signal) {
   console.log(`🛑 ${signal} received, shutting down gracefully`);
-  
+
   const servers = [httpServer, httpsServer].filter(Boolean);
   let remaining = servers.length;
-  
+
   if (remaining === 0) {
     console.log('✅ No servers to close');
     process.exit(0);
     return;
   }
-  
+
   servers.forEach(server => {
     server.close(() => {
       remaining--;
@@ -2328,7 +2329,7 @@ function gracefulShutdown(signal) {
       }
     });
   });
-  
+
   // 强制退出保护
   setTimeout(() => {
     console.log('⚡ Force exit after timeout');
