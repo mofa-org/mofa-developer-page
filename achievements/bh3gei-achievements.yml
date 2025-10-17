@@ -2,13 +2,13 @@ githubUsername: bh3gei
 enableGithubStats: true
 
 awards:
-  - title: "占位测试GOSIM Hangzhou 2025 Code Alert Hackathon"
-    rank: "First Place Winner"
-    description: "AI-powered code analysis and vulnerability detection"
-    team: "李杰, 刘雨寒, 王云洋"
-    highlight: "Built real-time code scanning with 95% accuracy"
-    date: "January 2025"
-    image: "https://picsum.photos/200/150?random=1"
+  - title: "GOSIM Wonderland"
+    rank: "Audience Favorite Award"
+    description: "GOSIM Wonderland 是一个为大会/活动设计的互动体验系统，用户可以拍照或上传图片，通过AI生成GOSIM风格的卡通头像，并在大屏幕上实时展示。"
+    team: "Zonghuan Wu, Yao Li"
+    highlight: "三端系统架构：用户端、展示端、管理端"
+    date: "September 2025"
+    image: "https://avatars.githubusercontent.com/u/200447588?s=48&v=4"
     
   - title: "占位AIOS Hackathon 2025"
     rank: "Second Place Winner"
