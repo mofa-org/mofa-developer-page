@@ -741,8 +741,7 @@ function generateAchievementsSection(achievements, githubStats) {
   // 2. 精选仓库
   content += generateReposCard(achievements);
 
-  // 3. GitHub动态
-  content += generateGithubActivityCard(achievements);
+  // 移除 GitHub 动态部分
 
   content += "</div>";
   return content;
@@ -991,8 +990,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         /* 流体网格布局系统 - Pinterest瀑布流风格 */
         .fluid-container {
-            column-count: 3;
-            column-gap: 20px;
+            column-count: 2;
+            column-gap: 24px;
             margin-bottom: 40px;
         }
 
@@ -1025,66 +1024,38 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             z-index: 10;
         }
 
-        /* 悬停时的彩色阴影 - 只用四个指定颜色 */
-        .fluid-coral:hover, .fluid-peach:hover {
-            box-shadow: 4px 4px 0 #fc543e;
-        }
-
-        .fluid-mint:hover, .fluid-sky:hover {
-            box-shadow: 4px 4px 0 #ffc63e;
-        }
-
-        .fluid-lavender:hover, .fluid-sage:hover, .fluid-lemon:hover {
-            box-shadow: 4px 4px 0 #fe6a5b;
-        }
-
-        .fluid-rose:hover {
-            box-shadow: 4px 4px 0 #6dcad0;
+        /* 悬停时的黑色阴影 */
+        .fluid-card:hover {
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-black"]};
         }
 
         .fluid-card:active {
             transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 ${COLORS["mondrian-black"]};
             transition: transform 0.1s ease;
-        }
-
-        /* 激活时的彩色阴影 - 只用四个指定颜色 */
-        .fluid-coral:active, .fluid-peach:active {
-            box-shadow: 2px 2px 0 #fc543e;
-        }
-
-        .fluid-mint:active, .fluid-sky:active {
-            box-shadow: 2px 2px 0 #ffc63e;
-        }
-
-        .fluid-lavender:active, .fluid-sage:active, .fluid-lemon:active {
-            box-shadow: 2px 2px 0 #fe6a5b;
-        }
-
-        .fluid-rose:active {
-            box-shadow: 2px 2px 0 #6dcad0;
         }
 
         /* 流体卡片高度变化 */
         .fluid-compact {
-            padding: 20px 16px;
-            min-height: 100px;
+            padding: 10px 8px;
+            min-height: 50px;
         }
 
         .fluid-normal {
-            padding: 28px 20px;
-            min-height: 140px;
+            padding: 12px 10px;
+            min-height: 60px;
         }
 
         .fluid-tall {
-            padding: 36px 24px;
-            min-height: 180px;
+            padding: 14px 12px;
+            min-height: 75px;
         }
 
         /* 流体卡片图标 */
         .fluid-icon {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 12px;
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
             filter: brightness(0);
             opacity: 0.8;
             transition: all 0.3s ease;
@@ -1106,14 +1077,14 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         .fluid-tall .fluid-icon {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 16px;
+            width: 28px;
+            height: 28px;
+            margin-bottom: 6px;
         }
 
         /* 流体卡片文字 */
         .fluid-name {
-            font-size: 15px;
+            font-size: 11px;
             font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
             text-align: center;
             line-height: 1.4;
@@ -1122,48 +1093,48 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         .fluid-tall .fluid-name {
-            font-size: 17px;
+            font-size: 12px;
             font-weight: 600;
         }
 
         /* 流体卡片颜色主题 - 马卡龙纯色 */
         .fluid-coral {
-            border-color: #fc543e !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #fe6a5b !important;
         }
 
         .fluid-mint {
-            border-color: #fe6a5b !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #6dcad0 !important;
         }
 
         .fluid-lavender {
-            border-color: #fc543e !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #ffc63e !important;
         }
 
         .fluid-peach {
-            border-color: #6dcad0 !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #fe6a5b !important;
         }
 
         .fluid-sky {
-            border-color: #ffc63e !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #6dcad0 !important;
         }
 
         .fluid-sage {
-            border-color: #fc543e !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #ffc63e !important;
         }
 
         .fluid-rose {
-            border-color: #ffc63e !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #fc543e !important;
         }
 
         .fluid-lemon {
-            border-color: #6dcad0 !important;
+            border-color: ${COLORS["mondrian-black"]} !important;
             background: #ffc63e !important;
         }
 
@@ -1199,7 +1170,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             }
 
             .fluid-container {
-                column-count: 3;
+                column-count: 2;
             }
         }
 
@@ -1278,10 +1249,6 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             display: flex;
             flex-direction: column;
             gap: 24px;
-            position: sticky;
-            top: 20px;
-            max-height: calc(100vh - 40px);
-            overflow-y: auto;
         }
 
         .achievement-card {
@@ -1386,6 +1353,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             background: rgba(211, 47, 47, 0.1);
             border-radius: 0;
             border: 1px solid ${COLORS["mondrian-red"]};
+            transition: all 0.2s ease;
+        }
+
+        .award-item:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 ${COLORS["mondrian-red"]};
         }
 
         .award-icon {
@@ -1579,48 +1552,150 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             clear: both;
         }
 
-        /* 二维码区域 */
-        .qr-section {
-            margin: 40px 0;
-            padding: 24px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 0;
-            border: 2px solid ${COLORS["mondrian-black"]};
-            box-shadow: 0 2px 0 ${COLORS["mondrian-black"]};
-            grid-column: 1 / -1;
-            text-align: center;
-        }
-
-        /* 按钮样式 - 仿照MoFA官网的btn-primary */
-        .qr-toggle {
-            display: inline-flex;
+        /* 二维码卡片按钮 */
+        .qr-card-button {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            padding: 12px 24px;
-            background-color: ${COLORS["mondrian-red"]};
-            color: white;
+            justify-content: center;
             text-decoration: none;
-            border: 1px solid ${COLORS["mondrian-black"]};
-            border-radius: 0;
+            color: ${COLORS["mondrian-black"]};
             font-weight: 600;
+            border-radius: 0;
             transition: all 0.2s ease;
             cursor: pointer;
+            background: #6dcad0 !important;
+            border: 2px solid ${COLORS["mondrian-black"]};
             box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
+            padding: 12px 10px;
+            min-height: 60px;
+            margin-bottom: 20px;
+            width: 100%;
         }
 
-        .qr-toggle:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 3px 3px 0 ${COLORS["mondrian-black"]};
+        .qr-card-button:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-black"]};
+            z-index: 10;
         }
 
-        .qr-code {
-            margin-top: 20px;
-            display: none;
+        .qr-card-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            filter: brightness(0);
+            opacity: 0.8;
+            transition: all 0.3s ease;
         }
 
-        .qr-code img {
+        .qr-card-button:hover .qr-card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .qr-card-text {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border: 1px solid ${COLORS["mondrian-black"]};
             border-radius: 0;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            border: 1px solid ${COLORS["mondrian-gray"]};
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
+            transition: all 0.2s ease;
+            text-align: center;
+            line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            opacity: 0.95;
+        }
+
+        /* 二维码模态窗口 */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .qr-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 0;
+            border: 3px solid ${COLORS["mondrian-black"]};
+            box-shadow: 0 8px 0 ${COLORS["mondrian-black"]};
+            text-align: center;
+            animation: qr-modal-appear 0.3s ease-out;
+            max-width: 90vw;
+        }
+
+        @keyframes qr-modal-appear {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .qr-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, ${COLORS["mofa-gradient-3"]}, ${COLORS["mofa-gradient-4"]});
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .qr-modal img {
+            border-radius: 0;
+            border: 2px solid ${COLORS["mondrian-black"]};
+            margin: 20px 0;
+        }
+
+        .qr-modal-close {
+            background: ${COLORS["mondrian-red"]};
+            color: white;
+            border: 2px solid ${COLORS["mondrian-black"]};
+            border-radius: 0;
+            padding: 10px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 0 ${COLORS["mondrian-black"]};
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .qr-modal-close:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 ${COLORS["mondrian-black"]};
+        }
+
+        /* 移动端二维码模态窗口优化 */
+        @media (max-width: 640px) {
+            .qr-modal-content {
+                padding: 30px 20px;
+                width: 90vw;
+            }
+
+            .qr-modal-title {
+                font-size: 1.2rem;
+            }
+
+            .qr-modal img {
+                max-width: 100%;
+                height: auto;
+            }
         }
 
         .footer {
@@ -1875,6 +1950,15 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         </div>
     </div>
 
+    <!-- 二维码模态窗口 -->
+    <div id="qrModal" class="qr-modal" onclick="hideQRModal()">
+        <div class="qr-modal-content" onclick="event.stopPropagation()">
+            <div class="qr-modal-title">扫码访问此页面</div>
+            <img src="${qrCodeUrl}" alt="QR Code" width="200" height="200">
+            <button class="qr-modal-close" onclick="hideQRModal()">关闭</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="main-content">
             <div class="links-section">
@@ -1900,6 +1984,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
                         <div class="mini-line blue-line"></div>
                         <div class="mini-line yellow-line"></div>
                     </div>
+
+                    <!-- 二维码卡片按钮 -->
+                    <div class="qr-card-button" onclick="showQRModal()">
+                        <img src="/icons/qr-code.svg" alt="QR Code" class="qr-card-icon">
+                        <span class="qr-card-text">分享二维码</span>
+                    </div>
                 </div>
                 <div class="fluid-container">
                     ${fluidLinks
@@ -1918,33 +2008,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             ${achievements ? generateAchievementsSection(achievements, githubStats) : ""}
         </div>
 
-        <div class="qr-section">
-            <button class="qr-toggle" onclick="toggleQR()">分享二维码</button>
-            <div class="qr-code" id="qrCode">
-                <p style="margin-bottom: 12px; color: #64748b;">扫码访问此页面</p>
-                <img src="${qrCodeUrl}" alt="QR Code" width="200" height="200">
-            </div>
-        </div>
-
         <div class="footer">
             <p>由 <a href="https://mofa.ai" target="_blank">MoFA</a> 强力驱动</p>
         </div>
     </div>
 
     <script>
-        function toggleQR() {
-            const qrCode = document.getElementById('qrCode');
-            const button = document.querySelector('.qr-toggle');
-
-            if (qrCode.style.display === 'none' || qrCode.style.display === '') {
-                qrCode.style.display = 'block';
-                button.textContent = '隐藏二维码';
-            } else {
-                qrCode.style.display = 'none';
-                button.textContent = '分享二维码';
-            }
-        }
-
         function showMagicHat() {
             const modal = document.getElementById('magicModal');
             modal.style.display = 'block';
@@ -1952,6 +2021,16 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         function hideMagicHat() {
             const modal = document.getElementById('magicModal');
+            modal.style.display = 'none';
+        }
+
+        function showQRModal() {
+            const modal = document.getElementById('qrModal');
+            modal.style.display = 'block';
+        }
+
+        function hideQRModal() {
+            const modal = document.getElementById('qrModal');
             modal.style.display = 'none';
         }
 
