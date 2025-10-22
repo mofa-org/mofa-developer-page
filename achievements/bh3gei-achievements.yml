@@ -27,33 +27,28 @@ repositories:
     
   - name: "bh3gei/infoDigest" 
     description: "AI-powered RSS information summarization tool"
-    language: "TypeScript"
+    language: "TypeScript + Python3"
     stars: 3
     url: "https://github.com/bh3gei/infoDigest"
 
-  - name: "bh3gei/infoDigest" 
-    description: "AI-powered RSS information summarization tool"
+  - name: "mofa-org/mofa-stage" 
+    description: "MoFA Stage Desktop is an Electron-based desktop application for AI agent development and management."
     language: "TypeScript"
     stars: 3
-    url: "https://github.com/bh3gei/infoDigest"
+    url: "https://github.com/mofa-org/mofa-stage"
     
-  - name: "bh3gei/infoDigest" 
-    description: "AI-powered RSS information summarization tool"
-    language: "TypeScript"
+  - name: "mofa-org/gosim-wonderland" 
+    description: "一个为大会/活动设计的互动体验系统，用户可以拍照或上传图片，通过AI生成GOSIM风格的卡通头像，并在大屏幕上实时展示。"
+    language: "TypeScript + Python3"
     stars: 3
-    url: "https://github.com/bh3gei/infoDigest"    
+    url: "https://github.com/mofa-org/gosim-wonderland"    
     
-  - name: "bh3gei/infoDigest" 
-    description: "AI-powered RSS information summarization tool"
+  - name: "mofa-org/mofa-org.github.io" 
+    description: "Official Website of MoFA"
     language: "TypeScript"
     stars: 3
-    url: "https://github.com/bh3gei/infoDigest"
+    url: "https://github.com/mofa-org/mofa-org.github.io"
     
-  - name: "bh3gei/infoDigest" 
-    description: "AI-powered RSS information summarization tool"
-    language: "TypeScript"
-    stars: 3
-    url: "https://github.com/bh3gei/infoDigest"
     
     
 activities:
