@@ -523,7 +523,6 @@ function parseAchievements(content) {
           `- **名次**: ${award.rank || ""}`,
           `- **项目介绍**: ${award.description || ""}`,
           `- **获奖人**: ${award.team || ""}`,
-          `- **亮点**: ${award.highlight || ""}`,
           `- **时间**: ${award.date || ""}`,
         ].join("\n");
 
@@ -795,6 +794,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 
     <style>
@@ -1765,6 +1766,23 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             z-index: 0;
         }
 
+        .award-item::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            width: 120px;
+            height: 120px;
+            background-image: url('https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/resources/icons/trophy.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            filter: saturate(1.2);
+        }
+
         .award-item:nth-child(4n+1)::before {
             background: rgba(254, 106, 91, 0.45);
         }
@@ -1779,6 +1797,25 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         .award-item:nth-child(4n)::before {
             background: rgba(252, 84, 62, 0.45);
+        }
+
+        .award-item:nth-child(4n+1)::after {
+            opacity: 0.08;
+        }
+
+        .award-item:nth-child(4n+2)::after {
+            opacity: 0.1;
+            filter: saturate(1.5) hue-rotate(120deg);
+        }
+
+        .award-item:nth-child(4n+3)::after {
+            opacity: 0.1;
+            filter: saturate(1.8) hue-rotate(30deg);
+        }
+
+        .award-item:nth-child(4n)::after {
+            opacity: 0.09;
+            filter: saturate(1.3) hue-rotate(-5deg);
         }
 
         .award-item:hover {
@@ -1800,34 +1837,52 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         .award-icon {
             flex-shrink: 0;
-            width: 42px;
-            height: 42px;
+            width: 64px;
+            height: 64px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1.5px solid rgba(254, 106, 91, 0.4);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(254, 106, 91, 0.08));
+            border: 2px solid rgba(254, 106, 91, 0.5);
             border-radius: 50%;
-            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+            box-shadow:
+                0 4px 12px rgba(254, 106, 91, 0.25),
+                0 0 0 4px rgba(254, 106, 91, 0.1),
+                inset 0 -2px 8px rgba(254, 106, 91, 0.1);
             position: relative;
             z-index: 1;
         }
 
         .award-item:nth-child(4n+2) .award-icon {
-            border-color: rgba(109, 202, 208, 0.4);
+            border-color: rgba(109, 202, 208, 0.5);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(109, 202, 208, 0.08));
+            box-shadow:
+                0 4px 12px rgba(109, 202, 208, 0.25),
+                0 0 0 4px rgba(109, 202, 208, 0.1),
+                inset 0 -2px 8px rgba(109, 202, 208, 0.1);
         }
 
         .award-item:nth-child(4n+3) .award-icon {
-            border-color: rgba(255, 198, 62, 0.4);
+            border-color: rgba(255, 198, 62, 0.5);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 198, 62, 0.08));
+            box-shadow:
+                0 4px 12px rgba(255, 198, 62, 0.25),
+                0 0 0 4px rgba(255, 198, 62, 0.1),
+                inset 0 -2px 8px rgba(255, 198, 62, 0.1);
         }
 
         .award-item:nth-child(4n) .award-icon {
-            border-color: rgba(252, 84, 62, 0.4);
+            border-color: rgba(252, 84, 62, 0.5);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(252, 84, 62, 0.08));
+            box-shadow:
+                0 4px 12px rgba(252, 84, 62, 0.25),
+                0 0 0 4px rgba(252, 84, 62, 0.1),
+                inset 0 -2px 8px rgba(252, 84, 62, 0.1);
         }
 
         .award-mini-icon {
-            width: 20px;
-            height: 20px;
+            width: 36px;
+            height: 36px;
             filter: none;
         }
 
@@ -1880,9 +1935,11 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         .award-title {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
             font-weight: 700;
             color: rgba(184, 66, 58, 0.95);
-            font-size: 1rem;
+            font-size: 1.1rem;
+            letter-spacing: 0.01em;
         }
 
         .award-item:nth-child(4n+2) .award-title {
