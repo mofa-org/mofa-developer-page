@@ -4,14 +4,15 @@ enableGithubStats: true
 awards:
   - title: "GOSIM Hangzhou 2025 Spotlight"
     rank: "Audience Popularity Award"
-    description: "GOSIM Wonderland, A Image Creator"
+    description: "For GOSIM Wonderland, An Image Creator"
     team: "Zonghuan Wu, Yao Li"
     date: "September 2025"
     certNumber: "2025001"
-    image: "https://china2024.gosim.org/images/66c7dd4f6865e5012249f0d5_gosim-logo-32.svg"
+    image: "https://github.com/user-attachments/assets/c11751f6-9410-44e3-bd8f-3a93bc431a38"
 
   - title: "GOSIM 2025 MoFA Search AI Hackathon"
     rank: "Second Place Winner"
+    description: "RSS Hub"
     team: "Yao Li"
     date: "February 2025"
     certNumber: "2025002"
