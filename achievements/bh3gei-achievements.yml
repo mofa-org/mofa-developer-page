@@ -22,15 +22,40 @@ repositories:
   - name: "bh3gei/mofa-developer-page"
     description: "Personal developer page system using Cloudflare Workers"
     language: "JavaScript"
-    stars: 12
+    stars: 2
     url: "https://github.com/bh3gei/mofa-developer-page"
     
   - name: "bh3gei/infoDigest" 
-    description: "AI-powered RSS information summarization tool 2024二等奖"
+    description: "AI-powered RSS information summarization tool"
     language: "TypeScript"
-    stars: 8
+    stars: 3
     url: "https://github.com/bh3gei/infoDigest"
 
+  - name: "bh3gei/infoDigest" 
+    description: "AI-powered RSS information summarization tool"
+    language: "TypeScript"
+    stars: 3
+    url: "https://github.com/bh3gei/infoDigest"
+    
+  - name: "bh3gei/infoDigest" 
+    description: "AI-powered RSS information summarization tool"
+    language: "TypeScript"
+    stars: 3
+    url: "https://github.com/bh3gei/infoDigest"    
+    
+  - name: "bh3gei/infoDigest" 
+    description: "AI-powered RSS information summarization tool"
+    language: "TypeScript"
+    stars: 3
+    url: "https://github.com/bh3gei/infoDigest"
+    
+  - name: "bh3gei/infoDigest" 
+    description: "AI-powered RSS information summarization tool"
+    language: "TypeScript"
+    stars: 3
+    url: "https://github.com/bh3gei/infoDigest"
+    
+    
 activities:
   - type: "1 commits"
     repo: "mofa-org/mofa"
