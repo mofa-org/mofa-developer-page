@@ -817,10 +817,34 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             line-height: 1.6;
             color: ${COLORS["mondrian-black"]};
             background: #E8F6F7;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
             padding: 0;
             position: relative;
+            overflow: hidden;
+        }
+
+        :root {
+            --texture-coral: 
+                linear-gradient(140deg, rgba(254, 106, 91, 0.14), rgba(252, 84, 62, 0.06)),
+                radial-gradient(circle at 18% 22%, rgba(254, 106, 91, 0.24) 0%, rgba(254, 106, 91, 0) 58%),
+                radial-gradient(circle at 82% 76%, rgba(255, 198, 62, 0.16) 0%, rgba(255, 198, 62, 0) 62%),
+                conic-gradient(from 90deg at 50% 50%, rgba(254, 106, 91, 0.18), rgba(254, 106, 91, 0) 240deg);
+            --texture-mint:
+                linear-gradient(140deg, rgba(109, 202, 208, 0.14), rgba(109, 202, 208, 0.05)),
+                radial-gradient(circle at 20% 28%, rgba(109, 202, 208, 0.24) 0%, rgba(109, 202, 208, 0) 56%),
+                radial-gradient(circle at 78% 72%, rgba(255, 198, 62, 0.18) 0%, rgba(255, 198, 62, 0) 60%),
+                conic-gradient(from 120deg at 45% 55%, rgba(109, 202, 208, 0.18), rgba(109, 202, 208, 0) 250deg);
+            --texture-lemon:
+                linear-gradient(140deg, rgba(255, 198, 62, 0.16), rgba(255, 198, 62, 0.06)),
+                radial-gradient(circle at 22% 24%, rgba(255, 198, 62, 0.26) 0%, rgba(255, 198, 62, 0) 58%),
+                radial-gradient(circle at 74% 78%, rgba(253, 84, 63, 0.16) 0%, rgba(253, 84, 63, 0) 62%),
+                conic-gradient(from 45deg at 50% 50%, rgba(255, 198, 62, 0.2), rgba(255, 198, 62, 0) 240deg);
+            --texture-rose:
+                linear-gradient(140deg, rgba(252, 84, 62, 0.16), rgba(252, 84, 62, 0.06)),
+                radial-gradient(circle at 18% 25%, rgba(252, 84, 62, 0.25) 0%, rgba(252, 84, 62, 0) 58%),
+                radial-gradient(circle at 76% 70%, rgba(254, 106, 91, 0.18) 0%, rgba(254, 106, 91, 0) 62%),
+                conic-gradient(from 160deg at 50% 50%, rgba(252, 84, 62, 0.18), rgba(252, 84, 62, 0) 240deg);
         }
 
 
@@ -834,6 +858,9 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .main-content {
@@ -841,6 +868,9 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             grid-template-columns: 0.5fr 4.5fr;
             gap: 40px;
             align-items: start;
+            flex: 1;
+            overflow: hidden;
+            min-height: 0;
         }
 
         .header {
@@ -997,6 +1027,42 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         .links-section {
             grid-column: 1;
+            position: sticky;
+            top: 40px;
+            align-self: start;
+            min-height: 0;
+        }
+
+        .links-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: calc(100vh - 120px);
+            height: min(calc(100vh - 120px), 100%);
+            min-height: 0;
+        }
+
+        .links-scroll {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding-right: 6px;
+            margin-right: -6px;
+            scrollbar-width: thin;
+        }
+
+        .links-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .links-scroll::-webkit-scrollbar-track {
+            background: rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+        }
+
+        .links-scroll::-webkit-scrollbar-thumb {
+            background: rgba(100, 116, 139, 0.4);
+            border-radius: 8px;
         }
 
         /* 流体卡片基础样式 */
@@ -1155,22 +1221,59 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         /* 响应式流体布局 */
         @media (max-width: 1024px) {
+            body {
+                height: auto;
+                overflow: auto;
+            }
+
+            .container {
+                height: auto;
+            }
+
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 30px;
+                overflow: visible;
+                height: auto;
+            }
+
+            .links-section {
+                position: static;
+                top: auto;
+            }
+
+            .links-wrapper {
+                max-height: none;
+                height: auto;
+            }
+
+            .links-scroll {
+                flex: unset;
+                min-height: unset;
+                overflow: visible;
+                padding-right: 0;
+                margin-right: 0;
             }
 
             .achievements-section {
                 grid-column: 1;
-                position: static;
                 max-height: none;
                 overflow-y: visible;
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                height: auto;
+                padding-right: 0;
             }
 
             .fluid-container {
                 column-count: 2;
+            }
+
+            .achievements-section::before {
+                top: -20px;
+                right: -30px;
+                width: 200px;
+                height: 200px;
             }
         }
 
@@ -1178,68 +1281,213 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             .fluid-container {
                 column-count: 2;
             }
+
+            .repos-list {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 640px) {
+            body {
+                height: auto;
+                overflow-y: auto;
+            }
+
+            .container {
+                padding: 18px 16px 32px;
+                height: auto;
+                gap: 20px;
+            }
+
+            .main-content {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+                overflow: visible;
+            }
+
+            .links-section {
+                order: 1;
+                width: 100%;
+            }
+
+            .links-wrapper {
+                background: rgba(255, 255, 255, 0.92);
+                border: 1px solid rgba(148, 163, 184, 0.3);
+                border-radius: 20px;
+                padding: 16px 16px 0;
+                gap: 16px;
+                box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+                max-height: none;
+                height: auto;
+            }
+
+            .header-in-left {
+                padding: 0;
+                text-align: center;
+            }
+
+            .username {
+                justify-content: center;
+                font-size: 1.85rem;
+            }
+
+            .subtitle {
+                justify-content: center;
+                font-size: 0.95rem;
+            }
+
+            .header-in-left .mini-divider {
+                justify-content: center;
+                margin: 16px auto;
+                padding: 10px 0;
+            }
+
+            .links-scroll {
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding: 0 4px 8px;
+                margin: 0 -4px;
+                scrollbar-width: thin;
+            }
+
+            .links-scroll::-webkit-scrollbar {
+                height: 5px;
+            }
+
+            .links-scroll::-webkit-scrollbar-thumb {
+                background: rgba(148, 163, 184, 0.35);
+                border-radius: 8px;
+            }
+
             .fluid-container {
-                column-count: 2;
-                column-gap: 16px;
+                column-count: unset;
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 10px;
             }
 
             .fluid-card {
-                border-radius: 14px;
-                margin-bottom: 16px;
+                min-width: 150px;
+                border-radius: 16px;
+                padding: 16px 14px;
+                margin-bottom: 0;
+            }
+
+            .fluid-card::after {
+                display: none;
             }
 
             .fluid-icon {
-                width: 32px;
-                height: 32px;
+                width: 24px;
+                height: 24px;
                 margin-bottom: 10px;
-            }
-
-            .fluid-tall .fluid-icon {
-                width: 36px;
-                height: 36px;
-                margin-bottom: 12px;
+                opacity: 0.85;
             }
 
             .fluid-name {
-                font-size: 13px;
+                font-size: 11.5px;
+                letter-spacing: 0.01em;
             }
 
-            .fluid-tall .fluid-name {
-                font-size: 15px;
+            .achievements-section {
+                order: 2;
+                display: flex;
+                flex-direction: column;
+                gap: 18px;
+                height: auto;
+                overflow: visible;
+                padding-right: 0;
+            }
+
+            .achievements-section::before {
+                content: none;
+            }
+
+            .achievement-card {
+                border-radius: 18px;
+                padding: 18px;
+                box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+            }
+
+            .awards-card::before,
+            .repos-card::before,
+            .github-activity::before {
+                inset: auto 18px 0 18px;
+                width: auto;
+                height: 5px;
+                border-radius: 50px 50px 0 0;
+            }
+
+            .awards-list {
+                gap: 12px;
+            }
+
+            .award-item {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .award-content {
+                width: 100%;
+            }
+
+            .repos-list {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .footer {
+                margin-top: 16px;
             }
         }
 
         @media (max-width: 480px) {
-            .fluid-container {
-                column-count: 1;
-                column-gap: 0;
+            .container {
+                padding: 18px 14px 28px;
             }
 
-            .container {
-                padding: 20px 12px;
+            .fluid-container {
+                gap: 8px;
+                scroll-snap-type: x mandatory;
             }
 
             .fluid-card {
-                margin-bottom: 14px;
-                border-radius: 12px;
+                min-width: 140px;
+                border-radius: 14px;
+                padding: 15px 12px;
+                scroll-snap-align: start;
             }
 
             .fluid-compact {
-                padding: 18px 14px;
                 min-height: 90px;
             }
 
             .fluid-normal {
-                padding: 24px 16px;
-                min-height: 120px;
+                min-height: 110px;
             }
 
             .fluid-tall {
-                padding: 30px 18px;
-                min-height: 150px;
+                min-height: 125px;
+            }
+
+            .achievement-card {
+                border-radius: 16px;
+                padding: 16px;
+            }
+
+            .award-item {
+                padding: 16px 14px;
+            }
+
+            .qr-modal-content {
+                padding: 24px;
+                gap: 16px;
+            }
+
+            .qr-code-wrapper img {
+                width: 180px;
+                height: 180px;
             }
         }
 
@@ -1249,34 +1497,151 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             display: flex;
             flex-direction: column;
             gap: 24px;
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 8px;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            min-height: 0;
+        }
+
+        .achievements-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .achievements-section::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.35);
+            border-radius: 8px;
+        }
+
+        .achievements-section::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .achievements-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 240px;
+            height: 240px;
+            background: conic-gradient(from 0deg,
+                rgba(251, 106, 88, 0.6),
+                rgba(253, 84, 63, 0.55),
+                rgba(255, 198, 62, 0.45),
+                rgba(109, 202, 206, 0.5),
+                rgba(251, 106, 88, 0.6));
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: aurora-spin 18s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes aurora-spin {
+            0% {
+                transform: rotate(0deg) scale(0.95);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.05);
+            }
+            100% {
+                transform: rotate(360deg) scale(0.95);
+            }
         }
 
         .achievement-card {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 0;
             padding: 20px;
-            border: 2px solid ${COLORS["mondrian-black"]};
-            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
+            border: 1.5px solid rgba(254, 106, 91, 0.28);
+            box-shadow: 0 4px 12px rgba(254, 106, 91, 0.12);
             transition: all 0.2s ease;
             flex-shrink: 0;
+            color: rgba(51, 65, 85, 0.92);
         }
 
         /* 蒙德里安配色 - 不同类型用不同颜色的左边框 */
         .awards-card {
-            border-left: 6px solid ${COLORS["mondrian-red"]};
+            background: rgba(255, 255, 255, 0.96);
+            position: relative;
+            overflow: visible;
+            border-color: rgba(254, 106, 91, 0.3);
+            padding-left: 26px;
+        }
+
+        .awards-card::before {
+            content: '';
+            position: absolute;
+            inset: 14px auto 14px 0;
+            width: 6px;
+            border-radius: 0 8px 8px 0;
+            background: linear-gradient(180deg, rgba(254, 106, 91, 0.9), rgba(252, 84, 62, 0.75));
+        }
+
+        .awards-card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .repos-card {
-            border-left: 6px solid ${COLORS["mondrian-blue"]};
+            border-color: rgba(109, 202, 208, 0.3);
+            padding-left: 26px;
+        }
+
+        .repos-card::before {
+            content: '';
+            position: absolute;
+            inset: 14px auto 14px 0;
+            width: 6px;
+            border-radius: 0 8px 8px 0;
+            background: linear-gradient(180deg, rgba(109, 202, 208, 0.9), rgba(255, 198, 62, 0.75));
+        }
+
+        .repos-card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .github-activity {
-            border-left: 6px solid ${COLORS["mondrian-yellow"]};
+            border-color: rgba(255, 198, 62, 0.3);
+            padding-left: 26px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .github-activity::before {
+            content: '';
+            position: absolute;
+            inset: 14px auto 14px 0;
+            width: 6px;
+            border-radius: 0 8px 8px 0;
+            background: linear-gradient(180deg, rgba(255, 198, 62, 0.9), rgba(109, 202, 208, 0.75));
+        }
+
+        .github-activity > * {
+            position: relative;
+            z-index: 1;
         }
 
         .achievement-card:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 4px 4px 0 ${COLORS["mondrian-black"]};
+            transform: translateY(-4px);
+            box-shadow: 0 14px 28px rgba(254, 106, 91, 0.18);
+        }
+
+        .awards-card:hover {
+            box-shadow: 0 16px 30px rgba(254, 106, 91, 0.2);
+        }
+
+        .repos-card:hover {
+            box-shadow: 0 16px 30px rgba(109, 202, 208, 0.2);
+        }
+
+        .github-activity:hover {
+            box-shadow: 0 16px 30px rgba(255, 198, 62, 0.2);
         }
 
         .achievement-header {
@@ -1301,8 +1666,22 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         .achievement-header h3 {
             font-size: 1.2rem;
             font-weight: 600;
-            color: ${COLORS["mondrian-black"]};
             margin: 0;
+            color: rgba(51, 65, 85, 0.9);
+        }
+
+        .awards-card .achievement-header h3 {
+            background: linear-gradient(120deg, rgba(254, 106, 91, 0.9), rgba(252, 84, 62, 0.8));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .repos-card .achievement-header h3 {
+            background: linear-gradient(120deg, rgba(109, 202, 208, 0.95), rgba(255, 198, 62, 0.85));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         /* GitHub动态样式 */
@@ -1314,9 +1693,9 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         .activity-item {
             padding: 12px;
-            background: rgba(25, 118, 210, 0.1);
+            background: linear-gradient(135deg, rgba(255, 198, 62, 0.14), rgba(109, 202, 208, 0.08));
             border-radius: 0;
-            border-left: 3px solid ${COLORS["mondrian-blue"]};
+            border-left: 3px solid rgba(255, 198, 62, 0.6);
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -1325,7 +1704,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         .activity-type {
             font-size: 0.85rem;
             font-weight: 600;
-            color: ${COLORS["mondrian-blue"]};
+            color: rgba(255, 198, 62, 0.95);
         }
 
         .activity-repo {
@@ -1348,47 +1727,137 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         .award-item {
             display: flex;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(211, 47, 47, 0.1);
+            gap: 18px;
+            padding: 18px;
             border-radius: 0;
-            border: 1px solid ${COLORS["mondrian-red"]};
-            transition: all 0.2s ease;
+            border: 1.5px solid rgba(254, 106, 91, 0.35);
+            transition: all 0.25s ease;
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.95);
+            background-image: var(--texture-coral);
+            box-shadow: 0 3px 8px rgba(45, 55, 72, 0.12);
+            align-items: flex-start;
+            overflow: hidden;
+        }
+
+        .award-item:nth-child(4n+2) {
+            background-image: var(--texture-mint);
+            border-color: rgba(109, 202, 208, 0.35);
+        }
+
+        .award-item:nth-child(4n+3) {
+            background-image: var(--texture-lemon);
+            border-color: rgba(255, 198, 62, 0.35);
+        }
+
+        .award-item:nth-child(4n) {
+            background-image: var(--texture-rose);
+            border-color: rgba(252, 84, 62, 0.35);
+        }
+
+        .award-item::before {
+            content: '';
+            position: absolute;
+            inset: 12px auto 12px 0;
+            width: 6px;
+            border-radius: 0 8px 8px 0;
+            background: rgba(254, 106, 91, 0.45);
+            z-index: 0;
+        }
+
+        .award-item:nth-child(4n+1)::before {
+            background: rgba(254, 106, 91, 0.45);
+        }
+
+        .award-item:nth-child(4n+2)::before {
+            background: rgba(109, 202, 208, 0.45);
+        }
+
+        .award-item:nth-child(4n+3)::before {
+            background: rgba(255, 198, 62, 0.45);
+        }
+
+        .award-item:nth-child(4n)::before {
+            background: rgba(252, 84, 62, 0.45);
         }
 
         .award-item:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 3px 3px 0 ${COLORS["mondrian-red"]};
+            transform: translate(-3px, -3px);
+            box-shadow: 0 6px 16px rgba(254, 106, 91, 0.2);
+        }
+
+        .award-item:nth-child(4n+2):hover {
+            box-shadow: 0 6px 16px rgba(109, 202, 208, 0.2);
+        }
+
+        .award-item:nth-child(4n+3):hover {
+            box-shadow: 0 6px 16px rgba(255, 198, 62, 0.2);
+        }
+
+        .award-item:nth-child(4n):hover {
+            box-shadow: 0 6px 16px rgba(252, 84, 62, 0.2);
         }
 
         .award-icon {
             flex-shrink: 0;
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, ${COLORS["mofa-gradient-1"]}, ${COLORS["mofa-gradient-2"]});
-            border-radius: 0;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid rgba(254, 106, 91, 0.4);
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+            position: relative;
+            z-index: 1;
+        }
+
+        .award-item:nth-child(4n+2) .award-icon {
+            border-color: rgba(109, 202, 208, 0.4);
+        }
+
+        .award-item:nth-child(4n+3) .award-icon {
+            border-color: rgba(255, 198, 62, 0.4);
+        }
+
+        .award-item:nth-child(4n) .award-icon {
+            border-color: rgba(252, 84, 62, 0.4);
         }
 
         .award-mini-icon {
             width: 20px;
             height: 20px;
-            filter: brightness(0) invert(1);
+            filter: none;
         }
 
         /* 奖项图片样式 */
         .award-image {
             flex-shrink: 0;
-            width: 60px;
-            height: 60px;
+            width: 62px;
+            height: 62px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
+            border-radius: 0;
             overflow: hidden;
-            border: 1px solid ${COLORS["mondrian-gray"]};
+            border: 1.5px solid rgba(254, 106, 91, 0.4);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
+            position: relative;
+            z-index: 1;
+        }
+
+        .award-item:nth-child(4n+2) .award-image {
+            border-color: rgba(109, 202, 208, 0.4);
+        }
+
+        .award-item:nth-child(4n+3) .award-image {
+            border-color: rgba(255, 198, 62, 0.4);
+        }
+
+        .award-item:nth-child(4n) .award-image {
+            border-color: rgba(252, 84, 62, 0.4);
         }
 
         .award-photo {
@@ -1405,113 +1874,286 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
         }
 
         .award-title {
-            font-weight: 600;
-            color: ${COLORS["mondrian-black"]};
-            font-size: 0.9rem;
+            font-weight: 700;
+            color: rgba(184, 66, 58, 0.95);
+            font-size: 1rem;
+        }
+
+        .award-item:nth-child(4n+2) .award-title {
+            color: rgba(34, 125, 134, 0.95);
+        }
+
+        .award-item:nth-child(4n+3) .award-title {
+            color: rgba(201, 140, 36, 0.95);
+        }
+
+        .award-item:nth-child(4n) .award-title {
+            color: rgba(214, 74, 58, 0.95);
         }
 
         .award-event {
-            font-size: 0.8rem;
-            color: #666;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-size: 0.82rem;
+            color: rgba(184, 66, 58, 0.9);
+            font-weight: 600;
+            padding: 2px 6px;
+            border: 1px solid rgba(254, 106, 91, 0.4);
+            border-radius: 0;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.85);
+            transition: all 0.2s ease;
+        }
+
+        .award-item:nth-child(4n+2) .award-event,
+        .award-item:nth-child(4n+2) .award-achievement {
+            border-color: rgba(109, 202, 208, 0.4);
+            color: rgba(34, 125, 134, 0.92);
+        }
+
+        .award-item:nth-child(4n+3) .award-event,
+        .award-item:nth-child(4n+3) .award-achievement {
+            border-color: rgba(255, 198, 62, 0.4);
+            color: rgba(201, 140, 36, 0.92);
+        }
+
+        .award-item:nth-child(4n) .award-event,
+        .award-item:nth-child(4n) .award-achievement {
+            border-color: rgba(252, 84, 62, 0.4);
+            color: rgba(214, 74, 58, 0.92);
         }
 
         .award-project {
-            font-size: 0.75rem;
-            color: #888;
+            font-size: 0.78rem;
+            color: rgba(74, 82, 102, 0.85);
             font-style: italic;
         }
 
         .award-team {
-            font-size: 0.75rem;
-            color: #888;
+            font-size: 0.78rem;
+            color: rgba(74, 82, 102, 0.85);
         }
 
         .award-achievement {
-            font-size: 0.75rem;
-            color: #666;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-size: 0.78rem;
+            color: rgba(184, 66, 58, 0.9);
+            font-weight: 600;
+            padding: 2px 6px;
+            border: 1px solid rgba(254, 106, 91, 0.4);
+            border-radius: 0;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.85);
+            transition: all 0.2s ease;
         }
 
         .award-date {
-            font-size: 0.7rem;
-            color: #999;
+            font-size: 0.72rem;
+            color: rgba(100, 116, 139, 0.75);
         }
 
         .award-details {
-            font-size: 0.8rem;
-            color: #666;
-            line-height: 1.4;
+            font-size: 0.82rem;
+            color: rgba(48, 62, 78, 0.85);
+            line-height: 1.5;
             margin-top: 6px;
         }
 
         /* 仓库展示样式 */
         .repos-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
         }
 
         .repo-item {
-            padding: 12px;
-            background: rgba(255, 179, 0, 0.1);
+            padding: 16px;
             border-radius: 0;
-            border: 1px solid ${COLORS["mondrian-yellow"]};
-            transition: all 0.2s ease;
+            border: 1.5px solid rgba(254, 106, 91, 0.3);
+            transition: all 0.25s ease;
+            position: relative;
+            background-color: rgba(255, 255, 255, 0.95);
+            background-image: var(--texture-coral);
+            box-shadow: 0 3px 8px rgba(254, 106, 91, 0.12);
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .repo-item:nth-child(4n+2) {
+            background-image: var(--texture-mint);
+            border-color: rgba(109, 202, 208, 0.3);
+            box-shadow: 0 3px 8px rgba(109, 202, 208, 0.12);
+        }
+
+        .repo-item:nth-child(4n+3) {
+            background-image: var(--texture-lemon);
+            border-color: rgba(255, 198, 62, 0.3);
+            box-shadow: 0 3px 8px rgba(255, 198, 62, 0.12);
+        }
+
+        .repo-item:nth-child(4n) {
+            background-image: var(--texture-rose);
+            border-color: rgba(252, 84, 62, 0.3);
+            box-shadow: 0 3px 8px rgba(252, 84, 62, 0.12);
+        }
+
+        .repo-item::after {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.04);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .repo-item:nth-child(4n+1)::after {
+            background: rgba(254, 106, 91, 0.35);
+        }
+
+        .repo-item:nth-child(4n+2)::after {
+            background: rgba(109, 202, 208, 0.35);
+        }
+
+        .repo-item:nth-child(4n+3)::after {
+            background: rgba(255, 198, 62, 0.35);
+        }
+
+        .repo-item:nth-child(4n)::after {
+            background: rgba(252, 84, 62, 0.35);
         }
 
         .repo-item:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 3px 3px 0 ${COLORS["mondrian-yellow"]};
+            transform: translate(-3px, -3px);
+            box-shadow: 0 6px 16px rgba(254, 106, 91, 0.2);
+        }
+
+        .repo-item:nth-child(4n+2):hover {
+            box-shadow: 0 6px 16px rgba(109, 202, 208, 0.2);
+        }
+
+        .repo-item:nth-child(4n+3):hover {
+            box-shadow: 0 6px 16px rgba(255, 198, 62, 0.2);
+        }
+
+        .repo-item:nth-child(4n):hover {
+            box-shadow: 0 6px 16px rgba(252, 84, 62, 0.2);
         }
 
         .repo-name {
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
         }
 
         .repo-name a {
-            color: ${COLORS["mondrian-black"]};
+            color: rgba(22, 101, 118, 0.9);
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.9rem;
-            padding: 4px 8px;
-            border: 1px solid ${COLORS["mondrian-black"]};
-            border-radius: 0;
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
-            transition: all 0.2s ease;
+            font-size: 0.92rem;
+            padding: 4px 6px;
+            border-bottom: 2px solid rgba(254, 106, 91, 0.5);
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .repo-item:nth-child(4n+2) .repo-name a {
+            border-bottom-color: rgba(109, 202, 208, 0.5);
+        }
+
+        .repo-item:nth-child(4n+3) .repo-name a {
+            border-bottom-color: rgba(255, 198, 62, 0.5);
+        }
+
+        .repo-item:nth-child(4n) .repo-name a {
+            border-bottom-color: rgba(252, 84, 62, 0.5);
+        }
+
+        .repo-item:nth-child(4n+1) .repo-name a {
+            color: rgba(214, 74, 58, 0.92);
+        }
+
+        .repo-item:nth-child(4n+2) .repo-name a {
+            color: rgba(22, 101, 118, 0.9);
+        }
+
+        .repo-item:nth-child(4n+3) .repo-name a {
+            color: rgba(201, 140, 36, 0.92);
+        }
+
+        .repo-item:nth-child(4n) .repo-name a {
+            color: rgba(214, 74, 58, 0.92);
         }
 
         .repo-name a:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 3px 3px 0 ${COLORS["mondrian-black"]};
+            transform: translateY(-1px);
         }
 
         .repo-description {
-            font-size: 0.8rem;
-            color: #666;
-            line-height: 1.4;
-            margin-bottom: 8px;
+            font-size: 0.82rem;
+            color: rgba(56, 72, 86, 0.85);
+            line-height: 1.5;
+            margin-bottom: 12px;
         }
 
         .repo-meta {
             display: flex;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
             font-size: 0.75rem;
         }
 
         .repo-language {
-            color: ${COLORS["mofa-gradient-3"]};
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            color: rgba(22, 101, 118, 0.92);
+            font-weight: 600;
+            padding: 2px 6px;
+            border: 1px solid rgba(254, 106, 91, 0.4);
+            border-radius: 0;
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .repo-item:nth-child(4n+1) .repo-language {
+            color: rgba(214, 74, 58, 0.92);
+        }
+
+        .repo-item:nth-child(4n+2) .repo-language {
+            border-color: rgba(109, 202, 208, 0.4);
+            color: rgba(22, 101, 118, 0.92);
+        }
+
+        .repo-item:nth-child(4n+3) .repo-language {
+            border-color: rgba(255, 198, 62, 0.4);
+            color: rgba(201, 140, 36, 0.92);
+        }
+
+        .repo-item:nth-child(4n) .repo-language {
+            border-color: rgba(252, 84, 62, 0.4);
+            color: rgba(214, 74, 58, 0.92);
         }
 
         .repo-stars {
-            color: #666;
+            color: rgba(71, 85, 105, 0.75);
+        }
+
+        .repo-item:nth-child(4n+1) .repo-stars {
+            color: rgba(214, 74, 58, 0.7);
+        }
+
+        .repo-item:nth-child(4n+2) .repo-stars {
+            color: rgba(22, 101, 118, 0.72);
+        }
+
+        .repo-item:nth-child(4n+3) .repo-stars {
+            color: rgba(201, 140, 36, 0.72);
+        }
+
+        .repo-item:nth-child(4n) .repo-stars {
+            color: rgba(214, 74, 58, 0.7);
         }
 
         /* 响应式成就区域 */
@@ -1542,6 +2184,15 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             .repo-item {
                 padding: 10px;
             }
+
+            .repos-list {
+                gap: 12px;
+                grid-template-columns: 1fr;
+            }
+
+            .achievements-section::before {
+                content: none;
+            }
         }
 
         /* 流体容器优化 */
@@ -1554,58 +2205,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         /* 二维码卡片按钮 */
         .qr-card-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: ${COLORS["mondrian-black"]};
-            font-weight: 600;
-            border-radius: 0;
-            transition: all 0.2s ease;
             cursor: pointer;
-            background: #6dcad0 !important;
-            border: 2px solid ${COLORS["mondrian-black"]};
-            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
-            padding: 12px 10px;
-            min-height: 60px;
-            margin-bottom: 20px;
-            width: 100%;
         }
 
-        .qr-card-button:hover {
-            transform: translate(-3px, -3px);
-            box-shadow: 4px 4px 0 ${COLORS["mondrian-black"]};
-            z-index: 10;
-        }
-
-        .qr-card-icon {
-            width: 24px;
-            height: 24px;
-            margin-bottom: 4px;
-            filter: brightness(0);
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-
-        .qr-card-button:hover .qr-card-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .qr-card-text {
-            font-size: 11px;
-            font-weight: 600;
-            padding: 2px 6px;
-            border: 1px solid ${COLORS["mondrian-black"]};
-            border-radius: 0;
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
-            transition: all 0.2s ease;
-            text-align: center;
-            line-height: 1.4;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            opacity: 0.95;
+        .qr-card-button:focus-visible {
+            outline: 2px solid ${COLORS["mondrian-black"]};
+            outline-offset: 3px;
         }
 
         /* 二维码模态窗口 */
@@ -1613,38 +2218,68 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             display: none;
             position: fixed;
             z-index: 999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(10px);
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
         }
 
         .qr-modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.96);
+            padding: 32px;
             border-radius: 0;
             border: 3px solid ${COLORS["mondrian-black"]};
-            box-shadow: 0 8px 0 ${COLORS["mondrian-black"]};
+            box-shadow: 0 12px 0 ${COLORS["mondrian-black"]};
             text-align: center;
             animation: qr-modal-appear 0.3s ease-out;
-            max-width: 90vw;
+            width: min(360px, 90vw);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow: hidden;
+        }
+
+        .qr-modal-content::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            background: linear-gradient(135deg,
+                rgba(251, 106, 88, 0.45),
+                rgba(253, 84, 63, 0.4),
+                rgba(255, 198, 62, 0.35),
+                rgba(109, 202, 206, 0.45));
+            z-index: -1;
+            border-radius: 0;
+            filter: blur(24px);
+            opacity: 0.9;
         }
 
         @keyframes qr-modal-appear {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.8);
+                transform: scale(0.85);
             }
             100% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
+                transform: scale(1);
             }
+        }
+
+        .qr-modal-header {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .qr-modal-subtitle {
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #64748b;
         }
 
         .qr-modal-title {
@@ -1654,18 +2289,37 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            margin-bottom: 20px;
         }
 
-        .qr-modal img {
-            border-radius: 0;
+        .qr-modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .qr-code-wrapper {
             border: 2px solid ${COLORS["mondrian-black"]};
-            margin: 20px 0;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};
+        }
+
+        .qr-code-wrapper img {
+            display: block;
+            width: 200px;
+            height: 200px;
+        }
+
+        .qr-modal-meta {
+            font-size: 0.85rem;
+            color: #475569;
+            line-height: 1.5;
         }
 
         .qr-modal-close {
-            background: ${COLORS["mondrian-red"]};
-            color: white;
+            background: ${COLORS["mondrian-black"]};
+            color: ${COLORS["mondrian-white"]};
             border: 2px solid ${COLORS["mondrian-black"]};
             border-radius: 0;
             padding: 10px 20px;
@@ -1673,7 +2327,6 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             cursor: pointer;
             box-shadow: 0 2px 0 ${COLORS["mondrian-black"]};
             transition: all 0.2s ease;
-            margin-top: 20px;
         }
 
         .qr-modal-close:hover {
@@ -1684,39 +2337,41 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         /* 移动端二维码模态窗口优化 */
         @media (max-width: 640px) {
             .qr-modal-content {
-                padding: 30px 20px;
-                width: 90vw;
+                padding: 28px 20px;
+                width: 88vw;
             }
 
             .qr-modal-title {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
             }
 
-            .qr-modal img {
-                max-width: 100%;
-                height: auto;
+            .qr-code-wrapper img {
+                width: 190px;
+                height: 190px;
             }
         }
 
         .footer {
-            margin-top: 40px;
-            padding-top: 24px;
-            border-top: 1px solid ${COLORS["mondrian-gray"]};
-            color: #64748b;
-            font-size: 0.875rem;
+            margin-top: 8px;
+            padding: 6px 0;
+            border-top: 1px solid rgba(148, 163, 184, 0.35);
+            color: rgba(100, 116, 139, 0.7);
+            font-size: 0.68rem;
             grid-column: 1 / -1;
             text-align: center;
+            letter-spacing: 0.03em;
         }
 
         .footer a {
-            color: ${COLORS["mondrian-black"]};
+            color: rgba(22, 101, 118, 0.85);
             text-decoration: none;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;
+            transition: color 0.2s ease;
         }
 
         .footer a:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 2px 2px 0 ${COLORS["mondrian-black"]};
+            color: rgba(184, 66, 58, 0.9);
+            text-decoration: underline;
         }
 
         /* 移动端优化 */
@@ -1743,54 +2398,71 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             height: 100vh;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.4;
-            background: linear-gradient(135deg,
-                rgba(248, 250, 252, 0.5) 0%,
-                rgba(226, 232, 240, 0.5) 100%);
+            opacity: 1;
+            background:
+                radial-gradient( circle at 18% 24%, rgba(254, 106, 91, 0.12) 0%, rgba(254, 106, 91, 0) 55%),
+                radial-gradient( circle at 82% 16%, rgba(109, 202, 208, 0.14) 0%, rgba(109, 202, 208, 0) 52%),
+                radial-gradient( circle at 78% 78%, rgba(255, 198, 62, 0.12) 0%, rgba(255, 198, 62, 0) 60%),
+                linear-gradient(135deg, rgba(248, 250, 252, 0.75), rgba(226, 232, 240, 0.6));
         }
 
         .decoration::before {
             content: '';
             position: absolute;
-            top: 20%;
-            left: -50px;
-            width: 200px;
-            height: 300px;
-            background: linear-gradient(45deg, ${COLORS["macaron-peach"]}44, ${COLORS["macaron-rose"]}44);
-            border-radius: 20px;
-            transform: rotate(-15deg);
-            animation: mondrian-geometric-float 8s ease-in-out infinite;
+            top: 18%;
+            left: -80px;
+            width: 320px;
+            height: 320px;
+            background: conic-gradient(from 120deg, rgba(254, 106, 91, 0.38), rgba(252, 84, 62, 0.12) 220deg, rgba(254, 106, 91, 0));
+            clip-path: polygon(18% 0%, 90% 8%, 100% 72%, 72% 100%, 0% 88%, 0% 18%);
+            animation: mondrian-geometric-float-a 10s ease-in-out infinite;
         }
 
         .decoration::after {
             content: '';
             position: absolute;
-            bottom: 20%;
-            right: -50px;
-            width: 250px;
-            height: 200px;
-            background: linear-gradient(135deg, ${COLORS["macaron-sky"]}44, ${COLORS["macaron-lavender"]}44);
-            border-radius: 20px;
-            transform: rotate(15deg);
-            animation: mondrian-geometric-float 10s ease-in-out infinite 1s;
+            bottom: 18%;
+            right: -60px;
+            width: 280px;
+            height: 280px;
+            background:
+                radial-gradient(circle at 40% 40%, rgba(109, 202, 208, 0.28) 0%, rgba(109, 202, 208, 0) 70%),
+                radial-gradient(circle at 70% 70%, rgba(255, 198, 62, 0.24) 0%, rgba(255, 198, 62, 0) 65%);
+            clip-path: polygon(24% 0%, 100% 22%, 82% 100%, 8% 88%);
+            animation: mondrian-geometric-float-b 12s ease-in-out infinite 0.8s;
         }
 
-        @keyframes mondrian-geometric-float {
+        @keyframes mondrian-geometric-float-a {
             0%, 100% {
-                transform: translateY(0px) scale(1) rotate(-15deg);
-                opacity: 0.3;
+                transform: translateY(0px) scale(1) rotate(-16deg);
+                opacity: 0.35;
             }
             25% {
-                transform: translateY(-5px) scale(1.02) rotate(-14.6deg);
-                opacity: 0.4;
+                transform: translateY(-6px) scale(1.02) rotate(-13deg);
+                opacity: 0.42;
             }
             50% {
-                transform: translateY(-15px) scale(1.04) rotate(-14.2deg);
+                transform: translateY(-14px) scale(1.05) rotate(-11deg);
                 opacity: 0.5;
             }
             75% {
-                transform: translateY(-5px) scale(1.02) rotate(-14.6deg);
-                opacity: 0.4;
+                transform: translateY(-6px) scale(1.02) rotate(-13deg);
+                opacity: 0.42;
+            }
+        }
+
+        @keyframes mondrian-geometric-float-b {
+            0%, 100% {
+                transform: translateY(0px) scale(1) rotate(10deg);
+                opacity: 0.35;
+            }
+            33% {
+                transform: translateY(-8px) scale(1.03) rotate(7deg);
+                opacity: 0.44;
+            }
+            66% {
+                transform: translateY(-14px) scale(1.05) rotate(5deg);
+                opacity: 0.52;
             }
         }
 
@@ -1953,8 +2625,16 @@ async function generateHTML(username, links, hostname, achievements = null, gith
     <!-- 二维码模态窗口 -->
     <div id="qrModal" class="qr-modal" onclick="hideQRModal()">
         <div class="qr-modal-content" onclick="event.stopPropagation()">
-            <div class="qr-modal-title">扫码访问此页面</div>
-            <img src="${qrCodeUrl}" alt="QR Code" width="200" height="200">
+            <div class="qr-modal-header">
+                <span class="qr-modal-subtitle">MoFA Developer Link</span>
+                <div class="qr-modal-title">扫码访问此页面</div>
+            </div>
+            <div class="qr-modal-body">
+                <div class="qr-code-wrapper">
+                    <img src="${qrCodeUrl}" alt="QR Code" width="200" height="200">
+                </div>
+                <p class="qr-modal-meta">使用手机摄像头或微信扫一扫快速打开当前开发者主页。</p>
+            </div>
             <button class="qr-modal-close" onclick="hideQRModal()">关闭</button>
         </div>
     </div>
@@ -1962,46 +2642,50 @@ async function generateHTML(username, links, hostname, achievements = null, gith
     <div class="container">
         <div class="main-content">
             <div class="links-section">
-                <div class="header-in-left">
-                    <h1 class="username">
-                        <a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer" class="user-profile-link">
-                            <div class="avatar-container">
-                                <div class="magic-trigger">🎩</div>
-                                <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
-                            </div>
-                            ${username.toUpperCase()}
-                        </a>
-                    </h1>
-                    <p class="subtitle">
-                        <a href="https://mofa.ai" target="_blank" rel="noopener noreferrer" class="mofa-logo-link">
-                            <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="subtitle-logo">
-                        </a>
-                        魔法师 - MoFA Developer
-                    </p>
-                    <!-- 小装饰分隔线 -->
-                    <div class="mini-divider">
-                        <div class="mini-line red-line"></div>
-                        <div class="mini-line blue-line"></div>
-                        <div class="mini-line yellow-line"></div>
-                    </div>
+                <div class="links-wrapper">
+                    <div class="header-in-left">
+                        <h1 class="username">
+                            <a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer" class="user-profile-link">
+                                <div class="avatar-container">
+                                    <div class="magic-trigger">🎩</div>
+                                    <img src="https://avatars.githubusercontent.com/${username}" alt="${username}" class="user-avatar">
+                                </div>
+                                ${username.toUpperCase()}
+                            </a>
+                        </h1>
+                        <p class="subtitle">
+                            <a href="https://mofa.ai" target="_blank" rel="noopener noreferrer" class="mofa-logo-link">
+                                <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Logo" class="subtitle-logo">
+                            </a>
+                            魔法师 - MoFA Developer
+                        </p>
+                        <!-- 小装饰分隔线 -->
+                        <div class="mini-divider">
+                            <div class="mini-line red-line"></div>
+                            <div class="mini-line blue-line"></div>
+                            <div class="mini-line yellow-line"></div>
+                        </div>
 
-                    <!-- 二维码卡片按钮 -->
-                    <div class="qr-card-button" onclick="showQRModal()">
-                        <img src="/icons/qr-code.svg" alt="QR Code" class="qr-card-icon">
-                        <span class="qr-card-text">分享二维码</span>
+                        <!-- 二维码卡片按钮 -->
+                        <div class="fluid-card fluid-normal fluid-mint qr-card-button" onclick="showQRModal()">
+                            <img src="/icons/qr-code.svg" alt="QR Code" class="fluid-icon">
+                            <span class="fluid-name">分享二维码</span>
+                        </div>
                     </div>
-                </div>
-                <div class="fluid-container">
-                    ${fluidLinks
-                      .map(
-                        (link) => `
-                        <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="fluid-card fluid-${link.fluidHeight} fluid-${link.fluidColor}">
-                            <img src="${link.icon}" alt="${link.name}" class="fluid-icon">
-                            <span class="fluid-name">${link.name}</span>
-                        </a>
-                    `,
-                      )
-                      .join("")}
+                    <div class="links-scroll">
+                        <div class="fluid-container">
+                            ${fluidLinks
+                              .map(
+                                (link) => `
+                                <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="fluid-card fluid-${link.fluidHeight} fluid-${link.fluidColor}">
+                                    <img src="${link.icon}" alt="${link.name}" class="fluid-icon">
+                                    <span class="fluid-name">${link.name}</span>
+                                </a>
+                            `,
+                              )
+                              .join("")}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -2026,7 +2710,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         function showQRModal() {
             const modal = document.getElementById('qrModal');
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
         }
 
         function hideQRModal() {
@@ -2167,23 +2851,24 @@ function generateDebugPage(username, hostname, debugInfo) {
         }
 
         .footer {
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid ${COLORS["mondrian-gray"]};
-            color: #64748b;
-            font-size: 0.875rem;
+            margin-top: 8px;
+            padding: 6px 0;
+            border-top: 1px solid rgba(148, 163, 184, 0.35);
+            color: rgba(100, 116, 139, 0.7);
+            font-size: 0.68rem;
             text-align: center;
         }
 
         .footer a {
-            color: ${COLORS["mondrian-black"]};
+            color: rgba(22, 101, 118, 0.85);
             text-decoration: none;
-            font-weight: 600;            padding: 2px 6px;            border: 1px solid ${COLORS["mondrian-black"]};            border-radius: 0;            display: inline-block;            background: rgba(255, 255, 255, 0.9);            box-shadow: 0 0px 0 ${COLORS["mondrian-black"]};            transition: all 0.2s ease;
+            font-weight: 600;
+            transition: color 0.2s ease;
         }
 
         .footer a:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 2px 2px 0 ${COLORS["mondrian-black"]};
+            color: rgba(184, 66, 58, 0.9);
+            text-decoration: underline;
         }
     </style>
 </head>
