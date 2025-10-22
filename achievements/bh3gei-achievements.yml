@@ -2,21 +2,20 @@ githubUsername: bh3gei
 enableGithubStats: true
 
 awards:
-  - title: "占位测试GOSIM Hangzhou 2025 Code Alert Hackathon"
-    rank: "First Place Winner"
-    description: "AI-powered code analysis and vulnerability detection"
-    team: "李杰, 刘雨寒, 王云洋"
-    date: "January 2025"
+  - title: "GOSIM Hangzhou 2025 Spotlight"
+    rank: "Audience Popularity Award"
+    description: "GOSIM Wonderland, A Image Creator"
+    team: "Zonghuan Wu, Yao Li"
+    date: "September 2025"
     certNumber: "2025001"
-    image: "https://picsum.photos/200/150?random=1"
+    image: "https://china2024.gosim.org/images/66c7dd4f6865e5012249f0d5_gosim-logo-32.svg"
 
-  - title: "占位AIOS Hackathon 2025"
+  - title: "GOSIM 2025 MoFA Search AI Hackathon"
     rank: "Second Place Winner"
-    description: "Intelligent task automation platform"
-    team: "李杰, 王小明, 张三"
+    team: "Yao Li"
     date: "February 2025"
     certNumber: "2025002"
-    image: "https://picsum.photos/200/150?random=2"
+    image: "https://opencamp.cn/favicon.ico"
 
 repositories:
   - name: "bh3gei/mofa-developer-page"
