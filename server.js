@@ -833,7 +833,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         :root {
-            --texture-coral: 
+            --texture-coral:
                 linear-gradient(140deg, rgba(254, 106, 91, 0.14), rgba(252, 84, 62, 0.06)),
                 radial-gradient(circle at 18% 22%, rgba(254, 106, 91, 0.24) 0%, rgba(254, 106, 91, 0) 58%),
                 radial-gradient(circle at 82% 76%, rgba(255, 198, 62, 0.16) 0%, rgba(255, 198, 62, 0) 62%),
@@ -855,6 +855,110 @@ async function generateHTML(username, links, hostname, achievements = null, gith
                 conic-gradient(from 160deg at 50% 50%, rgba(252, 84, 62, 0.18), rgba(252, 84, 62, 0) 240deg);
         }
 
+        /* 浮动蒙德里安色块装饰 */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .float-shape {
+            position: absolute;
+            border-radius: 0;
+            opacity: 0.08;
+        }
+
+        .float-red {
+            width: 120px;
+            height: 120px;
+            background: ${COLORS["mondrian-red"]};
+            top: 15%;
+            left: 8%;
+            animation: float-1 25s ease-in-out infinite;
+        }
+
+        .float-blue {
+            width: 80px;
+            height: 80px;
+            background: ${COLORS["mondrian-blue"]};
+            top: 60%;
+            right: 12%;
+            animation: float-2 30s ease-in-out infinite;
+        }
+
+        .float-yellow {
+            width: 100px;
+            height: 100px;
+            background: ${COLORS["mondrian-yellow"]};
+            bottom: 20%;
+            left: 15%;
+            animation: float-3 28s ease-in-out infinite;
+        }
+
+        .float-black {
+            width: 60px;
+            height: 60px;
+            background: ${COLORS["mondrian-black"]};
+            top: 35%;
+            right: 20%;
+            animation: float-4 32s ease-in-out infinite;
+        }
+
+        @keyframes float-1 {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(30px, -20px) rotate(5deg);
+            }
+            50% {
+                transform: translate(-20px, 30px) rotate(-3deg);
+            }
+            75% {
+                transform: translate(40px, 10px) rotate(8deg);
+            }
+        }
+
+        @keyframes float-2 {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            33% {
+                transform: translate(-40px, 25px) rotate(-6deg);
+            }
+            66% {
+                transform: translate(20px, -30px) rotate(4deg);
+            }
+        }
+
+        @keyframes float-3 {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            30% {
+                transform: translate(-25px, -35px) rotate(7deg);
+            }
+            60% {
+                transform: translate(35px, 20px) rotate(-5deg);
+            }
+        }
+
+        @keyframes float-4 {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            40% {
+                transform: translate(30px, 40px) rotate(-8deg);
+            }
+            80% {
+                transform: translate(-30px, -20px) rotate(6deg);
+            }
+        }
 
         /* 选中文本颜色 - 与MoFA官网一致 */
         ::selection {
@@ -2741,6 +2845,14 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 </head>
 <body>
     <div class="decoration"></div>
+
+    <!-- 浮动蒙德里安色块装饰 -->
+    <div class="floating-shapes">
+        <div class="float-shape float-red"></div>
+        <div class="float-shape float-blue"></div>
+        <div class="float-shape float-yellow"></div>
+        <div class="float-shape float-black"></div>
+    </div>
 
     <!-- 魔法帽子模态窗口 -->
     <div id="magicModal" class="magic-modal" onclick="hideMagicHat()">
