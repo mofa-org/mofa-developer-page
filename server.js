@@ -530,6 +530,7 @@ function parseAchievements(content) {
           title: award.title,
           content: content,
           image: award.image || null,
+          certNumber: award.certNumber || null,
         });
       }
     });
@@ -663,7 +664,7 @@ function generateAwardsCard(achievements) {
     <div class="achievement-card awards-card">
       <div class="achievement-header">
         <img src="https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/resources/icons/trophy.svg" alt="Trophy" class="achievement-icon">
-        <h3>获奖信息</h3>
+        <h3>荣誉认证</h3>
       </div>
       <div class="awards-list">
         ${achievements.hackathons
@@ -671,6 +672,12 @@ function generateAwardsCard(achievements) {
           .map(
             (award) => `
           <div class="award-item ${award.image ? "award-with-image" : ""}">
+            <!-- MoFA 认证印章 -->
+            <div class="award-cert-stamp">
+              <img src="https://mofa.ai/mofa-logo.png" alt="MoFA Certified" class="cert-logo">
+              ${award.certNumber ? `<div class="cert-number">No.${award.certNumber}</div>` : ''}
+            </div>
+
             ${
               award.image
                 ? `
@@ -795,7 +802,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 
     <style>
@@ -1123,8 +1130,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             width: 24px;
             height: 24px;
             margin-bottom: 4px;
-            filter: brightness(0);
-            opacity: 0.8;
+            filter: saturate(1.2) brightness(0.85);
+            opacity: 0.9;
             transition: all 0.3s ease;
         }
 
@@ -1164,45 +1171,53 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             font-weight: 600;
         }
 
-        /* 流体卡片颜色主题 - 马卡龙纯色 */
+        /* 流体卡片颜色主题 - 淡化纹理背景 */
         .fluid-coral {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #fe6a5b !important;
+            background-image: var(--texture-coral) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .fluid-mint {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #6dcad0 !important;
+            background-image: var(--texture-mint) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .fluid-lavender {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #ffc63e !important;
+            background-image: var(--texture-lemon) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .fluid-peach {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #fe6a5b !important;
+            background-image: var(--texture-coral) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .fluid-sky {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #6dcad0 !important;
+            background-image: var(--texture-mint) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .fluid-sage {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #ffc63e !important;
+            background-image: var(--texture-lemon) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .fluid-rose {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #fc543e !important;
+            background-image: var(--texture-rose) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .fluid-lemon {
             border-color: ${COLORS["mondrian-black"]} !important;
-            background: #ffc63e !important;
+            background-image: var(--texture-lemon) !important;
+            background-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         /* 流体卡片水波纹效果 */
@@ -1634,11 +1649,15 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         .awards-card:hover {
-            box-shadow: 0 16px 30px rgba(254, 106, 91, 0.2);
+            box-shadow:
+                0 16px 30px rgba(254, 106, 91, 0.2),
+                inset 0 0 20px rgba(218, 165, 32, 0.15);
         }
 
         .repos-card:hover {
-            box-shadow: 0 16px 30px rgba(109, 202, 208, 0.2);
+            box-shadow:
+                0 16px 30px rgba(109, 202, 208, 0.2),
+                inset 0 0 20px rgba(218, 165, 32, 0.12);
         }
 
         .github-activity:hover {
@@ -1650,6 +1669,25 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             align-items: center;
             margin-bottom: 20px;
             gap: 12px;
+            padding-top: 16px;
+            position: relative;
+        }
+
+        .achievement-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(218, 165, 32, 0.6) 20%,
+                rgba(255, 215, 0, 0.8) 50%,
+                rgba(218, 165, 32, 0.6) 80%,
+                transparent 100%
+            );
+            border-radius: 2px;
         }
 
         .achievement-icon {
@@ -1769,18 +1807,16 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         .award-item::after {
             content: '';
             position: absolute;
-            right: -10px;
-            bottom: -10px;
-            width: 120px;
-            height: 120px;
+            right: -5px;
+            bottom: -5px;
+            width: 85px;
+            height: 85px;
             background-image: url('https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/resources/icons/trophy.svg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.08;
             z-index: 0;
             pointer-events: none;
-            filter: saturate(1.2);
         }
 
         .award-item:nth-child(4n+1)::before {
@@ -1799,23 +1835,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             background: rgba(252, 84, 62, 0.45);
         }
 
-        .award-item:nth-child(4n+1)::after {
-            opacity: 0.08;
-        }
-
-        .award-item:nth-child(4n+2)::after {
-            opacity: 0.1;
-            filter: saturate(1.5) hue-rotate(120deg);
-        }
-
-        .award-item:nth-child(4n+3)::after {
-            opacity: 0.1;
-            filter: saturate(1.8) hue-rotate(30deg);
-        }
-
+        .award-item:nth-child(4n+1)::after,
+        .award-item:nth-child(4n+2)::after,
+        .award-item:nth-child(4n+3)::after,
         .award-item:nth-child(4n)::after {
-            opacity: 0.09;
-            filter: saturate(1.3) hue-rotate(-5deg);
+            opacity: 0.18;
+            filter: sepia(1) saturate(3) hue-rotate(10deg) brightness(1.3) drop-shadow(0 0 8px rgba(218, 165, 32, 0.3));
         }
 
         .award-item:hover {
@@ -1886,6 +1911,53 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             filter: none;
         }
 
+        /* MoFA 认证印章样式 */
+        .award-cert-stamp {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+        }
+
+        .cert-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid rgba(218, 165, 32, 0.6);
+            box-shadow:
+                0 2px 8px rgba(218, 165, 32, 0.3),
+                0 0 0 3px rgba(255, 255, 255, 0.9),
+                0 0 0 5px rgba(218, 165, 32, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .award-item:hover .cert-logo {
+            transform: rotate(8deg) scale(1.05);
+            box-shadow:
+                0 4px 12px rgba(218, 165, 32, 0.4),
+                0 0 0 3px rgba(255, 255, 255, 0.95),
+                0 0 0 5px rgba(218, 165, 32, 0.3);
+        }
+
+        .cert-number {
+            font-size: 10px;
+            font-weight: 600;
+            color: rgba(139, 110, 32, 0.9);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(218, 165, 32, 0.4);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            letter-spacing: 0.5px;
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+        }
+
         /* 奖项图片样式 */
         .award-image {
             flex-shrink: 0;
@@ -1935,11 +2007,11 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         .award-title {
-            font-family: 'Playfair Display', 'Noto Serif SC', serif;
-            font-weight: 700;
+            font-family: 'Italiana', 'Noto Serif SC', serif;
+            font-weight: 400;
             color: rgba(184, 66, 58, 0.95);
-            font-size: 1.1rem;
-            letter-spacing: 0.01em;
+            font-size: 1.2rem;
+            letter-spacing: 0.02em;
         }
 
         .award-item:nth-child(4n+2) .award-title {

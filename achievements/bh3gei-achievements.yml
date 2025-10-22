@@ -6,16 +6,16 @@ awards:
     rank: "First Place Winner"
     description: "AI-powered code analysis and vulnerability detection"
     team: "李杰, 刘雨寒, 王云洋"
-    highlight: "Built real-time code scanning with 95% accuracy"
     date: "January 2025"
+    certNumber: "2025001"
     image: "https://picsum.photos/200/150?random=1"
-    
+
   - title: "占位AIOS Hackathon 2025"
     rank: "Second Place Winner"
     description: "Intelligent task automation platform"
     team: "李杰, 王小明, 张三"
-    highlight: "Automated 80% of routine tasks using AI"
     date: "February 2025"
+    certNumber: "2025002"
     image: "https://picsum.photos/200/150?random=2"
 
 repositories:
