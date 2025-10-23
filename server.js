@@ -1003,23 +1003,23 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         body.layout-sparse .container {
-            height: 100vh;
-            min-height: auto;
-            padding: 40px 20px 30px;
+            height: auto;
+            min-height: 100vh;
+            padding: 50px 20px 40px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
         }
 
         body.layout-sparse .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             max-width: 680px;
             margin: 0 auto;
             gap: 20px;
             overflow: visible;
+            flex: 1;
         }
 
         body.layout-sparse .links-section {
@@ -1151,8 +1151,10 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         body.layout-sparse .footer {
-            margin-top: 20px;
+            margin-top: auto;
+            padding-top: 30px;
             font-size: 0.85rem;
+            flex-shrink: 0;
         }
 
         .header {
