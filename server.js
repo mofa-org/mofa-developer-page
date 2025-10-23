@@ -994,72 +994,66 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             min-height: 0;
         }
 
-        /* 稀疏布局（≤5项）- 单列居中设计 */
+        /* 稀疏布局（≤5项）- 极简紧凑设计 */
         body.layout-sparse {
-            height: auto;
-            min-height: 100vh;
-            overflow-y: auto;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
         }
 
         body.layout-sparse .container {
-            height: auto;
-            min-height: 100vh;
-            padding: 50px 20px 40px;
+            height: 100vh;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
         }
 
         body.layout-sparse .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            max-width: 680px;
+            justify-content: center;
+            max-width: 600px;
             margin: 0 auto;
-            gap: 20px;
-            overflow: visible;
-            flex: 1;
+            gap: 16px;
         }
 
         body.layout-sparse .links-section {
             width: 100%;
-            max-width: 680px;
+            max-width: 600px;
             position: static;
             order: 1;
         }
 
         body.layout-sparse .links-wrapper {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1.5px solid rgba(148, 163, 184, 0.25);
-            border-radius: 18px;
-            padding: 24px 20px 20px;
-            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
-            max-height: none;
-            height: auto;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            box-shadow: none;
         }
 
         body.layout-sparse .header-in-left {
             text-align: center;
             padding-top: 0;
+            margin-bottom: 0;
         }
 
         body.layout-sparse .username {
             justify-content: center;
-            font-size: 1.85rem;
-            margin-top: 0;
-            margin-bottom: 6px;
+            font-size: 1.75rem;
+            margin: 0 0 4px 0;
         }
 
         body.layout-sparse .subtitle {
             justify-content: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
         }
 
+        /* 隐藏装饰分隔线 */
         body.layout-sparse .mini-divider {
-            justify-content: center;
-            margin: 12px auto;
-            padding: 6px 0;
+            display: none;
         }
 
         body.layout-sparse .links-scroll {
@@ -1068,46 +1062,53 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             margin: 0;
         }
 
+        /* 链接改为横向紧凑图标列表 */
         body.layout-sparse .fluid-container {
-            column-count: 1;
             display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 10px;
-            width: 100%;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         body.layout-sparse .fluid-card {
-            width: 100%;
-            max-width: none;
-            min-height: 68px;
-            padding: 14px 16px;
-            border-radius: 14px;
+            width: auto;
+            min-width: 52px;
+            min-height: 52px;
+            max-width: 52px;
+            padding: 0;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* 隐藏QR码卡片 */
         body.layout-sparse .qr-card-button {
-            order: 999;
-            margin-top: 4px;
+            display: none;
         }
 
         body.layout-sparse .fluid-icon {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
+            margin: 0;
         }
 
+        /* 隐藏链接名称，只显示图标 */
         body.layout-sparse .fluid-name {
-            font-size: 0.9rem;
+            display: none;
         }
 
         body.layout-sparse .achievements-section {
             width: 100%;
-            max-width: 680px;
+            max-width: 600px;
             order: 2;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            overflow: visible;
-            padding: 0;
+            gap: 12px;
+            margin-top: 8px;
         }
 
         body.layout-sparse .achievements-section::before {
@@ -1115,46 +1116,63 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         body.layout-sparse .achievement-card {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1.5px solid rgba(148, 163, 184, 0.25);
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
         }
 
         body.layout-sparse .achievement-header {
-            text-align: center;
-            margin-bottom: 14px;
+            text-align: left;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.layout-sparse .achievement-header h3 {
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        body.layout-sparse .achievement-icon {
+            width: 18px;
+            height: 18px;
         }
 
         body.layout-sparse .awards-list {
             display: flex;
             flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
+            gap: 10px;
         }
 
         body.layout-sparse .repos-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         body.layout-sparse .award-item {
-            max-width: none;
-            width: 100%;
+            padding: 12px;
+            font-size: 0.9rem;
         }
 
         body.layout-sparse .repo-item {
-            max-width: none;
-            width: 100%;
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+
+        body.layout-sparse .award-title,
+        body.layout-sparse .repo-name {
+            font-size: 0.95rem;
         }
 
         body.layout-sparse .footer {
-            margin-top: auto;
-            padding-top: 30px;
-            font-size: 0.85rem;
-            flex-shrink: 0;
+            margin-top: 0;
+            padding-top: 20px;
+            font-size: 0.8rem;
+            text-align: center;
         }
 
         .header {
