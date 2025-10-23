@@ -1,0 +1,11 @@
+# Example 2 - 极简示例的成就配置
+# 无成就记录
+
+githubUsername: example2
+enableGithubStats: false
+
+awards: []
+
+repositories: []
+
+activities: []

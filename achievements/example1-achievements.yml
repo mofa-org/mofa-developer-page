@@ -1,0 +1,46 @@
+# Example 1 - 完整示例的成就配置
+
+githubUsername: example1
+enableGithubStats: false
+
+awards:
+  - title: "MoFA Developer Summit 2024"
+    rank: "Best Project Award"
+    description: "For innovative AI-powered developer tools"
+    team: "Example Team"
+    date: "December 2024"
+    certNumber: "MOFA2024001"
+    image: ""
+
+  - title: "Open Source Contribution Award"
+    rank: "Community Recognition"
+    description: "Outstanding contributions to open source ecosystem"
+    team: "Solo"
+    date: "November 2024"
+    certNumber: "OSS2024002"
+    image: ""
+
+repositories:
+  - name: "example1/awesome-project"
+    description: "A comprehensive showcase of modern development practices"
+    language: "TypeScript"
+    stars: 128
+    url: "https://github.com/example1/awesome-project"
+
+  - name: "example1/developer-tools"
+    description: "Essential tools for productive development workflow"
+    language: "JavaScript"
+    stars: 89
+    url: "https://github.com/example1/developer-tools"
+
+  - name: "example1/ai-playground"
+    description: "Experimental AI models and applications"
+    language: "Python"
+    stars: 256
+    url: "https://github.com/example1/ai-playground"
+
+  - name: "example1/design-system"
+    description: "Modern UI component library and design tokens"
+    language: "React"
+    stars: 67
+    url: "https://github.com/example1/design-system"

@@ -1,0 +1,10 @@
+# Example 2 - 极简示例配置
+# 展示最小化内容的示例用户
+
+github:
+  url: https://github.com/example2
+  icon:
+
+email:
+  url: mailto:contact@example.com
+  icon: mail

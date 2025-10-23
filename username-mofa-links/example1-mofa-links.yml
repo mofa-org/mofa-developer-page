@@ -1,0 +1,38 @@
+# Example 1 - 完整示例配置
+# 展示所有功能的示例用户
+
+homepage:
+  url: https://example.com
+  icon: home
+
+github:
+  url: https://github.com/example1
+  icon:
+
+linkedin:
+  url: https://www.linkedin.com/in/example1
+  icon:
+
+twitter:
+  url: https://twitter.com/example1
+  icon:
+
+email:
+  url: mailto:hello@example.com
+  icon: mail
+
+telegram:
+  url: https://t.me/example1
+  icon:
+
+discord:
+  url: https://discord.gg/example1
+  icon:
+
+youtube:
+  url: https://www.youtube.com/@example1
+  icon:
+
+blog:
+  url: https://blog.example.com
+  icon: book-open
