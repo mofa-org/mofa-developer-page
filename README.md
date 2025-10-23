@@ -1,6 +1,29 @@
 # MoFA Developer Personal Pages
 
-为 MoFA 开发者提供个人链接页面服务，基于 Cloudflare Worker 构建。
+为 MoFA 开发者提供个人链接页面服务，每位开发者都可以拥有自己的专属子域名展示页面。
+
+## 🚀 快速添加你的页面
+
+想要创建你自己的开发者页面？只需 3 步：
+
+1. **📝 准备配置** - 创建链接和成就两个 YAML 文件
+2. **🔀 提交 PR** - Fork 仓库并提交配置
+3. **✨ 上线** - 审核通过后，你的页面将在 `你的用户名.mofa.ai` 上线
+
+**👉 查看完整指南**：[CONTRIBUTING.md](CONTRIBUTING.md)
+
+### 📦 示例页面
+
+体验不同风格的配置效果：
+
+| 示例 | 风格 | 内容量 | 访问地址 |
+|------|------|--------|---------|
+| **example1** | 完整展示 | 15 项 | [example1.mofa.ai](https://example1.mofa.ai) |
+| **example2** | 极简风格 | 2 项 | [example2.mofa.ai](https://example2.mofa.ai) |
+| **example3** | 精选展示 | 3 项 | [example3.mofa.ai](https://example3.mofa.ai) |
+| **bh3gei** | 丰富内容 | 20+ 项 | [bh3gei.mofa.ai](https://bh3gei.mofa.ai) |
+
+---
 
 ## 系统架构
 
