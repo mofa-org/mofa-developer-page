@@ -1003,19 +1003,22 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         body.layout-sparse .container {
-            height: auto;
-            min-height: 100vh;
-            padding: 60px 20px;
+            height: 100vh;
+            min-height: auto;
+            padding: 40px 20px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         body.layout-sparse .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             max-width: 680px;
             margin: 0 auto;
-            gap: 28px;
+            gap: 20px;
             overflow: visible;
         }
 
@@ -1029,8 +1032,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         body.layout-sparse .links-wrapper {
             background: rgba(255, 255, 255, 0.96);
             border: 1.5px solid rgba(148, 163, 184, 0.25);
-            border-radius: 20px;
-            padding: 28px 24px 24px;
+            border-radius: 18px;
+            padding: 24px 20px 20px;
             box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
             max-height: none;
             height: auto;
@@ -1043,19 +1046,20 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         body.layout-sparse .username {
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.85rem;
             margin-top: 0;
+            margin-bottom: 6px;
         }
 
         body.layout-sparse .subtitle {
             justify-content: center;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         body.layout-sparse .mini-divider {
             justify-content: center;
-            margin: 16px auto;
-            padding: 8px 0;
+            margin: 12px auto;
+            padding: 6px 0;
         }
 
         body.layout-sparse .links-scroll {
@@ -1069,16 +1073,16 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
         }
 
         body.layout-sparse .fluid-card {
             width: 100%;
             max-width: none;
-            min-height: 80px;
-            padding: 16px;
-            border-radius: 16px;
+            min-height: 68px;
+            padding: 14px 16px;
+            border-radius: 14px;
         }
 
         body.layout-sparse .qr-card-button {
@@ -1087,12 +1091,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         body.layout-sparse .fluid-icon {
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
         }
 
         body.layout-sparse .fluid-name {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         body.layout-sparse .achievements-section {
@@ -1101,7 +1105,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             order: 2;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
             overflow: visible;
             padding: 0;
         }
@@ -1113,27 +1117,27 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         body.layout-sparse .achievement-card {
             background: rgba(255, 255, 255, 0.96);
             border: 1.5px solid rgba(148, 163, 184, 0.25);
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 18px;
+            padding: 20px;
             box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
         }
 
         body.layout-sparse .achievement-header {
             text-align: center;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         body.layout-sparse .awards-list {
             display: flex;
             flex-direction: column;
             align-items: stretch;
-            gap: 16px;
+            gap: 12px;
         }
 
         body.layout-sparse .repos-list {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 14px;
+            gap: 12px;
         }
 
         body.layout-sparse .award-item {
@@ -1147,7 +1151,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         body.layout-sparse .footer {
-            margin-top: 40px;
+            margin-top: 20px;
+            font-size: 0.85rem;
         }
 
         .header {
