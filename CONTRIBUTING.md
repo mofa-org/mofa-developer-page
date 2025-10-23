@@ -118,8 +118,6 @@ repositories:
     stars: 100
     url: "https://github.com/username/repo-name"
 
-# GitHub 活动（可选，暂未启用）
-activities: []
 ```
 
 ---
@@ -128,9 +126,8 @@ activities: []
 
 我们提供了多个示例配置，涵盖不同使用场景：
 
-### 📦 示例 1：完整展示 (example1)
+### 📦 示例 1：
 
-**适用场景**：内容丰富的开发者（9个链接 + 2个奖项 + 4个项目）
 
 **访问地址**：[example1.mofa.ai](https://example1.mofa.ai)
 
@@ -138,27 +135,10 @@ activities: []
 - [example1-mofa-links.yml](username-mofa-links/example1-mofa-links.yml)
 - [example1-achievements.yml](achievements/example1-achievements.yml)
 
-**布局效果**：左右双列布局（0.5:4.5 比例）
 
 ---
 
-### 🎨 示例 2：极简风格 (example2)
-
-**适用场景**：简洁至上（2个链接，无成就）
-
-**访问地址**：[example2.mofa.ai](https://example2.mofa.ai)
-
-**配置文件**：
-- [example2-mofa-links.yml](username-mofa-links/example2-mofa-links.yml)
-- [example2-achievements.yml](achievements/example2-achievements.yml)
-
-**布局效果**：稀疏布局（单屏居中，横向图标）
-
----
-
-### 🏆 示例 3：精选展示 (example3)
-
-**适用场景**：突出重点（1个链接 + 1个奖项 + 1个项目）
+### 🎨 示例 2：
 
 **访问地址**：[example3.mofa.ai](https://example3.mofa.ai)
 
@@ -166,15 +146,6 @@ activities: []
 - [example3-mofa-links.yml](username-mofa-links/example3-mofa-links.yml)
 - [example3-achievements.yml](achievements/example3-achievements.yml)
 
-**布局效果**：稀疏布局（宽扁卡片设计）
-
----
-
-### 🔍 示例 4-6：边界测试
-
-- **example4**：4项内容（稀疏布局上限）
-- **example5**：6项内容（正常布局下限）
-- **example6**：10项内容（中等密度）
 
 ---
 
@@ -194,8 +165,8 @@ activities: []
 ## 开发者映射表
 
 [example][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example-mofa-links.yml]
-[bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/bh3gei-mofa-links.yml]
 [YOUR_USERNAME][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/YOUR_USERNAME-mofa-links.yml]
+
 ```
 
 ### 2. 本地测试（可选）
@@ -228,9 +199,7 @@ git commit -m "feat: Add YOUR_USERNAME developer page
 - Add achievements profile
 - Register in developers.md
 
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
-Co-Authored-By: Claude <noreply@anthropic.com>"
 
 # 推送到你的 Fork
 git push origin main
