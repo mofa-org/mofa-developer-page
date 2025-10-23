@@ -1013,7 +1013,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            max-width: 540px;
+            max-width: 680px;
             margin: 0 auto;
             gap: 28px;
             overflow: visible;
@@ -1021,7 +1021,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         body.layout-sparse .links-section {
             width: 100%;
-            max-width: 440px;
+            max-width: 680px;
             position: static;
             order: 1;
         }
@@ -1097,7 +1097,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         body.layout-sparse .achievements-section {
             width: 100%;
-            max-width: 540px;
+            max-width: 680px;
             order: 2;
             display: flex;
             flex-direction: column;
