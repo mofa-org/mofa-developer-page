@@ -40,7 +40,7 @@ touch achievements/YOUR_USERNAME-achievements.yml
 
 #### 📝 配置文件格式
 
-##### 1. 社交链接配置 (`username-mofa-links.yml`)
+##### 1. 社交链接配置 (`username-mofa-links/username-mofa-links.yml`)
 
 ```yaml
 # 必填：GitHub 链接
@@ -82,7 +82,7 @@ twitter:
 - 其他：Medium, Stack Overflow, Dribbble, Behance
 
 
-##### 2. 成就档案配置 (`username-achievements.yml`)
+##### 2. 成就档案配置 (`achievements/username-achievements.yml`)
 
 ```yaml
 # GitHub 用户名（必填）
