@@ -13,6 +13,7 @@
 1. **社交链接配置** (`username-mofa-links.yml`)
 2. **成就档案配置** (`username-achievements.yml`)
 
+注意：username建议使用你的github username。
 ### 第二步：Fork 仓库
 
 1. 访问 [mofa-org/mofa-developer-page](https://github.com/mofa-org/mofa-developer-page)
