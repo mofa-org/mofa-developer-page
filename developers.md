@@ -10,6 +10,7 @@
 [bh3gei][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/bh3gei-mofa-links.yml]
 [example1][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example1-mofa-links.yml]
 [example2][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example2-mofa-links.yml]
+[example3][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example3-mofa-links.yml]
 
 ## 添加说明
 

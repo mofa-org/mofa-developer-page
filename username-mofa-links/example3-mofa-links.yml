@@ -1,0 +1,6 @@
+# Example 3 - 稀疏示例配置
+# 1个联系方式
+
+github:
+  url: https://github.com/example3
+  icon:

@@ -1,0 +1,23 @@
+# Example 3 - 稀疏示例的成就配置
+# 1个奖项，1个项目
+
+githubUsername: example3
+enableGithubStats: false
+
+awards:
+  - title: "Hackathon 2024"
+    rank: "Third Place"
+    description: "For creative problem-solving approach"
+    team: "Example3 Team"
+    date: "October 2024"
+    certNumber: "HACK2024003"
+    image: ""
+
+repositories:
+  - name: "example3/simple-project"
+    description: "A simple and elegant solution"
+    language: "JavaScript"
+    stars: 12
+    url: "https://github.com/example3/simple-project"
+
+activities: []
