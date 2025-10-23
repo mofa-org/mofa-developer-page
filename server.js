@@ -788,6 +788,15 @@ async function generateHTML(username, links, hostname, achievements = null, gith
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://${hostname}`)}`;
   const fluidLinks = assignFluidLayouts(links);
 
+  // 智能布局判断：计算总项数
+  const linksCount = Object.keys(links).length;
+  const awardsCount = achievements?.awards?.length || 0;
+  const reposCount = achievements?.repositories?.length || 0;
+  const totalItems = linksCount + awardsCount + reposCount;
+
+  // 布局类型：sparse（稀疏居中）, normal（正常布局）
+  const layoutType = totalItems <= 5 ? 'sparse' : 'normal';
+
   return `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -983,6 +992,106 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex: 1;
             overflow: hidden;
             min-height: 0;
+        }
+
+        /* 稀疏布局（≤5项）- 单列居中设计 */
+        body.layout-sparse .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            max-width: 600px;
+            margin: 0 auto;
+            gap: 32px;
+            overflow: visible;
+        }
+
+        body.layout-sparse .links-section {
+            width: 100%;
+            position: static;
+            order: 1;
+        }
+
+        body.layout-sparse .links-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 24px;
+            padding: 32px 28px;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+            max-height: none;
+            height: auto;
+        }
+
+        body.layout-sparse .header-in-left {
+            text-align: center;
+        }
+
+        body.layout-sparse .username {
+            justify-content: center;
+            font-size: 2.2rem;
+        }
+
+        body.layout-sparse .subtitle {
+            justify-content: center;
+        }
+
+        body.layout-sparse .mini-divider {
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        body.layout-sparse .links-scroll {
+            overflow: visible;
+            padding: 0;
+        }
+
+        body.layout-sparse .fluid-container {
+            column-count: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+        }
+
+        body.layout-sparse .fluid-card {
+            width: 100%;
+            max-width: 320px;
+            padding: 18px;
+        }
+
+        body.layout-sparse .achievements-section {
+            width: 100%;
+            order: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow: visible;
+            padding: 0;
+        }
+
+        body.layout-sparse .achievement-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+        }
+
+        body.layout-sparse .achievement-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        body.layout-sparse .awards-list,
+        body.layout-sparse .repos-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body.layout-sparse .award-item,
+        body.layout-sparse .repo-item {
+            max-width: 480px;
         }
 
         .header {
@@ -2843,7 +2952,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
     </style>
 </head>
-<body>
+<body class="layout-${layoutType}">
     <div class="decoration"></div>
 
     <!-- 浮动蒙德里安色块装饰 -->
