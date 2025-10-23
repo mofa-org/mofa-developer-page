@@ -1,0 +1,14 @@
+# Example 5 - 边界测试 (6项 = normal)
+# 3个联系方式
+
+github:
+  url: https://github.com/example5
+  icon:
+
+email:
+  url: mailto:example5@test.com
+  icon: mail
+
+twitter:
+  url: https://twitter.com/example5
+  icon:

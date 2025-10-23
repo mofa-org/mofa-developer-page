@@ -1,0 +1,10 @@
+# Example 4 - 边界测试 (4项 = sparse)
+# 2个联系方式
+
+github:
+  url: https://github.com/example4
+  icon:
+
+email:
+  url: mailto:example4@test.com
+  icon: mail

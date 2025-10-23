@@ -1,0 +1,22 @@
+# Example 4 - 边界测试 (4项 = sparse)
+# 2个仓库
+
+githubUsername: example4
+enableGithubStats: false
+
+awards: []
+
+repositories:
+  - name: "example4/project-alpha"
+    description: "First test project"
+    language: "TypeScript"
+    stars: 5
+    url: "https://github.com/example4/project-alpha"
+
+  - name: "example4/project-beta"
+    description: "Second test project"
+    language: "Python"
+    stars: 8
+    url: "https://github.com/example4/project-beta"
+
+activities: []

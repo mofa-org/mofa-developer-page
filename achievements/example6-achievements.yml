@@ -1,0 +1,43 @@
+# Example 6 - 中等密度测试 (10项 = normal)
+# 2个奖项 + 3个仓库
+
+githubUsername: example6
+enableGithubStats: false
+
+awards:
+  - title: "Innovation Award 2024"
+    rank: "First Place"
+    description: "For groundbreaking project"
+    team: "Example6 Innovation Team"
+    date: "November 2024"
+    certNumber: "INN2024006"
+    image: ""
+
+  - title: "Community Excellence Award"
+    rank: "Recognition"
+    description: "For active community engagement"
+    team: "Example6"
+    date: "August 2024"
+    certNumber: "COM2024006"
+    image: ""
+
+repositories:
+  - name: "example6/frontend-framework"
+    description: "Next-generation UI framework"
+    language: "TypeScript"
+    stars: 156
+    url: "https://github.com/example6/frontend-framework"
+
+  - name: "example6/data-pipeline"
+    description: "Scalable data processing system"
+    language: "Python"
+    stars: 89
+    url: "https://github.com/example6/data-pipeline"
+
+  - name: "example6/mobile-app"
+    description: "Cross-platform mobile application"
+    language: "React Native"
+    stars: 67
+    url: "https://github.com/example6/mobile-app"
+
+activities: []

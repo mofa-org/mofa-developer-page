@@ -1,0 +1,29 @@
+# Example 5 - 边界测试 (6项 = normal)
+# 1个奖项 + 2个仓库
+
+githubUsername: example5
+enableGithubStats: false
+
+awards:
+  - title: "Development Award 2024"
+    rank: "Honorable Mention"
+    description: "For consistent contributions"
+    team: "Example5 Team"
+    date: "September 2024"
+    certNumber: "DEV2024005"
+    image: ""
+
+repositories:
+  - name: "example5/webapp"
+    description: "Modern web application"
+    language: "React"
+    stars: 25
+    url: "https://github.com/example5/webapp"
+
+  - name: "example5/api-server"
+    description: "RESTful API backend"
+    language: "Node.js"
+    stars: 18
+    url: "https://github.com/example5/api-server"
+
+activities: []

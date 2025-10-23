@@ -1,0 +1,22 @@
+# Example 6 - 中等密度测试 (10项 = normal)
+# 5个联系方式
+
+github:
+  url: https://github.com/example6
+  icon:
+
+homepage:
+  url: https://example6.dev
+  icon: home
+
+email:
+  url: mailto:example6@test.com
+  icon: mail
+
+linkedin:
+  url: https://www.linkedin.com/in/example6
+  icon:
+
+twitter:
+  url: https://twitter.com/example6
+  icon:
