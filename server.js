@@ -995,103 +995,159 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         /* 稀疏布局（≤5项）- 单列居中设计 */
+        body.layout-sparse {
+            height: auto;
+            min-height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        body.layout-sparse .container {
+            height: auto;
+            min-height: 100vh;
+            padding: 60px 20px;
+        }
+
         body.layout-sparse .main-content {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            max-width: 600px;
+            max-width: 540px;
             margin: 0 auto;
-            gap: 32px;
+            gap: 28px;
             overflow: visible;
         }
 
         body.layout-sparse .links-section {
             width: 100%;
+            max-width: 440px;
             position: static;
             order: 1;
         }
 
         body.layout-sparse .links-wrapper {
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid rgba(148, 163, 184, 0.2);
-            border-radius: 24px;
-            padding: 32px 28px;
-            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+            background: rgba(255, 255, 255, 0.96);
+            border: 1.5px solid rgba(148, 163, 184, 0.25);
+            border-radius: 20px;
+            padding: 28px 24px 24px;
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
             max-height: none;
             height: auto;
         }
 
         body.layout-sparse .header-in-left {
             text-align: center;
+            padding-top: 0;
         }
 
         body.layout-sparse .username {
             justify-content: center;
-            font-size: 2.2rem;
+            font-size: 2rem;
+            margin-top: 0;
         }
 
         body.layout-sparse .subtitle {
             justify-content: center;
+            font-size: 0.95rem;
         }
 
         body.layout-sparse .mini-divider {
             justify-content: center;
-            margin: 20px auto;
+            margin: 16px auto;
+            padding: 8px 0;
         }
 
         body.layout-sparse .links-scroll {
             overflow: visible;
             padding: 0;
+            margin: 0;
         }
 
         body.layout-sparse .fluid-container {
             column-count: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 14px;
+            align-items: stretch;
+            gap: 12px;
+            width: 100%;
         }
 
         body.layout-sparse .fluid-card {
             width: 100%;
-            max-width: 320px;
-            padding: 18px;
+            max-width: none;
+            min-height: 80px;
+            padding: 16px;
+            border-radius: 16px;
+        }
+
+        body.layout-sparse .qr-card-button {
+            order: 999;
+            margin-top: 4px;
+        }
+
+        body.layout-sparse .fluid-icon {
+            width: 28px;
+            height: 28px;
+        }
+
+        body.layout-sparse .fluid-name {
+            font-size: 0.95rem;
         }
 
         body.layout-sparse .achievements-section {
             width: 100%;
+            max-width: 540px;
             order: 2;
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
             overflow: visible;
             padding: 0;
         }
 
+        body.layout-sparse .achievements-section::before {
+            display: none;
+        }
+
         body.layout-sparse .achievement-card {
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid rgba(148, 163, 184, 0.2);
-            border-radius: 24px;
-            padding: 28px;
-            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+            background: rgba(255, 255, 255, 0.96);
+            border: 1.5px solid rgba(148, 163, 184, 0.25);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.04);
         }
 
         body.layout-sparse .achievement-header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
-        body.layout-sparse .awards-list,
-        body.layout-sparse .repos-list {
+        body.layout-sparse .awards-list {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: stretch;
+            gap: 16px;
         }
 
-        body.layout-sparse .award-item,
+        body.layout-sparse .repos-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        body.layout-sparse .award-item {
+            max-width: none;
+            width: 100%;
+        }
+
         body.layout-sparse .repo-item {
-            max-width: 480px;
+            max-width: none;
+            width: 100%;
+        }
+
+        body.layout-sparse .footer {
+            margin-top: 40px;
         }
 
         .header {
