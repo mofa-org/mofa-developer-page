@@ -18,7 +18,7 @@ const CONFIG = {
   REPO_OWNER: "mofa-org", 
   REPO_NAME: "mofa-developer-page",
   DEVELOPERS_FILE: "developers.md",
-  CACHE_TTL: 300, // 5分钟缓存
+  CACHE_TTL: 10, // 10秒短缓存（开发模式）
   PRODUCTION_DOMAIN: "mofa.ai",
   TEST_DOMAIN: "liyao.space",
   PORT: process.env.PORT || 80,
