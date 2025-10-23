@@ -12,17 +12,6 @@
 
 **👉 查看完整指南**：[CONTRIBUTING.md](CONTRIBUTING.md)
 
-### 📦 示例页面
-
-体验不同风格的配置效果：
-
-| 示例 | 风格 | 内容量 | 访问地址 |
-|------|------|--------|---------|
-| **example1** | 完整展示 | 15 项 | [example1.mofa.ai](https://example1.mofa.ai) |
-| **example2** | 极简风格 | 2 项 | [example2.mofa.ai](https://example2.mofa.ai) |
-| **example3** | 精选展示 | 3 项 | [example3.mofa.ai](https://example3.mofa.ai) |
-| **bh3gei** | 丰富内容 | 20+ 项 | [bh3gei.mofa.ai](https://bh3gei.mofa.ai) |
-
 ---
 
 ## 系统架构
