@@ -2,16 +2,6 @@
 
 欢迎加入 MoFA Developer 开发者社区！本指南将帮助你创建并提交自己的个人页面配置。
 
-## 📋 目录
-
-- [快速开始](#快速开始)
-- [配置文件格式](#配置文件格式)
-- [示例参考](#示例参考)
-- [提交流程](#提交流程)
-- [布局说明](#布局说明)
-- [最佳实践](#最佳实践)
-- [常见问题](#常见问题)
-
 ---
 
 ## 🚀 快速开始
@@ -37,6 +27,8 @@ cd mofa-developer-page
 ### 第三步：创建配置文件
 
 ```bash
+# 命令仅供示例，可以使用GUI操作
+
 # 创建链接配置文件
 touch username-mofa-links/YOUR_USERNAME-mofa-links.yml
 
@@ -46,9 +38,9 @@ touch achievements/YOUR_USERNAME-achievements.yml
 
 ---
 
-## 📝 配置文件格式
+#### 📝 配置文件格式
 
-### 1. 社交链接配置 (`username-mofa-links.yml`)
+##### 1. 社交链接配置 (`username-mofa-links.yml`)
 
 ```yaml
 # 必填：GitHub 链接
@@ -81,7 +73,7 @@ twitter:
 # wechat, line, whatsapp, spotify, 等
 ```
 
-**支持的平台列表**：
+###### 支持的平台列表：
 - 开发平台：GitHub, GitLab, Bitbucket
 - 社交媒体：Twitter, LinkedIn, Facebook, Instagram
 - 即时通讯：Telegram, Discord, WeChat, Line, WhatsApp
@@ -89,9 +81,8 @@ twitter:
 - 音乐平台：Spotify, 网易云音乐, Apple Music
 - 其他：Medium, Stack Overflow, Dribbble, Behance
 
----
 
-### 2. 成就档案配置 (`username-achievements.yml`)
+##### 2. 成就档案配置 (`username-achievements.yml`)
 
 ```yaml
 # GitHub 用户名（必填）
@@ -119,12 +110,28 @@ repositories:
     url: "https://github.com/username/repo-name"
 
 ```
+##### 3. 编辑映射文件
+
+打开 `developers.md`，在 `## 开发者映射表` 部分添加你的映射：
+
+```markdown
+[YOUR_USERNAME][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/YOUR_USERNAME-mofa-links.yml]
+```
+
+完整示例：
+
+```markdown
+## 开发者映射表
+
+[example][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example-mofa-links.yml]
+[YOUR_USERNAME][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/YOUR_USERNAME-mofa-links.yml]
+
+```
 
 ---
 
 ## 🎯 示例参考
 
-我们提供了多个示例配置，涵盖不同使用场景：
 
 ### 📦 示例 1：
 
@@ -151,38 +158,8 @@ repositories:
 
 ## 🔄 提交流程
 
-### 1. 编辑映射文件
 
-打开 `developers.md`，在 `## 开发者映射表` 部分添加你的映射：
-
-```markdown
-[YOUR_USERNAME][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/YOUR_USERNAME-mofa-links.yml]
-```
-
-**完整示例**：
-
-```markdown
-## 开发者映射表
-
-[example][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example-mofa-links.yml]
-[YOUR_USERNAME][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/YOUR_USERNAME-mofa-links.yml]
-
-```
-
-### 2. 本地测试（可选）
-
-如果你想在本地测试配置：
-
-```bash
-# 安装依赖（项目无依赖）
-npm install
-
-# 启动本地服务器
-node server.js
-
-# 访问测试页面
-# http://localhost/
-```
+### 1. 创建和修改文件
 
 ### 3. 提交更改
 
@@ -193,49 +170,19 @@ git add username-mofa-links/YOUR_USERNAME-mofa-links.yml
 git add achievements/YOUR_USERNAME-achievements.yml
 
 # 提交
-git commit -m "feat: Add YOUR_USERNAME developer page
-
-- Add social links configuration
-- Add achievements profile
-- Register in developers.md
-
-
+git commit -m "feat: Add YOUR_USERNAME developer page"
 
 # 推送到你的 Fork
 git push origin main
+
 ```
 
 ### 4. 创建 Pull Request
 
 1. 访问你的 Fork 页面
 2. 点击 **Contribute** → **Open pull request**
-3. 填写 PR 信息：
+3. 填写 PR 信息
 
-**标题格式**：
-```
-feat: Add [YOUR_USERNAME] developer page
-```
-
-**描述模板**：
-```markdown
-## 添加开发者页面
-
-**用户名**：YOUR_USERNAME
-
-**访问地址**：YOUR_USERNAME.mofa.ai
-
-**配置内容**：
-- ✅ 社交链接配置
-- ✅ 成就档案配置
-- ✅ 映射表注册
-
-**预览截图**（可选）：
-[附上页面截图]
-
----
-
-我已阅读并遵循贡献指南。
-```
 
 4. 点击 **Create pull request**
 
@@ -247,115 +194,6 @@ feat: Add [YOUR_USERNAME] developer page
 
 ---
 
-## 🎨 布局说明
-
-系统会根据你的内容总量自动选择最佳布局：
-
-### 稀疏布局（≤5 项内容）
-
-**适用条件**：`总项数 = 链接数 + 奖项数 + 项目数 ≤ 5`
-
-**特点**：
-- ✨ 单列居中设计
-- 📐 宽扁卡片（1080px 宽）
-- 🎯 单屏显示，无需滚动
-- 🔘 链接显示为横向图标按钮
-- 🏅 MoFA 认证印章（36px，不遮挡内容）
-
-**示例**：example2, example3, example4
-
----
-
-### 正常布局（>5 项内容）
-
-**适用条件**：`总项数 > 5`
-
-**特点**：
-- 📊 左右双列布局（0.5:4.5 比例）
-- 📱 左侧：用户信息 + 社交链接（可滚动）
-- 🏆 右侧：成就展示 + 精选项目（可滚动）
-- 🎨 流体网格布局（Pinterest 风格）
-- 🌈 马卡龙配色 + 蒙德里安装饰
-
-**示例**：example1, example5, example6, bh3gei
-
----
-
-## 💡 最佳实践
-
-### 1. 图标选择
-
-**自动识别图标**：
-```yaml
-github:
-  url: https://github.com/username
-  icon:  # 留空，自动识别为 GitHub 图标
-```
-
-**手动指定内置图标**：
-```yaml
-homepage:
-  url: https://example.com
-  icon: home  # 使用内置图标名称
-```
-
-**使用自定义图标**：
-```yaml
-custom:
-  url: https://example.com
-  icon: https://example.com/icon.svg  # 自定义图标 URL
-```
-
-### 2. 链接优先级
-
-建议按重要性排序：
-1. GitHub（必填）
-2. 个人网站/博客
-3. 邮箱
-4. LinkedIn
-5. 其他社交平台
-
-### 3. 奖项描述
-
-**推荐格式**：
-```yaml
-awards:
-  - title: "比赛/奖项完整名称"
-    rank: "获奖等级（第一名/二等奖/优秀奖）"
-    description: "项目主题或获奖原因（1-2句话）"
-    team: "团队成员姓名"
-    date: "YYYY年MM月"
-    certNumber: "唯一认证编号"
-    image: "高清证书图片 URL"
-```
-
-### 4. 项目筛选
-
-**选择标准**：
-- ⭐ 优先选择 Star 数较多的项目
-- 🎯 代表你技术能力的项目
-- 🔥 近期活跃维护的项目
-- 💡 有创新性/独特性的项目
-
-**建议数量**：
-- 稀疏布局：1-2 个精选项目
-- 正常布局：3-5 个代表项目
-
-### 5. 内容精简
-
-**稀疏布局用户**（≤5项）：
-- 精选最重要的 1-2 个联系方式
-- 突出 1 个最重要的成就
-- 展示 1 个最佳项目
-- 目标：单屏完整展示
-
-**正常布局用户**（>5项）：
-- 可以展示更多链接（建议 ≤10 个）
-- 奖项建议 ≤3 个
-- 项目建议 ≤5 个
-
----
-
 ## ❓ 常见问题
 
 ### Q1: 我的 GitHub 用户名和页面用户名必须一致吗？
@@ -364,7 +202,7 @@ awards:
 
 ### Q2: 我没有奖项和项目，可以只配置链接吗？
 
-**A**: 可以！参考 [example2](https://example2.mofa.ai)，只配置基础链接也完全没问题。系统会自动使用稀疏布局。
+**A**: 可以！参考 [example2](https://example2.mofa.ai)，只配置基础链接也完全没问题。系统会自动使用稀疏布局展示。
 
 ### Q3: 配置文件可以用中文吗？
 
@@ -382,7 +220,7 @@ awards:
 
 ### Q6: 我可以使用自己的域名吗？
 
-**A**: 目前仅支持 `*.mofa.ai` 和 `*.liyao.space` 子域名。自定义域名需要联系管理员。
+**A**: 目前仅支持 `*.mofa.ai` 子域名。自定义域名需要联系管理员。
 
 ### Q7: enableGithubStats 有什么用？
 
