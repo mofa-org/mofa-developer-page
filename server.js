@@ -1155,6 +1155,7 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         body.layout-sparse .award-item {
             padding: 10px 12px;
+            padding-right: 70px;
             font-size: 0.9rem;
         }
 
@@ -1163,9 +1164,32 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             font-size: 0.9rem;
         }
 
+        /* 印章样式调整 - 缩小并确保不遮挡内容 */
+        body.layout-sparse .award-cert-stamp {
+            top: 8px;
+            right: 8px;
+            gap: 2px;
+        }
+
+        body.layout-sparse .cert-logo {
+            width: 36px;
+            height: 36px;
+            border-width: 1.5px;
+            padding: 3px;
+        }
+
+        body.layout-sparse .cert-number {
+            font-size: 9px;
+            padding: 2px 6px;
+        }
+
         body.layout-sparse .award-title,
         body.layout-sparse .repo-name {
             font-size: 0.95rem;
+        }
+
+        body.layout-sparse .award-content {
+            padding-right: 0;
         }
 
         body.layout-sparse .footer {
