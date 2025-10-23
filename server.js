@@ -1013,14 +1013,14 @@ async function generateHTML(username, links, hostname, achievements = null, gith
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            max-width: 600px;
+            max-width: 1080px;
             margin: 0 auto;
-            gap: 16px;
+            gap: 14px;
         }
 
         body.layout-sparse .links-section {
             width: 100%;
-            max-width: 600px;
+            max-width: 1080px;
             position: static;
             order: 1;
         }
@@ -1103,11 +1103,11 @@ async function generateHTML(username, links, hostname, achievements = null, gith
 
         body.layout-sparse .achievements-section {
             width: 100%;
-            max-width: 600px;
+            max-width: 1080px;
             order: 2;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             margin-top: 8px;
         }
 
@@ -1118,8 +1118,8 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         body.layout-sparse .achievement-card {
             background: rgba(255, 255, 255, 0.95);
             border: 1px solid rgba(148, 163, 184, 0.2);
-            border-radius: 16px;
-            padding: 16px 18px;
+            border-radius: 14px;
+            padding: 12px 20px;
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
         }
 
@@ -1154,12 +1154,12 @@ async function generateHTML(username, links, hostname, achievements = null, gith
         }
 
         body.layout-sparse .award-item {
-            padding: 12px;
+            padding: 10px 12px;
             font-size: 0.9rem;
         }
 
         body.layout-sparse .repo-item {
-            padding: 12px;
+            padding: 10px 12px;
             font-size: 0.9rem;
         }
 
