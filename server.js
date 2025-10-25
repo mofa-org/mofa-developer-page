@@ -355,7 +355,7 @@ function parseUsernameMapping(content, username) {
     const match = line.match(/^\[([^\]]+)\]\[([^\]]+)\]$/);
     if (match) {
       console.log(`✅ Found mapping: "${match[1]}" -> "${match[2]}"`);
-      if (match[1] === username) {
+      if (match[1].toLowerCase() === username.toLowerCase()) {
         console.log(`🎯 Found match for username: ${username}`);
         return match[2];
       }
