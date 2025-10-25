@@ -14,6 +14,7 @@
 [example4][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example4-mofa-links.yml]
 [example5][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example5-mofa-links.yml]
 [example6][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/example6-mofa-links.yml]
+[Xiaokuge][https://raw.githubusercontent.com/mofa-org/mofa-developer-page/main/username-mofa-links/Xiaokuge-mofa-links.yml]
 
 ## 添加说明
 
