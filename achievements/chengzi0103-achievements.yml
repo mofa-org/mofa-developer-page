@@ -1,0 +1,49 @@
+# GitHub 用户名（必填）
+githubUsername: chengzi0103
+
+# 是否显示 GitHub 统计数据（可选，默认 false）
+enableGithubStats: true
+
+# 荣誉认证列表（可选）
+awards:
+  - title: "MoFA Developer Award 2025"
+    rank: "Outstanding Developer"
+    description: "Recognition for exceptional contributions to the MoFA ecosystem and innovative project development"
+    team: "chengzi0103"
+    date: "January 2025"
+    certNumber: "MOFA2025003"
+    image: ""
+
+  - title: "Open Source Innovation Award"
+    rank: "Community Choice"
+    description: "Awarded for building impactful open source tools and fostering community collaboration"
+    team: "chengzi0103"
+    date: "December 2024"
+    certNumber: "OSI2024015"
+    image: ""
+
+# 精选仓库列表（可选）
+repositories:
+  - name: "chengzi0103/awesome-toolkit"
+    description: "A collection of developer productivity tools and utilities"
+    language: "TypeScript"
+    stars: 156
+    url: "https://github.com/chengzi0103/awesome-toolkit"
+
+  - name: "chengzi0103/ai-assistant"
+    description: "AI-powered coding assistant with smart suggestions"
+    language: "Python"
+    stars: 342
+    url: "https://github.com/chengzi0103/ai-assistant"
+
+  - name: "chengzi0103/web-framework"
+    description: "Lightweight and modern web application framework"
+    language: "JavaScript"
+    stars: 89
+    url: "https://github.com/chengzi0103/web-framework"
+
+  - name: "chengzi0103/data-viz"
+    description: "Interactive data visualization library with beautiful charts"
+    language: "React"
+    stars: 234
+    url: "https://github.com/chengzi0103/data-viz"

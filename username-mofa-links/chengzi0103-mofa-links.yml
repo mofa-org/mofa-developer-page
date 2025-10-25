@@ -1,0 +1,21 @@
+# chengzi0103 - Social Media Links Configuration
+
+github:
+  url: https://github.com/chengzi0103
+  icon:
+
+linkedin:
+  url: https://www.linkedin.com/in/chengzi0103
+  icon:
+
+twitter:
+  url: https://twitter.com/chengzi0103
+  icon:
+
+email:
+  url: mailto:chengzi0103@example.com
+  icon: mail
+
+homepage:
+  url: https://chengzi0103.dev
+  icon: home
