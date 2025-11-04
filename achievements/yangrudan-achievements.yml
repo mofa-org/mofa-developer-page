@@ -1,0 +1,23 @@
+# GitHub 用户名（必填）
+githubUsername: yangrudan
+
+# 是否显示 GitHub 统计数据（可选，默认 false）
+enableGithubStats: true
+
+# 荣誉认证列表（可选）
+awards:
+  - title: "黑客马拉松编程大赛"
+    rank: "第三名"
+    description: "项目描述或获奖原因"
+    team: "yangrudan"
+    date: "2025-09-14"
+    certNumber: ""
+    image: ""
+
+# 精选仓库列表（可选）
+repositories:
+  - name: "yangrudan/OPS-agent"
+    description: "旨在为老年人提供便捷、安全的智能生活体验"
+    language: "python"
+    stars: 15
+    url: "https://github.com/yangrudan/OPS-agent"
