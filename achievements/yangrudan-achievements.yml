@@ -8,7 +8,7 @@ enableGithubStats: true
 awards:
   - title: "黑客马拉松编程大赛"
     rank: "第三名"
-    description: "项目描述或获奖原因"
+    description: "基于mofa-ai框架设计与打造， 专为老年人设计的智能助手，遵循成为老年人的守护者的初心，为其提供覆盖记忆、健康、天气三大类型的核心服务。"
     team: "yangrudan"
     date: "2025-09-14"
     certNumber: ""
