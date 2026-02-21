@@ -1,0 +1,9 @@
+# 必填：GitHub 链接
+github:
+  url: https://github.com/yangrudan
+  icon:  # 留空自动识别 GitHub 图标
+
+# 可选：个人主页
+homepage:
+  url: https://www.zhihu.com/people/da-yu-hai-tang-15-70
+  icon: home
